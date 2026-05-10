@@ -2,42 +2,42 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users collection
+    // ── Users ──────────────────────────────────────────────────────────────
     match /users/{uid} {
-      // Any signed-in user can read/write their own document
+      // A signed-in user can always read/write their OWN document.
+      // This is required so new users can create their profile on first sign-in
+      // AND so /debug can set role = "admin" for initial bootstrap.
       allow read, write: if request.auth != null && request.auth.uid == uid;
 
-      // Admin can read/write ALL user documents
-      // We check the role directly in the token claim OR in the document
+      // An admin can read/write ALL user documents (for admin panel user management)
       allow read, write: if request.auth != null
-        && request.auth.uid != uid
         && exists(/databases/$(database)/documents/users/$(request.auth.uid))
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
     }
 
-    // Resources - fully public read, any signed-in user can write (for dev)
+    // ── Resources ──────────────────────────────────────────────────────────
     match /resources/{id} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // Universities - fully public read, any signed-in user can write (for dev)
+    // ── Universities ───────────────────────────────────────────────────────
     match /universities/{id} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // Marketplace
+    // ── Marketplace ────────────────────────────────────────────────────────
     match /marketplace/{id} {
       allow read, write: if request.auth != null;
     }
 
-    // Bids
+    // ── Bids ───────────────────────────────────────────────────────────────
     match /bids/{id} {
       allow read, write: if request.auth != null;
     }
 
-    // Help Requests
+    // ── Help Requests ──────────────────────────────────────────────────────
     match /helpRequests/{id} {
       allow read, write: if request.auth != null;
     }
