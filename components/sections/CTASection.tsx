@@ -18,18 +18,18 @@ export default function CTASection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
           style={{
-            background: 'linear-gradient(135deg, rgba(91,99,245,0.15) 0%, rgba(124,58,237,0.15) 50%, rgba(6,182,212,0.08) 100%)',
-            border: '1px solid rgba(91,99,245,0.2)',
+            background: 'linear-gradient(135deg, rgba(255,75,114,0.08) 0%, rgba(139,92,246,0.08) 50%, rgba(139,92,246,0.03) 100%)',
+            border: '2px solid rgba(139,92,246,0.15)',
           }}
         >
           {/* Glowing orbs inside card */}
-          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-brand-600/20 blur-[100px] rounded-full pointer-events-none" />
-          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[300px] h-[250px] bg-purple-600/15 blur-[80px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-[#FF4B72]/[0.08] blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[300px] h-[250px] bg-[#8B5CF6]/[0.08] blur-[80px] rounded-full pointer-events-none" />
 
           {/* Decorative background grid */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
             style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)',
+              backgroundImage: 'linear-gradient(rgba(11,7,30,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(11,7,30,0.08) 1px, transparent 1px)',
               backgroundSize: '40px 40px',
             }}
           />
@@ -40,13 +40,13 @@ export default function CTASection() {
               Limited Early Access
             </div>
 
-            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-6">
+            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-6 text-[#0B071E]">
               Ready to ace your{' '}
               <span className="gradient-text">university journey?</span>
             </h2>
 
-            <p className="text-white/55 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Join 50,000+ Pakistani students who are already using TutorTap 
+            <p className="text-[#0B071E]/60 text-lg max-w-xl mx-auto mb-10 leading-relaxed font-semibold">
+              Join 50,000+ Pakistani students who are already using Tute 
               to access better resources, connect with tutors, and navigate 
               their academic life with confidence.
             </p>
@@ -61,7 +61,7 @@ export default function CTASection() {
               </Link>
             </div>
 
-            <p className="text-white/30 text-sm mt-6">
+            <p className="text-[#0B071E]/40 text-sm mt-6 font-semibold">
               No credit card required · Free forever for students · Cancel anytime
             </p>
           </div>

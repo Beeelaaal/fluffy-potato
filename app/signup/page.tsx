@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Eye, EyeOff, Zap, GraduationCap, Users } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signInWithGoogle, signInWithGitHub, signUpWithEmail } from '@/lib/auth';
+import { TuteLogo } from '@/components/brand/TuteLogo';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -97,16 +98,8 @@ export default function SignupPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="flex items-center gap-2 mb-8">
-          <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #FF6B00, #FF3D71)' }}
-          >
-            <Zap size={16} className="text-white" />
-          </div>
-          <span className="font-display font-bold text-xl">
-            Tutor<span className="gradient-text">Tap</span>
-          </span>
+        <div className="inline-block mb-8">
+          <TuteLogo size={34} />
         </div>
 
         <h1 className="font-display font-bold text-3xl mb-2">Create an Account</h1>
@@ -122,8 +115,8 @@ export default function SignupPage() {
 
         <div className="flex gap-3 mb-6">
           {[
-            { value: 'student' as const, label: '🎓 I&apos;m a Student' },
-            { value: 'tutor' as const, label: '👨‍🏫 I&apos;m a Tutor' },
+            { value: 'student' as const, label: 'I&apos;m a Student' },
+            { value: 'tutor' as const, label: 'I&apos;m a Tutor' },
           ].map(({ value, label }) => (
             <button
               key={value}

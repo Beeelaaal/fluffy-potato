@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Zap, Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
+import { TuteLogo } from '@/components/brand/TuteLogo';
 
 const footerLinks = {
   Platform: [
@@ -9,16 +10,16 @@ const footerLinks = {
     { label: 'Admin Panel', href: '/admin' },
   ],
   Company: [
-    { label: 'About Us', href: '#' },
-    { label: 'Blog', href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Press', href: '#' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Press', href: '/press' },
   ],
   Support: [
-    { label: 'Help Center', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Contact Us', href: '#' },
+    { label: 'Help Center', href: '/help' },
+    { label: 'Terms of Service', href: '/terms' },
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Contact Us', href: '/contact' },
   ],
 };
 
@@ -31,45 +32,37 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="relative mt-24 border-t border-glass-border overflow-hidden">
-      {/* Glow effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-brand-600/10 blur-[100px] pointer-events-none" />
+    <footer className="relative mt-24 border-t border-black/10 overflow-hidden bg-white/70">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-[#8B5CF6]/5 blur-[100px] pointer-events-none" />
 
       <div className="section-container pt-16 pb-10 relative z-10">
-        {/* Top grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #5b63f5, #7c3aed)' }}>
-                <Zap size={18} className="text-white" />
-              </div>
-              <span className="font-display font-bold text-2xl">
-                Tutor<span className="gradient-text">Tap</span>
-              </span>
+            <Link href="/" className="inline-block mb-4">
+              <TuteLogo size={36} />
             </Link>
-            <p className="text-white/50 text-sm leading-relaxed max-w-sm mb-6">
-              Pakistan&apos;s premier EdTech platform connecting university students with resources, 
-              university insights, and expert tutoring — all in one place.
+            <p className="text-[#0B071E]/80 text-sm leading-relaxed max-w-sm mb-6 font-semibold">
+              Pakistan&apos;s premier EdTech platform connecting university students with resources,
+              university insights, and expert tutoring in one unified place.
             </p>
-            <div className="flex flex-col gap-2 text-white/40 text-sm">
-              <span className="flex items-center gap-2"><MapPin size={14} /> Islamabad, Pakistan</span>
-              <span className="flex items-center gap-2"><Mail size={14} /> hello@tutortap.pk</span>
-              <span className="flex items-center gap-2"><Phone size={14} /> +92-51-1234-5678</span>
+            <div className="flex flex-col gap-2 text-[#0B071E]/60 text-sm font-bold">
+              <span className="flex items-center gap-2"><MapPin size={14} className="text-[#8B5CF6]" /> Karachi, Pakistan</span>
+              <span className="flex items-center gap-2"><Mail size={14} className="text-[#8B5CF6]" /> hello@tute.pk</span>
+              <span className="flex items-center gap-2"><Phone size={14} className="text-[#8B5CF6]" /> 03312030359</span>
             </div>
           </div>
 
           {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="text-white/90 font-semibold text-sm mb-4">{title}</h4>
+              <h4 className="text-[#0B071E]/80 font-black text-sm mb-4">{title}</h4>
               <ul className="flex flex-col gap-2.5">
                 {links.map(({ label, href }) => (
                   <li key={label}>
                     <Link
                       href={href}
-                      className="text-white/45 hover:text-white/85 text-sm transition-colors duration-200"
+                      className="text-[#0B071E]/70 hover:text-[#8B5CF6] text-sm font-semibold transition-colors duration-200"
                     >
                       {label}
                     </Link>
@@ -81,16 +74,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-white/35 text-sm">
-            © 2025 TutorTap. All rights reserved. Built with ❤️ for Pakistani students.
+        <div className="pt-8 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-[#0B071E]/50 text-sm font-semibold">
+            © 2025 Tute. All rights reserved. Made for university students.
           </p>
           <div className="flex items-center gap-4">
             {socials.map(({ label, href }) => (
               <a
                 key={label}
                 href={href}
-                className="text-xs text-white/40 hover:text-white/80 transition-colors"
+                className="text-xs text-[#0B071E]/50 hover:text-[#8B5CF6] font-semibold transition-colors"
               >
                 {label}
               </a>

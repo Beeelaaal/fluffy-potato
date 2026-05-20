@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, Zap } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { signInWithGoogle, signInWithGitHub, signInWithEmail } from '@/lib/auth';
+import { TuteLogo } from '@/components/brand/TuteLogo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -53,11 +54,8 @@ export default function LoginPage() {
         initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5}}>
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 mb-8">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{background:'linear-gradient(135deg,#2EF2FF,#00BBDD)'}}>
-            <Zap size={17} className="text-dark-900" strokeWidth={2.5}/>
-          </div>
-          <span className="font-display font-bold text-xl">Tutor<span className="gradient-text">Tap</span></span>
+        <Link href="/" className="inline-block mb-8">
+          <TuteLogo size={34} />
         </Link>
 
         <h1 className="font-display text-4xl mb-2">Welcome back</h1>

@@ -1,29 +1,30 @@
 import type { Metadata } from 'next';
-import { Bungee, Sora } from 'next/font/google';
+import { Syne, Plus_Jakarta_Sans } from 'next/font/google';
 // @ts-ignore
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import TestimonialPrompt from '@/components/popup/TestimonialPrompt';
 import { AuthProvider } from '@/context/AuthContext';
 
-const displayFont = Bungee({
+const displayFont = Syne({
   subsets: ['latin'],
-  weight: '400',
+  weight: ['700', '800'],
   variable: '--font-display',
 });
 
-const bodyFont = Sora({
+const bodyFont = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-body',
 });
 
 export const metadata: Metadata = {
-  title: "TutorTap - Pakistan's #1 EdTech Platform",
+  title: "Tute — Pakistan's #1 EdTech Platform",
   description: "Pakistan's premier EdTech platform connecting students with universities, resources, and expert tutors.",
-  keywords: 'tutor, university, pakistan, education, edtech, resources, marketplace',
-  authors: [{ name: 'TutorTap' }],
+  keywords: 'tute, tutor, university, pakistan, education, edtech, resources, marketplace',
+  authors: [{ name: 'Tute' }],
   openGraph: {
-    title: 'TutorTap - Your University Life, Simplified',
+    title: 'Tute — Your University Life, Simplified',
     description: "Pakistan's premier EdTech platform for university students",
     type: 'website',
   },
@@ -31,12 +32,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className={`${displayFont.variable} ${bodyFont.variable} font-body bg-dark-900 text-white antialiased`}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${displayFont.variable} ${bodyFont.variable} font-body bg-[#FDFBF7] text-[#0B071E] antialiased`}>
         <AuthProvider>
           <Navbar />
           <main>{children}</main>
           <Footer />
+          <TestimonialPrompt />
         </AuthProvider>
       </body>
     </html>

@@ -57,7 +57,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
 
   // Fallback defaults for missing fields since we haven't built the profile editor yet
   const displayAvatar = profile.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.name}&backgroundColor=050e0d`;
-  const bio = "I am a dedicated member of TutorTap. I'm passionate about learning and exploring new concepts.";
+  const bio = "I am a dedicated member of Tute. I'm passionate about learning and exploring new concepts.";
   const degree = profile.role === 'tutor' ? 'Expert Tutor' : 'University Student';
   
   return (
@@ -105,7 +105,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                     ? 'bg-neon-lime/10 text-neon-lime border border-neon-lime/20'
                     : 'bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/20'
                 }`}>
-                  {profile.role === 'tutor' ? '👨‍🏫 Verified Tutor' : profile.role === 'admin' ? '🛡️ Admin' : '🎓 Student'}
+                  {profile.role === 'tutor' ? 'Verified Tutor' : profile.role === 'admin' ? 'Admin' : 'Student'}
                 </span>
               </div>
 

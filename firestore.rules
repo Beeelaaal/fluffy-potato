@@ -2,17 +2,16 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ── Users ──────────────────────────────────────────────────────────────
     match /users/{uid} {
-      // A signed-in user can always read/write their OWN document.
-      // This is required so new users can create their profile on first sign-in
-      // AND so /debug can set role = "admin" for initial bootstrap.
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      // Any signed-in user can read profiles (necessary for marketplace, viewing tutors, etc.)
+      allow read: if request.auth != null;
 
-      // An admin can read/write ALL user documents (for admin panel user management)
-      allow read, write: if request.auth != null
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      // Only the user themselves or an admin can write
+      allow write: if request.auth != null && (
+        request.auth.uid == uid ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin")
+      );
     }
 
     // ── Resources ──────────────────────────────────────────────────────────

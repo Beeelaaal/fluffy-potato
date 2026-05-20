@@ -6,7 +6,7 @@ import CTASection from '@/components/sections/CTASection';
 
 export default function HomePage() {
   return (
-    <div className="bg-dark-gradient">
+    <div className="overflow-hidden">
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />

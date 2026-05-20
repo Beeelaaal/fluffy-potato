@@ -7,7 +7,7 @@ export async function seedDatabase() {
 
   // 1. Users (admin + tutor + student)
   const users = [
-    { uid:'admin_main', name:'Admin User',  email:'admin@tutortap.pk', role:'admin',   university:'NUST', isVerified:true,  photoURL:'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin' },
+    { uid:'admin_main', name:'Admin User',  email:'admin@tute.pk', role:'admin',   university:'NUST', isVerified:true,  photoURL:'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin' },
     { uid:'tutor_001',  name:'Omar Farooq', email:'omar@nust.edu.pk',  role:'tutor',   university:'NUST', isVerified:true,  photoURL:'https://api.dicebear.com/7.x/avataaars/svg?seed=Omar', rating:4.8, sessions:120 },
     { uid:'tutor_002',  name:'Sana Malik',  email:'sana@lums.edu.pk',  role:'tutor',   university:'LUMS', isVerified:true,  photoURL:'https://api.dicebear.com/7.x/avataaars/svg?seed=Sana', rating:4.9, sessions:85 },
     { uid:'student_001',name:'Ali Hassan',  email:'ali@fast.edu.pk',   role:'student', university:'FAST', isVerified:false, photoURL:'https://api.dicebear.com/7.x/avataaars/svg?seed=Ali' },

@@ -26,6 +26,7 @@ module.exports = {
           coral:  '#FF5C7A',
         },
         dark: {
+          DEFAULT: '#0B071E',
           900: '#0A0514',
           800: '#110A20',
           700: '#1A0F30',

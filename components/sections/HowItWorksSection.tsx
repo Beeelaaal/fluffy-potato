@@ -54,8 +54,8 @@ export default function HowItWorksSection() {
             Get started in{' '}
             <span className="gradient-text">4 simple steps</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-xl mx-auto">
-            From signup to your first session, TutorTap makes the journey seamless and fast.
+          <p className="text-[#0B071E]/60 text-lg max-w-xl mx-auto font-semibold">
+            From signup to your first session, Tute makes the journey seamless and fast.
           </p>
         </motion.div>
 
@@ -63,7 +63,7 @@ export default function HowItWorksSection() {
         <div className="relative">
           {/* Connecting line (desktop) */}
           <div className="hidden lg:block absolute top-16 left-[12.5%] right-[12.5%] h-px"
-            style={{ background: 'linear-gradient(90deg, rgba(91,99,245,0.1), rgba(91,99,245,0.5), rgba(6,182,212,0.5), rgba(16,185,129,0.1))' }}
+            style={{ background: 'linear-gradient(90deg, rgba(139,92,246,0.05), rgba(139,92,246,0.3), rgba(139,92,246,0.3), rgba(139,92,246,0.05))' }}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
@@ -80,8 +80,8 @@ export default function HowItWorksSection() {
                   {/* Step circle */}
                   <div className="relative w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-2xl"
                     style={{
-                      background: `${step.color}15`,
-                      border: `2px solid ${step.color}40`,
+                      background: `${step.color}12`,
+                      border: `2px solid ${step.color}25`,
                     }}>
                     <Icon size={28} style={{ color: step.color }} />
 
@@ -92,8 +92,8 @@ export default function HowItWorksSection() {
                     </span>
                   </div>
 
-                  <h3 className="font-display font-semibold text-lg mb-3">{step.title}</h3>
-                  <p className="text-white/50 text-sm leading-relaxed px-2">{step.description}</p>
+                  <h3 className="font-display font-black text-lg mb-3 text-[#0B071E]">{step.title}</h3>
+                  <p className="text-[#0B071E]/60 text-sm font-semibold leading-relaxed px-2">{step.description}</p>
                 </motion.div>
               );
             })}

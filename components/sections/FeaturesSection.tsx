@@ -63,7 +63,7 @@ export default function FeaturesSection() {
     <section className="py-28 relative" id="features">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-funky-orange/6 blur-[120px] rounded-full" />
+        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#8B5CF6]/5 blur-[120px] rounded-full" />
       </div>
 
       <div className="section-container relative" ref={ref}>
@@ -79,8 +79,8 @@ export default function FeaturesSection() {
             Everything a student needs,{' '}
             <span className="gradient-text">in one place</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-2xl mx-auto">
-            TutorTap combines university discovery, academic resources, and expert tutoring 
+          <p className="text-[#0B071E]/60 text-lg max-w-2xl mx-auto font-semibold">
+            Tute combines university discovery, academic resources, and expert tutoring 
             into a seamless, premium experience.
           </p>
         </motion.div>
@@ -100,18 +100,18 @@ export default function FeaturesSection() {
               >
                 {/* Icon */}
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
-                  style={{ background: `${feature.color}18`, border: `1px solid ${feature.color}30` }}>
+                  style={{ background: `${feature.color}12`, border: `1px solid ${feature.color}25` }}>
                   <Icon size={22} style={{ color: feature.color }} />
                 </div>
 
                 {/* Content */}
-                <h3 className="font-display font-semibold text-lg text-white mb-3">{feature.title}</h3>
-                <p className="text-white/50 text-sm leading-relaxed mb-5">{feature.description}</p>
+                <h3 className="font-display font-black text-lg text-[#0B071E] mb-3">{feature.title}</h3>
+                <p className="text-[#0B071E]/60 text-sm font-semibold leading-relaxed mb-5">{feature.description}</p>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2">
                   {feature.tags.map(tag => (
-                    <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-medium"
+                    <span key={tag} className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider"
                       style={{
                         background: `${feature.color}12`,
                         border: `1px solid ${feature.color}25`,
