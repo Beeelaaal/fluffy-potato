@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Search, MapPin, GraduationCap, Users, BookOpen, X, Building2, Globe, Calendar, ChevronRight } from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { categorizedDegrees } from '@/data/resources';
 
 interface UniDoc {
   id: string;
@@ -19,6 +20,7 @@ interface UniDoc {
   websiteUrl?: string;
   deadline?: string;
   admissionCriteria?: string;
+  degrees?: string[];
 }
 
 export default function UniversitiesPage() {
@@ -28,6 +30,8 @@ export default function UniversitiesPage() {
   const [search, setSearch] = useState('');
   const [city, setCity] = useState('All Cities');
   const [type, setType] = useState('All Types');
+  const [selectedDegree, setSelectedDegree] = useState('All Degrees');
+  const [sortBy, setSortBy] = useState('name-asc');
   const headerRef = useRef(null);
   const inView = useInView(headerRef, { once: true });
 
@@ -50,13 +54,43 @@ export default function UniversitiesPage() {
 
   const filtered = universities.filter(u => {
     const q = search.toLowerCase();
-    const matchSearch = !search || u.name?.toLowerCase().includes(q) || u.shortName?.toLowerCase().includes(q);
+    const matchSearch = !search || 
+      u.name?.toLowerCase().includes(q) || 
+      u.shortName?.toLowerCase().includes(q) ||
+      u.degrees?.some(d => d.toLowerCase().includes(q));
     const matchCity = city === 'All Cities' || u.city === city;
     const matchType = type === 'All Types' || u.type === type;
-    return matchSearch && matchCity && matchType;
+    const matchDegree = selectedDegree === 'All Degrees' || u.degrees?.includes(selectedDegree);
+    return matchSearch && matchCity && matchType && matchDegree;
   });
 
-  const clearFilters = () => { setSearch(''); setCity('All Cities'); setType('All Types'); };
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortBy === 'name-asc') {
+      return a.name.localeCompare(b.name);
+    }
+    if (sortBy === 'name-desc') {
+      return b.name.localeCompare(a.name);
+    }
+    if (sortBy === 'programs-desc') {
+      return (b.programs || 0) - (a.programs || 0);
+    }
+    if (sortBy === 'deadline-asc') {
+      if (!a.deadline) return 1;
+      if (!b.deadline) return -1;
+      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    }
+    return 0;
+  });
+
+  const clearFilters = () => { 
+    setSearch(''); 
+    setCity('All Cities'); 
+    setType('All Types'); 
+    setSelectedDegree('All Degrees');
+    setSortBy('name-asc');
+  };
+
+  const hasFilters = search || city !== 'All Cities' || type !== 'All Types' || selectedDegree !== 'All Degrees' || sortBy !== 'name-asc';
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -77,22 +111,46 @@ export default function UniversitiesPage() {
         </div>
 
         {/* Search + Filters */}
-        <motion.div className="flex flex-col sm:flex-row gap-3 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <div className="relative flex-1">
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0B071E]/40" />
-            <input type="text" placeholder="Search universities..." value={search} onChange={e => setSearch(e.target.value)} className="input-field pl-10" />
+        <motion.div className="flex flex-col gap-3 mb-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0B071E]/40" />
+              <input type="text" placeholder="Search by name, abbreviation, or degree..." value={search} onChange={e => setSearch(e.target.value)} className="input-field pl-10" />
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <select value={city} onChange={e => setCity(e.target.value)} className="input-field w-full sm:w-44 cursor-pointer font-bold">
+                {cities.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+              <select value={type} onChange={e => setType(e.target.value)} className="input-field w-full sm:w-36 cursor-pointer capitalize font-bold">
+                {types.map(t => <option key={t} value={t}>{t === 'All Types' ? t : t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
+              </select>
+            </div>
           </div>
-          <select value={city} onChange={e => setCity(e.target.value)} className="input-field sm:w-44 cursor-pointer font-bold">
-            {cities.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <select value={type} onChange={e => setType(e.target.value)} className="input-field sm:w-36 cursor-pointer capitalize font-bold">
-            {types.map(t => <option key={t} value={t}>{t === 'All Types' ? t : t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
-          </select>
-          {(search || city !== 'All Cities' || type !== 'All Types') && (
-            <button onClick={clearFilters} className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-[#0B071E]/60 hover:text-white transition-all bg-white/80 border border-[#0B071E]/10 hover:bg-[#0B071E]">
-              <X size={14} /> Clear
-            </button>
-          )}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <select value={selectedDegree} onChange={e => setSelectedDegree(e.target.value)} className="input-field flex-1 cursor-pointer font-bold">
+              <option value="All Degrees">All Offered Degrees</option>
+              {Object.entries(categorizedDegrees).map(([category, catDegrees]) => (
+                <optgroup key={category} label={category}>
+                  {catDegrees.map(d => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+            <div className="flex gap-3">
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="input-field w-full sm:w-48 cursor-pointer font-bold">
+                <option value="name-asc">Sort: Name (A-Z)</option>
+                <option value="name-desc">Sort: Name (Z-A)</option>
+                <option value="programs-desc">Sort: Most Programs</option>
+                <option value="deadline-asc">Sort: Nearest Deadline</option>
+              </select>
+              {hasFilters && (
+                <button onClick={clearFilters} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#0B071E]/60 hover:text-white transition-all bg-white/80 border border-[#0B071E]/10 hover:bg-[#0B071E] font-bold">
+                  <X size={14} /> Clear
+                </button>
+              )}
+            </div>
+          </div>
         </motion.div>
 
         {/* Loading state */}
@@ -124,16 +182,16 @@ export default function UniversitiesPage() {
         )}
 
         {/* Count */}
-        {!loading && filtered.length > 0 && (
+        {!loading && sorted.length > 0 && (
           <p className="text-[#0B071E]/60 text-sm mb-6 font-bold">
-            Showing <span className="text-[#8B5CF6] font-extrabold">{filtered.length}</span> universities
+            Showing <span className="text-[#8B5CF6] font-extrabold">{sorted.length}</span> universities
           </p>
         )}
 
         {/* Grid */}
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((uni, i) => (
+            {sorted.map((uni, i) => (
               <motion.div key={uni.id} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.05, 0.4), duration: 0.45 }}>
                 <div className="glass-card overflow-hidden group h-full flex flex-col">
                   {/* Header bar - Clickable */}
@@ -171,6 +229,22 @@ export default function UniversitiesPage() {
                       {uni.deadline && <span className="flex items-center gap-1"><Calendar size={11} /> {uni.deadline}</span>}
                     </div>
 
+                    {/* Display offered degrees count or preview tags */}
+                    {uni.degrees && uni.degrees.length > 0 && (
+                      <div className="mb-4 flex flex-wrap gap-1 border-t border-black/5 pt-3">
+                        {uni.degrees.slice(0, 3).map((deg) => (
+                          <span key={deg} className="px-2 py-0.5 rounded-lg bg-black/[0.03] border border-black/5 text-[10px] text-[#0B071E]/65 font-bold">
+                            {deg.split(' (')[0]}
+                          </span>
+                        ))}
+                        {uni.degrees.length > 3 && (
+                          <span className="px-2 py-0.5 rounded-lg bg-[#8B5CF6]/5 border border-[#8B5CF6]/15 text-[10px] text-[#8B5CF6] font-bold">
+                            +{uni.degrees.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between mt-auto pt-2 border-t border-black/5">
                       {uni.websiteUrl ? (
                         <a href={uni.websiteUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs text-funky-cyan hover:text-funky-cyan/80 transition-colors font-bold">
@@ -189,7 +263,7 @@ export default function UniversitiesPage() {
         )}
 
         {/* No results after filtering */}
-        {!loading && filtered.length === 0 && universities.length > 0 && (
+        {!loading && sorted.length === 0 && universities.length > 0 && (
           <div className="text-center py-20">
             <Building2 size={36} className="text-[#0B071E]/20 mx-auto mb-4" />
             <p className="text-[#0B071E]/60 text-lg font-bold">No universities match your search</p>

@@ -7,11 +7,12 @@ import Link from 'next/link';
 import {
   MapPin, Users, BookOpen, Calendar, Globe, Phone, Mail,
   ArrowLeft, CheckCircle, Clock, DollarSign, Award, ChevronRight,
-  Building2
+  Building2, GraduationCap
 } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { universities as staticUniversities } from '@/data/universities';
+import { categorizedDegrees } from '@/data/resources';
 
 export default function UniversityDetailPage({ params }: { params: { id: string } }) {
   const [uni, setUni] = useState<any>(null);
@@ -64,13 +65,17 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               phone: data.phone || '+92-51-111-222-333',
               email: data.email || `admissions@${(data.shortName || 'univ').toLowerCase()}.edu.pk`,
               address: data.address || `${data.city}, Pakistan`
-            }
+            },
+            degrees: data.degrees || (staticUni as any)?.degrees || []
           });
         } else {
           // If not in Firestore, check if we have it in static data
           const staticUni = staticUniversities.find(u => u.id.toLowerCase() === params.id.toLowerCase());
           if (staticUni) {
-            setUni(staticUni);
+            setUni({
+              ...staticUni,
+              degrees: (staticUni as any).degrees || []
+            });
           } else {
             setUni(null);
           }
@@ -78,7 +83,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
       } catch (err) {
         console.error('Error fetching university details:', err);
         const staticUni = staticUniversities.find(u => u.id.toLowerCase() === params.id.toLowerCase());
-        setUni(staticUni || null);
+        setUni(staticUni ? { ...staticUni, degrees: (staticUni as any).degrees || [] } : null);
       } finally {
         setLoading(false);
       }
@@ -97,6 +102,17 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
   if (!uni) {
     notFound();
   }
+
+  const uniDegrees = uni.degrees || [];
+  const groupedDegrees = Object.entries(categorizedDegrees).reduce((acc, [category, degreesList]) => {
+    const matching = degreesList.filter(d => uniDegrees.includes(d));
+    if (matching.length > 0) {
+      acc[category] = matching;
+    }
+    return acc;
+  }, {} as Record<string, string[]>);
+
+  const hasDegrees = Object.keys(groupedDegrees).length > 0;
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -187,6 +203,39 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                 ))}
               </div>
             </motion.div>
+
+            {/* Offered Degrees */}
+            {hasDegrees && (
+              <motion.div
+                className="glass-card p-7"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <h2 className="font-display font-black text-xl mb-6 flex items-center gap-2 text-[#0B071E]">
+                  <GraduationCap size={18} className="text-[#8B5CF6]" /> Offered Degree Programs
+                </h2>
+                <div className="space-y-6">
+                  {Object.entries(groupedDegrees).map(([category, catDegrees]) => (
+                    <div key={category} className="space-y-3">
+                      <h3 className="text-xs font-black uppercase tracking-wider text-[#0B071E]/50 flex items-center gap-1.5">
+                        <Building2 size={12} className="text-funky-cyan" /> {category}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {catDegrees.map((degree) => (
+                          <span
+                            key={degree}
+                            className="px-3 py-1.5 text-xs font-extrabold rounded-xl bg-white/40 border border-black/5 text-[#0B071E] backdrop-blur-sm shadow-sm transition-all duration-300 hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5"
+                          >
+                            {degree}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             {/* Requirements */}
             <motion.div

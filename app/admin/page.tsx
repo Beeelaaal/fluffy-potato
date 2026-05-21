@@ -11,12 +11,12 @@ import { useProtectedRoute } from '@/hooks/useProtectedRoute';
 import { useAuth } from '@/context/AuthContext';
 import { normalizeResource } from '@/lib/resources';
 import { Resource } from '@/data/resources';
-import { degrees } from '@/data/resources';
+import { degrees, categorizedDegrees } from '@/data/resources';
 
 type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'contacts' | 'careers' | 'chats_bids' | 'blogs';
 
 type AdminUser = { id: string; email?: string; name?: string; role?: string; university?: string; };
-type UniDoc = { id: string; name: string; shortName: string; city: string; type: string; programs?: number; description?: string; logoUrl?: string; coverUrl?: string; websiteUrl?: string; deadline?: string; admissionCriteria?: string; };
+type UniDoc = { id: string; name: string; shortName: string; city: string; type: string; programs?: number; description?: string; logoUrl?: string; coverUrl?: string; websiteUrl?: string; deadline?: string; admissionCriteria?: string; degrees?: string[]; };
 type RequestDoc = { id: string; title: string; subject: string; budget: number; status: string; studentName?: string; createdAt?: any; bidsCount?: number; };
 type ContactDoc = { id: string; name: string; email: string; subject: string; message: string; createdAt?: any; };
 type CareerDoc = { id: string; name: string; email: string; phone: string; university: string; whyApply: string; createdAt?: any; };
@@ -39,7 +39,7 @@ const TABS: { id: Tab; label: string; icon: typeof TrendingUp }[] = [
 const RTYPES: Resource['type'][] = ['notes','past-paper','assignment','timetable','slide','book'];
 
 const emptyRes = { title:'', university:'NUST', degree: degrees[0]??'', course:'', instructor:'', description:'', fileUrl:'', fileType:'PDF', type:'notes' as Resource['type'] };
-const emptyUni = { name:'', shortName:'', city:'', type:'public', programs: 0, description:'', logoUrl:'', coverUrl:'', websiteUrl:'', deadline:'', admissionCriteria:'' };
+const emptyUni = { name:'', shortName:'', city:'', type:'public', programs: 0, description:'', logoUrl:'', coverUrl:'', websiteUrl:'', deadline:'', admissionCriteria:'', degrees: [] as string[] };
 
 export default function AdminPage() {
   const { loading, profile } = useProtectedRoute({ requiredRole:'admin', redirectOnRoleMismatch:false });
@@ -507,6 +507,114 @@ export default function AdminPage() {
                     <label className="form-label">Admission Criteria</label>
                     <textarea value={uniForm.admissionCriteria} onChange={e=>setUniForm(p=>({...p,admissionCriteria:e.target.value}))} rows={2} placeholder="Minimum marks, entry test details..." className="input-field resize-none"/>
                   </div>
+                  
+                  <div className="md:col-span-2 xl:col-span-3 border-t border-black/10 pt-5 mt-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                      <div>
+                        <h3 className="font-display text-base font-black text-[#0B071E]">Offered Degrees Checklist</h3>
+                        <p className="text-xs text-[#0B071E]/50 font-semibold">Select the degree programs offered by this university.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setUniForm(p => ({ ...p, degrees: Object.values(categorizedDegrees).flat() }))}
+                          className="px-3 py-1.5 rounded-xl border border-black/10 text-[11px] font-bold hover:bg-black/5 hover:border-black/20 transition-all text-[#0b071e]"
+                        >
+                          Select All
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setUniForm(p => ({ ...p, degrees: [] }))}
+                          className="px-3 py-1.5 rounded-xl border border-black/10 text-[11px] font-bold hover:bg-black/5 hover:border-black/20 transition-all text-[#0b071e]"
+                        >
+                          Clear All
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-6 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar border border-black/5 bg-black/[0.01] rounded-2xl p-4">
+                      {Object.entries(categorizedDegrees).map(([category, catDegrees]) => {
+                        const currentDegrees = uniForm.degrees || [];
+                        const checkedCount = catDegrees.filter(d => currentDegrees.includes(d)).length;
+
+                        return (
+                          <div key={category} className="rounded-xl border border-black/5 bg-white/50 p-4 backdrop-blur-sm">
+                            <div className="flex items-center justify-between mb-3 border-b border-black/5 pb-2">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-black uppercase tracking-wider text-[#8B5CF6]">{category}</span>
+                                {checkedCount > 0 && (
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#8B5CF6]/10 text-[#8B5CF6] font-bold">
+                                    {checkedCount} selected
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex gap-2 text-[10px] font-bold">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setUniForm(p => {
+                                      const current = p.degrees || [];
+                                      const next = [...new Set([...current, ...catDegrees])];
+                                      return { ...p, degrees: next };
+                                    });
+                                  }}
+                                  className="text-[#8B5CF6] hover:underline"
+                                >
+                                  Select Category
+                                </button>
+                                <span className="text-black/25">|</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setUniForm(p => {
+                                      const current = p.degrees || [];
+                                      const next = current.filter(d => !catDegrees.includes(d));
+                                      return { ...p, degrees: next };
+                                    });
+                                  }}
+                                  className="text-red-500 hover:underline"
+                                >
+                                  Clear Category
+                                </button>
+                              </div>
+                            </div>
+                            <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                              {catDegrees.map(deg => {
+                                const checked = currentDegrees.includes(deg);
+                                return (
+                                  <label
+                                    key={deg}
+                                    className={`flex items-start gap-2.5 rounded-xl border p-2.5 cursor-pointer transition-all duration-200 select-none ${
+                                      checked
+                                        ? 'border-[#8B5CF6]/30 bg-[#8B5CF6]/5 text-[#8B5CF6] font-bold shadow-sm'
+                                        : 'border-black/5 bg-white/40 text-[#0B071E]/70 font-semibold hover:border-black/10 hover:bg-white/70'
+                                    }`}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={e => {
+                                        const isChecked = e.target.checked;
+                                        setUniForm(p => {
+                                          const current = p.degrees || [];
+                                          const next = isChecked
+                                            ? [...current, deg]
+                                            : current.filter(d => d !== deg);
+                                          return { ...p, degrees: next };
+                                        });
+                                      }}
+                                      className="mt-0.5 rounded border-black/20 text-[#8B5CF6] focus:ring-[#8B5CF6]/30 cursor-pointer"
+                                    />
+                                    <span className="text-xs leading-tight">{deg}</span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
                 <div className="mt-5 flex gap-3 justify-end">
                   <button 
@@ -552,7 +660,8 @@ export default function AdminPage() {
                                 coverUrl: u.coverUrl || '',
                                 websiteUrl: u.websiteUrl || '',
                                 deadline: u.deadline || '',
-                                admissionCriteria: u.admissionCriteria || ''
+                                admissionCriteria: u.admissionCriteria || '',
+                                degrees: u.degrees || []
                               });
                               setEditingUniId(u.id);
                               setShowUniForm(true);

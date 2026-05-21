@@ -7,3 +7,6 @@ next-build/
 .env.local 
 dev-server*.log 
 .vercel
+
+# Local Netlify folder
+.netlify

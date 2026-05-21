@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { degrees, courses, Resource } from '@/data/resources';
 import { universities } from '@/data/universities';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
@@ -44,6 +44,46 @@ export default function ResourcesPage() {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [search, setSearch] = useState('');
+
+  const handleDownload = (resourceId: string, fileUrl?: string) => {
+    if (!fileUrl) {
+      alert("No download URL available for this resource.");
+      return;
+    }
+    // Increment downloads in Firestore in the background (non-blocking) so window.open is not blocked as a popup
+    updateDoc(doc(db, 'resources', resourceId), {
+      downloads: increment(1)
+    }).catch(err => console.error('Error updating download count:', err));
+
+    setResources(prev => prev.map(r => r.id === resourceId ? { ...r, downloads: (r.downloads || 0) + 1 } : r));
+
+    let downloadUrl = fileUrl;
+    
+    // 1. Check for standard Google Drive files
+    const driveRegex = /(?:drive\.google\.com\/file\/d\/|drive\.google\.com\/open\?id=)([^/?#&]+)/i;
+    const driveMatch = fileUrl.match(driveRegex);
+    if (driveMatch && driveMatch[1]) {
+      const fileId = driveMatch[1];
+      downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+    } else {
+      // 2. Check for Google Docs, Sheets, and Slides exportable formats
+      const docsRegex = /(?:docs\.google\.com\/(document|spreadsheets|presentation)\/d\/)([^/?#&]+)/i;
+      const docsMatch = fileUrl.match(docsRegex);
+      if (docsMatch && docsMatch[2]) {
+        const type = docsMatch[1].toLowerCase();
+        const fileId = docsMatch[2];
+        if (type === 'document') {
+          downloadUrl = `https://docs.google.com/document/d/${fileId}/export?format=pdf`;
+        } else if (type === 'spreadsheets') {
+          downloadUrl = `https://docs.google.com/spreadsheets/d/${fileId}/export?format=pdf`;
+        } else if (type === 'presentation') {
+          downloadUrl = `https://docs.google.com/presentation/d/${fileId}/export?format=pdf`;
+        }
+      }
+    }
+    
+    window.open(downloadUrl, '_blank');
+  };
 
   useEffect(() => {
     async function fetchResources() {
@@ -265,17 +305,21 @@ export default function ResourcesPage() {
                     {/* Actions */}
                     <div className="flex gap-3 mt-auto">
                       <button 
-                        onClick={() => {
-                          window.dispatchEvent(new CustomEvent('tute-download-resource'));
-                          alert('Starting resource download... 🚀 Thank you for using Tute!');
-                        }}
+                        onClick={() => handleDownload(res.id, res.fileUrl)}
                         className="btn-primary flex-1 py-2.5 text-sm font-extrabold tracking-wide"
                       >
                         <Download size={14} /> Download
                       </button>
                       <button 
-                        onClick={() => alert('Reviewing document... 📄')}
+                        onClick={() => {
+                          if (res.fileUrl) {
+                            window.open(res.fileUrl, '_blank');
+                          } else {
+                            alert('No document link available.');
+                          }
+                        }}
                         className="btn-ghost py-2.5 px-4 text-sm"
+                        title="Open Resource Link"
                       >
                         <ExternalLink size={14} />
                       </button>

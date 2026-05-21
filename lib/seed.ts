@@ -26,11 +26,11 @@ export async function seedDatabase() {
 
   // 3. Universities
   const unis = [
-    { name:'National University of Sciences and Technology', shortName:'NUST', city:'Islamabad', type:'public', programs:150, ranking:1, students:15000, established:1991 },
-    { name:'Lahore University of Management Sciences', shortName:'LUMS', city:'Lahore', type:'private', programs:80, ranking:2, students:5000, established:1984 },
-    { name:'FAST National University', shortName:'FAST', city:'Multiple', type:'private', programs:60, ranking:3, students:12000, established:2000 },
-    { name:'University of Engineering and Technology', shortName:'UET', city:'Lahore', type:'public', programs:100, ranking:4, students:20000, established:1921 },
-    { name:'Quaid-i-Azam University', shortName:'QAU', city:'Islamabad', type:'public', programs:120, ranking:5, students:18000, established:1967 },
+    { name:'National University of Sciences and Technology', shortName:'NUST', city:'Islamabad', type:'public', programs:150, ranking:1, students:15000, established:1991, degrees: ['Computer Science (CS)', 'Software Engineering (SE)', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'BBA', 'Mathematics'] },
+    { name:'Lahore University of Management Sciences', shortName:'LUMS', city:'Lahore', type:'private', programs:80, ranking:2, students:5000, established:1984, degrees: ['Computer Science (CS)', 'BBA', 'Accounting & Finance', 'Economics', 'Liberal Arts'] },
+    { name:'FAST National University', shortName:'FAST', city:'Multiple', type:'private', programs:60, ranking:3, students:12000, established:2000, degrees: ['Computer Science (CS)', 'Software Engineering (SE)', 'Artificial Intelligence (AI)', 'Data Science', 'Cyber Security', 'Electrical Engineering'] },
+    { name:'University of Engineering and Technology', shortName:'UET', city:'Lahore', type:'public', programs:100, ranking:4, students:20000, established:1921, degrees: ['Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Chemical Engineering', 'Computer Engineering'] },
+    { name:'Quaid-i-Azam University', shortName:'QAU', city:'Islamabad', type:'public', programs:120, ranking:5, students:18000, established:1967, degrees: ['Physics', 'Chemistry', 'Mathematics', 'International Relations'] },
   ];
   unis.forEach(u => batch.set(doc(collection(db,'universities'),u.shortName), u, { merge:true }));
 
