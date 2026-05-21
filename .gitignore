@@ -6,3 +6,4 @@ node_modules/
 next-build/ 
 .env.local 
 dev-server*.log 
+.vercel
