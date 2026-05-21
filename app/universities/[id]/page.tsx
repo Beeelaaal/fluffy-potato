@@ -41,7 +41,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
             students: data.students || staticUni?.students || 5000,
             programs: data.programs || staticUni?.programs || 10,
             logo: data.logoUrl || staticUni?.logo || `https://api.dicebear.com/7.x/initials/svg?seed=${data.shortName}&backgroundColor=1a1a35&textColor=5b63f5`,
-            image: staticUni?.image || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=60',
+            image: data.coverUrl || data.imageUrl || staticUni?.image || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&auto=format&fit=crop&q=60',
             description: data.description || staticUni?.description || 'No description available.',
             website: data.websiteUrl || staticUni?.website || 'https://google.com',
             fee: staticUni?.fee || { min: 100000, max: 300000 },

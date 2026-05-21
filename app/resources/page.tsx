@@ -67,9 +67,10 @@ export default function ResourcesPage() {
     if (selectedDegree && r.degree !== selectedDegree) return false;
     if (selectedCourse && r.course !== selectedCourse) return false;
     if (selectedType !== 'all' && r.type !== selectedType) return false;
-    if (search && !r.title.toLowerCase().includes(search.toLowerCase()) &&
-      !r.course.toLowerCase().includes(search.toLowerCase()) &&
-      !r.instructor.toLowerCase().includes(search.toLowerCase())) return false;
+    if (search && 
+      !(r.title || '').toLowerCase().includes(search.toLowerCase()) &&
+      !(r.course || '').toLowerCase().includes(search.toLowerCase()) &&
+      !(r.instructor || '').toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
@@ -231,7 +232,7 @@ export default function ResourcesPage() {
                       </div>
                       <span className="text-xs px-3 py-1.5 rounded-full font-extrabold capitalize tracking-wide border"
                         style={{ background: `${color}10`, borderColor: `${color}25`, color }}>
-                        {res.type.replace('-', ' ')}
+                        {(res.type || 'notes').replace('-', ' ')}
                       </span>
                     </div>
 

@@ -54,8 +54,8 @@ export const testimonials: Testimonial[] = [
 
 // Stats with Lucide icons instead of emojis
 export const stats = [
-  { label: 'Students Enrolled', value: '50,000+', Icon: GraduationCap },
-  { label: 'Tutors Available',  value: '3,200+',  Icon: Users },
-  { label: 'Universities Listed', value: '120+',  Icon: Building2 },
-  { label: 'Resources Shared',  value: '180,000+', Icon: BookOpen },
+  { label: 'Students Enrolled', value: '25,000+', Icon: GraduationCap },
+  { label: 'Tutors Available',  value: '1,200+',  Icon: Users },
+  { label: 'Universities Listed', value: '12',  Icon: Building2 },
+  { label: 'Resources Downloaded',  value: '150,000+', Icon: BookOpen },
 ];

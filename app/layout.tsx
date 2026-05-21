@@ -19,13 +19,18 @@ const bodyFont = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Tute — Pakistan's #1 EdTech Platform",
-  description: "Pakistan's premier EdTech platform connecting students with universities, resources, and expert tutors.",
+  title: "Tute — Your University Life, Simplified",
+  description: "Pakistan's premier platform connecting students with universities, resources, and expert tutors.",
   keywords: 'tute, tutor, university, pakistan, education, edtech, resources, marketplace',
   authors: [{ name: 'Tute' }],
+  icons: {
+    icon: '/logo.jpg',
+    shortcut: '/logo.jpg',
+    apple: '/logo.jpg',
+  },
   openGraph: {
     title: 'Tute — Your University Life, Simplified',
-    description: "Pakistan's premier EdTech platform for university students",
+    description: "Pakistan's premier platform for university students",
     type: 'website',
   },
 };

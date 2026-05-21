@@ -5,6 +5,9 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { ArrowRight, GraduationCap, Zap } from 'lucide-react';
 import { stats } from '@/data/testimonials';
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const HeroScene = dynamic(() => import('@/components/3d/HeroScene'), { ssr: false, loading: () => null });
 
@@ -12,6 +15,29 @@ const ctr = { hidden: {}, show: { transition: { staggerChildren: 0.1, delayChild
 const itm = { hidden: { opacity: 0, y: 22 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } } };
 
 export default function HeroSection() {
+  const [uniCount, setUniCount] = useState(12);
+
+  useEffect(() => {
+    async function loadCount() {
+      try {
+        const snap = await getDocs(collection(db, 'universities'));
+        if (!snap.empty) {
+          setUniCount(snap.size);
+        }
+      } catch (e) {
+        console.error('Error loading universities count:', e);
+      }
+    }
+    loadCount();
+  }, []);
+
+  const dynamicStats = stats.map(s => {
+    if (s.label === 'Universities Listed') {
+      return { ...s, value: `${uniCount}` };
+    }
+    return s;
+  });
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -34,15 +60,10 @@ export default function HeroSection() {
       <div className="relative z-10 section-container text-center pt-32 pb-24">
         <motion.div variants={ctr} initial="hidden" animate="show" className="max-w-4xl mx-auto">
 
-          {/* Badge */}
-          <motion.div variants={itm} className="flex justify-center mb-7">
-            <div className="live-badge">Pakistan&apos;s #1 EdTech Platform</div>
-          </motion.div>
-
           {/* Headline */}
           <motion.h1
             variants={itm}
-            className="font-display font-bold tracking-tight mb-6"
+            className="font-display font-bold tracking-tight mb-6 mt-4"
             style={{ fontSize: 'clamp(2.2rem, 5.5vw + 0.5rem, 5rem)', lineHeight: 1.05 }}
           >
             Your University Life,{' '}
@@ -79,7 +100,7 @@ export default function HeroSection() {
 
           {/* Stats — now using Lucide icons */}
           <motion.div variants={itm} className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            {stats.map(({ label, value, Icon }) => (
+            {dynamicStats.map(({ label, value, Icon }) => (
               <motion.div
                 key={label}
                 className="glass-card p-5 text-center cursor-default"

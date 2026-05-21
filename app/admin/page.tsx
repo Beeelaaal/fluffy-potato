@@ -16,7 +16,7 @@ import { degrees } from '@/data/resources';
 type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'requests';
 
 type AdminUser = { id: string; email?: string; name?: string; role?: string; university?: string; };
-type UniDoc = { id: string; name: string; shortName: string; city: string; type: string; programs?: number; description?: string; logoUrl?: string; websiteUrl?: string; deadline?: string; admissionCriteria?: string; };
+type UniDoc = { id: string; name: string; shortName: string; city: string; type: string; programs?: number; description?: string; logoUrl?: string; coverUrl?: string; websiteUrl?: string; deadline?: string; admissionCriteria?: string; };
 type RequestDoc = { id: string; title: string; subject: string; budget: number; status: string; studentName?: string; createdAt?: any; bidsCount?: number; };
 
 const TABS: { id: Tab; label: string; icon: typeof TrendingUp }[] = [
@@ -30,7 +30,7 @@ const TABS: { id: Tab; label: string; icon: typeof TrendingUp }[] = [
 const RTYPES: Resource['type'][] = ['notes','past-paper','assignment','timetable','slide','book'];
 
 const emptyRes = { title:'', university:'NUST', degree: degrees[0]??'', course:'', instructor:'', description:'', fileUrl:'', fileType:'PDF', type:'notes' as Resource['type'] };
-const emptyUni = { name:'', shortName:'', city:'', type:'public', programs: 0, description:'', logoUrl:'', websiteUrl:'', deadline:'', admissionCriteria:'' };
+const emptyUni = { name:'', shortName:'', city:'', type:'public', programs: 0, description:'', logoUrl:'', coverUrl:'', websiteUrl:'', deadline:'', admissionCriteria:'' };
 
 export default function AdminPage() {
   const { loading, profile } = useProtectedRoute({ requiredRole:'admin', redirectOnRoleMismatch:false });
@@ -426,6 +426,7 @@ export default function AdminPage() {
                     {label:'Short Name',   key:'shortName',         ph:'NUST'},
                     {label:'City',         key:'city',              ph:'Islamabad'},
                     {label:'Logo URL',     key:'logoUrl',           ph:'https://example.com/logo.png'},
+                    {label:'Cover Image URL', key:'coverUrl',       ph:'https://example.com/cover.jpg'},
                     {label:'Website URL',  key:'websiteUrl',        ph:'https://nust.edu.pk'},
                     {label:'App Deadline', key:'deadline',          ph:'2025-08-31'},
                   ].map(({label,key,ph})=>(
@@ -495,6 +496,7 @@ export default function AdminPage() {
                                 programs: u.programs || 0,
                                 description: u.description || '',
                                 logoUrl: u.logoUrl || '',
+                                coverUrl: u.coverUrl || '',
                                 websiteUrl: u.websiteUrl || '',
                                 deadline: u.deadline || '',
                                 admissionCriteria: u.admissionCriteria || ''
