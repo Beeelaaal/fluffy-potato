@@ -13,7 +13,7 @@ import { normalizeResource } from '@/lib/resources';
 import { Resource } from '@/data/resources';
 import { degrees } from '@/data/resources';
 
-type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'requests' | 'contacts' | 'careers' | 'chats_bids' | 'blogs';
+type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'contacts' | 'careers' | 'chats_bids' | 'blogs';
 
 type AdminUser = { id: string; email?: string; name?: string; role?: string; university?: string; };
 type UniDoc = { id: string; name: string; shortName: string; city: string; type: string; programs?: number; description?: string; logoUrl?: string; coverUrl?: string; websiteUrl?: string; deadline?: string; admissionCriteria?: string; };
@@ -25,16 +25,16 @@ type BidDoc = { id: string; requestId: string; tutorId: string; tutor: { name: s
 type BlogDoc = { id: string; title: string; slug: string; excerpt: string; content: string; category: string; authorName: string; date: string; readTime: string; };
 
 const TABS: { id: Tab; label: string; icon: typeof TrendingUp }[] = [
-  { id: 'overview',     label: 'Overview',      icon: TrendingUp   },
-  { id: 'users',        label: 'Users',          icon: Users        },
-  { id: 'resources',    label: 'Resources',      icon: BookOpen     },
-  { id: 'universities', label: 'Universities',   icon: Building     },
-  { id: 'requests',     label: 'Tutor Requests', icon: GraduationCap},
-  { id: 'contacts',     label: 'Contacts',       icon: Mail         },
-  { id: 'careers',      label: 'Careers',        icon: Briefcase    },
-  { id: 'chats_bids',   label: 'Chats & Bids',   icon: MessageSquare},
-  { id: 'blogs',        label: 'Blogs',          icon: FileText     },
+  { id: 'overview',     label: 'Overview',                icon: TrendingUp   },
+  { id: 'users',        label: 'Users',                   icon: Users        },
+  { id: 'resources',    label: 'Resources',               icon: BookOpen     },
+  { id: 'universities', label: 'Universities',            icon: Building     },
+  { id: 'contacts',     label: 'Contacts',                icon: Mail         },
+  { id: 'careers',      label: 'Careers',                 icon: Briefcase    },
+  { id: 'chats_bids',   label: 'Requests, Chats & Bids',  icon: MessageSquare},
+  { id: 'blogs',        label: 'Blogs',                   icon: FileText     },
 ];
+
 
 const RTYPES: Resource['type'][] = ['notes','past-paper','assignment','timetable','slide','book'];
 
@@ -573,41 +573,6 @@ export default function AdminPage() {
           </motion.div>
         )}
 
-        {/* ── REQUESTS (Marketplace) ── */}
-        {tab==='requests' && (
-          <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="glass-card overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="data-table w-full text-left text-[#0B071E]">
-                <thead><tr><th>Title</th><th>Subject</th><th>Budget</th><th>Student</th><th>Status</th><th className="text-right">Actions</th></tr></thead>
-                <tbody>
-                  {requests.map(r=>(
-                    <tr key={r.id}>
-                      <td className="font-semibold max-w-[160px] truncate">{r.title}</td>
-                      <td className="text-[#0B071E]/70 font-semibold">{r.subject}</td>
-                      <td className="text-[#15803D] font-bold">PKR {r.budget?.toLocaleString()}</td>
-                      <td className="text-[#0B071E]/70 font-semibold">{r.studentName||'—'}</td>
-                      <td>
-                        <span className={
-                          r.status==='open'?'tag-lime':
-                          r.status==='in-progress'?'tag-orange':
-                          'tag-coral'
-                        }>{r.status||'open'}</span>
-                      </td>
-                      <td className="text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {r.status!=='open'       && <button onClick={()=>updateRequestStatus(r.id,'open')}        className="btn-ghost px-2.5 py-1.5 text-xs text-[#0B071E] border-black/10">Open</button>}
-                          {r.status!=='in-progress'&& <button onClick={()=>updateRequestStatus(r.id,'in-progress')} className="btn-ghost px-2.5 py-1.5 text-xs text-[#0B071E] border-black/10">Progress</button>}
-                          {r.status!=='closed'     && <button onClick={()=>updateRequestStatus(r.id,'closed')}      className="btn-danger px-2.5 py-1.5 text-xs">Close</button>}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {requests.length===0 && <tr><td colSpan={6} className="py-10 text-center text-[#0B071E]/40 font-semibold">No marketplace requests. Seed Firebase to add sample data.</td></tr>}
-                </tbody>
-              </table>
-            </div>
-          </motion.div>
-        )}
 
         {/* ── CONTACT SUBMISSIONS ── */}
         {tab==='contacts' && (
@@ -679,6 +644,43 @@ export default function AdminPage() {
         {/* ── CHATS & BIDS ── */}
         {tab==='chats_bids' && (
           <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="space-y-8">
+            <div className="glass-card p-6">
+              <h2 className="font-display text-xl mb-4 font-black text-[#0B071E] flex items-center gap-2">
+                <GraduationCap className="text-[#8B5CF6]" size={20}/>
+                Tutor Requests ({requests.length})
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="data-table w-full text-left text-[#0B071E]">
+                  <thead><tr><th>Title</th><th>Subject</th><th>Budget</th><th>Student</th><th>Status</th><th className="text-right">Actions</th></tr></thead>
+                  <tbody>
+                    {requests.map(r=>(
+                      <tr key={r.id}>
+                        <td className="font-semibold max-w-[160px] truncate">{r.title}</td>
+                        <td className="text-[#0B071E]/70 font-semibold">{r.subject}</td>
+                        <td className="text-[#15803D] font-bold">PKR {r.budget?.toLocaleString()}</td>
+                        <td className="text-[#0B071E]/70 font-semibold">{r.studentName||'—'}</td>
+                        <td>
+                          <span className={
+                            r.status==='open'?'tag-lime':
+                            r.status==='in-progress'?'tag-orange':
+                            'tag-coral'
+                          }>{r.status||'open'}</span>
+                        </td>
+                        <td className="text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {r.status!=='open'       && <button onClick={()=>updateRequestStatus(r.id,'open')}        className="btn-ghost px-2.5 py-1.5 text-xs text-[#0B071E] border-black/10">Open</button>}
+                            {r.status!=='in-progress'&& <button onClick={()=>updateRequestStatus(r.id,'in-progress')} className="btn-ghost px-2.5 py-1.5 text-xs text-[#0B071E] border-black/10">Progress</button>}
+                            {r.status!=='closed'     && <button onClick={()=>updateRequestStatus(r.id,'closed')}      className="btn-danger px-2.5 py-1.5 text-xs">Close</button>}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {requests.length===0 && <tr><td colSpan={6} className="py-10 text-center text-[#0B071E]/40 font-semibold">No marketplace requests. Seed Firebase to add sample data.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div className="glass-card p-6">
               <h2 className="font-display text-xl mb-4 font-black text-[#0B071E] flex items-center gap-2">
                 <MessageSquare className="text-funky-purple" size={20}/>
