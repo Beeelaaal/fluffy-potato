@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * KEY FIX: we NEVER overwrite the role with 'student' when we can't read Firestore.
    * If the read fails we surface the error and keep role = null so the admin guard
    * doesn't incorrectly block access. The user should fix their Firestore rules
-   * or use /debug to set their role first.
+   * or manually set their role in Firestore.
    */
   const fetchProfile = useCallback(async (firebaseUser: User): Promise<void> => {
     setProfileError(null);

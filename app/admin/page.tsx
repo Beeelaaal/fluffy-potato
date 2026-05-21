@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BookOpen, Building, Database, ExternalLink, GraduationCap, Plus, RefreshCw, Shield, Trash2, TrendingUp, Users, X, Edit2, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { BookOpen, Building, Database, ExternalLink, GraduationCap, Plus, RefreshCw, Shield, Trash2, TrendingUp, Users, X, Edit2, CheckCircle, Clock, AlertCircle, Mail, Briefcase, MessageSquare, FileText } from 'lucide-react';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { seedDatabase } from '@/lib/seed';
@@ -13,11 +13,16 @@ import { normalizeResource } from '@/lib/resources';
 import { Resource } from '@/data/resources';
 import { degrees } from '@/data/resources';
 
-type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'requests';
+type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'requests' | 'contacts' | 'careers' | 'chats_bids' | 'blogs';
 
 type AdminUser = { id: string; email?: string; name?: string; role?: string; university?: string; };
 type UniDoc = { id: string; name: string; shortName: string; city: string; type: string; programs?: number; description?: string; logoUrl?: string; coverUrl?: string; websiteUrl?: string; deadline?: string; admissionCriteria?: string; };
 type RequestDoc = { id: string; title: string; subject: string; budget: number; status: string; studentName?: string; createdAt?: any; bidsCount?: number; };
+type ContactDoc = { id: string; name: string; email: string; subject: string; message: string; createdAt?: any; };
+type CareerDoc = { id: string; name: string; email: string; phone: string; university: string; whyApply: string; createdAt?: any; };
+type ChatDoc = { id: string; requestId: string; requestTitle: string; studentId: string; tutorId: string; studentName: string; tutorName: string; lastMessage: string; lastMessageAt?: any; status: string; };
+type BidDoc = { id: string; requestId: string; tutorId: string; tutor: { name: string; university: string; }; amount: number; message: string; status: string; postedAt?: string; };
+type BlogDoc = { id: string; title: string; slug: string; excerpt: string; content: string; category: string; authorName: string; date: string; readTime: string; };
 
 const TABS: { id: Tab; label: string; icon: typeof TrendingUp }[] = [
   { id: 'overview',     label: 'Overview',      icon: TrendingUp   },
@@ -25,6 +30,10 @@ const TABS: { id: Tab; label: string; icon: typeof TrendingUp }[] = [
   { id: 'resources',    label: 'Resources',      icon: BookOpen     },
   { id: 'universities', label: 'Universities',   icon: Building     },
   { id: 'requests',     label: 'Tutor Requests', icon: GraduationCap},
+  { id: 'contacts',     label: 'Contacts',       icon: Mail         },
+  { id: 'careers',      label: 'Careers',        icon: Briefcase    },
+  { id: 'chats_bids',   label: 'Chats & Bids',   icon: MessageSquare},
+  { id: 'blogs',        label: 'Blogs',          icon: FileText     },
 ];
 
 const RTYPES: Resource['type'][] = ['notes','past-paper','assignment','timetable','slide','book'];
@@ -41,6 +50,11 @@ export default function AdminPage() {
   const [resources, setResources] = useState<(Resource & { fileUrl?:string })[]>([]);
   const [universities, setUniversities] = useState<UniDoc[]>([]);
   const [requests, setRequests] = useState<RequestDoc[]>([]);
+  const [contacts, setContacts] = useState<ContactDoc[]>([]);
+  const [careers, setCareers] = useState<CareerDoc[]>([]);
+  const [chats, setChats] = useState<ChatDoc[]>([]);
+  const [bids, setBids] = useState<BidDoc[]>([]);
+  const [blogs, setBlogs] = useState<BlogDoc[]>([]);
   const [busy, setBusy] = useState(false);
   const [seeding, setSeeding] = useState(false);
   const [ok, setOk] = useState<string|null>(null);
@@ -55,16 +69,26 @@ export default function AdminPage() {
   async function load() {
     setBusy(true); setErr(null);
     try {
-      const [u,r,un,rq] = await Promise.all([
+      const [u,r,un,rq,co,ca,ch,bi,bl] = await Promise.all([
         getDocs(collection(db,'users')),
         getDocs(collection(db,'resources')),
         getDocs(collection(db,'universities')),
         getDocs(collection(db,'marketplace')),
+        getDocs(collection(db,'contactSubmissions')),
+        getDocs(collection(db,'careerApplications')),
+        getDocs(collection(db,'chats')),
+        getDocs(collection(db,'bids')),
+        getDocs(collection(db,'blogs')),
       ]);
       setUsers(u.docs.map(d=>({id:d.id,...d.data() as any})));
       setResources(r.docs.map(d=>normalizeResource(d.id,d.data())));
       setUniversities(un.docs.map(d=>({id:d.id,...d.data() as any})));
       setRequests(rq.docs.map(d=>({id:d.id,...d.data() as any})));
+      setContacts(co.docs.map(d=>({id:d.id,...d.data() as any})));
+      setCareers(ca.docs.map(d=>({id:d.id,...d.data() as any})));
+      setChats(ch.docs.map(d=>({id:d.id,...d.data() as any})));
+      setBids(bi.docs.map(d=>({id:d.id,...d.data() as any})));
+      setBlogs(bl.docs.map(d=>({id:d.id,...d.data() as any})));
     } catch(e: any){ setErr(e.message || 'Failed to load data. Check Firestore rules.'); }
     finally{ setBusy(false); }
   }
@@ -104,6 +128,7 @@ export default function AdminPage() {
         await addDoc(collection(db,'resources'),{
           ...resForm, downloads:0, views:0, rating:0,
           uploadedBy: profile?.name||'Admin',
+          uploadedByUid: profile?.uid || '',
           createdAt: serverTimestamp(),
         });
         setOk('Resource added!');
@@ -141,6 +166,36 @@ export default function AdminPage() {
     catch(e: any){ setErr(e.message || 'Update failed.'); }
   }
 
+  async function deleteContact(id: string) {
+    if(!confirm('Delete contact submission?')) return;
+    try { await deleteDoc(doc(db,'contactSubmissions',id)); setOk('Submission deleted.'); await load(); }
+    catch(e: any){ setErr(e.message || 'Delete failed.'); }
+  }
+
+  async function deleteCareer(id: string) {
+    if(!confirm('Delete career application?')) return;
+    try { await deleteDoc(doc(db,'careerApplications',id)); setOk('Application deleted.'); await load(); }
+    catch(e: any){ setErr(e.message || 'Delete failed.'); }
+  }
+
+  async function deleteBlog(id: string) {
+    if(!confirm('Delete blog post?')) return;
+    try { await deleteDoc(doc(db,'blogs',id)); setOk('Blog deleted.'); await load(); }
+    catch(e: any){ setErr(e.message || 'Delete failed.'); }
+  }
+
+  async function deleteChat(id: string) {
+    if(!confirm('Delete chat?')) return;
+    try { await deleteDoc(doc(db,'chats',id)); setOk('Chat deleted.'); await load(); }
+    catch(e: any){ setErr(e.message || 'Delete failed.'); }
+  }
+
+  async function deleteBid(id: string) {
+    if(!confirm('Delete bid?')) return;
+    try { await deleteDoc(doc(db,'bids',id)); setOk('Bid deleted.'); await load(); }
+    catch(e: any){ setErr(e.message || 'Delete failed.'); }
+  }
+
   if(loading) return (
     <div className="flex min-h-screen items-center justify-center pt-28">
       <div className="h-12 w-12 animate-spin rounded-full border-4 border-funky-cyan/20 border-t-funky-cyan glow-cyan" />
@@ -156,13 +211,8 @@ export default function AdminPage() {
         <h1 className="mb-3 font-display text-3xl text-[#0B071E] font-black">Access Denied</h1>
         <p className="mb-6 text-[#0B071E]/60 font-semibold">Your role is <span className="font-bold text-[#8B5CF6]">{profile?.role||'(loading…)'}</span>. Admin access required.</p>
         <div className="mb-6 rounded-2xl border border-black/10 bg-black/5 p-4 text-left text-sm text-[#0B071E]/70 font-semibold">
-          <p className="mb-1 font-bold text-[#15803D]">Quick fix steps:</p>
-          <ol className="list-decimal list-inside space-y-1">
-            <li>Visit <a href="/debug" className="text-[#8B5CF6] underline">/debug</a> (while signed in)</li>
-            <li>Click <strong className="text-[#15803D]">⚡ Force Set role = admin</strong></li>
-            <li>Come back here and click <strong className="text-[#8B5CF6]">Refresh Role</strong> below</li>
-          </ol>
-          <p className="mt-3 text-[#B45309]/95 text-xs">OR manually set <code className="text-[#B45309]">role = &quot;admin&quot;</code> in Firebase Console → Firestore → users → your UID</p>
+          <p className="mb-1 font-bold text-[#15803D]">Admin Role Activation:</p>
+          <p className="text-xs leading-relaxed">Please set <code className="text-[#B45309]">role = &quot;admin&quot;</code> (string) in Firebase Console → Firestore → users → your UID.</p>
         </div>
         <div className="flex flex-col gap-3">
           <button
@@ -173,7 +223,6 @@ export default function AdminPage() {
             <RefreshCw size={15} className={refreshing ? 'animate-spin' : ''}/>
             {refreshing ? 'Checking role…' : 'Refresh Role'}
           </button>
-          <Link href="/debug" className="btn-ghost w-full py-3">Open Debug Page →</Link>
           <Link href="/" className="btn-ghost w-full py-2">Back to Home</Link>
         </div>
       </div>
@@ -185,6 +234,10 @@ export default function AdminPage() {
     { label:'Resources', val:resources.length, icon:<BookOpen size={22}/>, color:'text-[#10b981]', border:'border-[#10b981]/20 bg-[#10b981]/5' },
     { label:'Universities', val:universities.length, icon:<Building size={22}/>, color:'text-[#f59e0b]', border:'border-[#f59e0b]/20 bg-[#f59e0b]/5' },
     { label:'Requests', val:requests.length, icon:<GraduationCap size={22}/>, color:'text-[#8B5CF6]', border:'border-[#8B5CF6]/20 bg-[#8B5CF6]/5' },
+    { label:'Contacts', val:contacts.length, icon:<Mail size={22}/>, color:'text-[#FF5C7A]', border:'border-[#FF5C7A]/20 bg-[#FF5C7A]/5' },
+    { label:'Careers', val:careers.length, icon:<Briefcase size={22}/>, color:'text-[#EC4899]', border:'border-[#EC4899]/20 bg-[#EC4899]/5' },
+    { label:'Chats/Bids', val:`${chats.length}/${bids.length}`, icon:<MessageSquare size={22}/>, color:'text-[#0ea5e9]', border:'border-[#0ea5e9]/20 bg-[#0ea5e9]/5' },
+    { label:'Blogs', val:blogs.length, icon:<FileText size={22}/>, color:'text-[#14b8a6]', border:'border-[#14b8a6]/20 bg-[#14b8a6]/5' },
   ];
 
   return (
@@ -195,7 +248,7 @@ export default function AdminPage() {
           <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8B5CF6]">Tute</div>
           <div className="font-display text-2xl font-black">Admin Portal</div>
         </div>
-        <div className="space-y-1 flex-1">
+        <div className="space-y-1 flex-1 overflow-y-auto pr-1">
           {TABS.map(({id,label,icon:Icon})=>(
             <button key={id} onClick={()=>setTab(id)}
               className={`sidebar-item w-full ${tab===id?'active':''}`}>
@@ -255,7 +308,7 @@ export default function AdminPage() {
                 <p><span className="text-[#0B071E]/50 font-semibold">Password:</span> <span className="text-[#15803D] font-bold">Tute@2025</span></p>
                 <p><span className="text-[#0B071E]/50 font-semibold">Role field:</span> <span className="text-[#B45309] font-bold">role = &quot;admin&quot;</span> in Firestore users collection</p>
               </div>
-              <p className="mt-3 text-xs text-[#0B071E]/50 font-semibold">Create this account via Firebase Auth, then set role to admin in Firestore, or use the /debug page.</p>
+              <p className="mt-3 text-xs text-[#0B071E]/50 font-semibold">Create this account via Firebase Auth, then set role to admin in Firestore.</p>
             </div>
           </motion.div>
         )}
@@ -552,6 +605,179 @@ export default function AdminPage() {
                   {requests.length===0 && <tr><td colSpan={6} className="py-10 text-center text-[#0B071E]/40 font-semibold">No marketplace requests. Seed Firebase to add sample data.</td></tr>}
                 </tbody>
               </table>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── CONTACT SUBMISSIONS ── */}
+        {tab==='contacts' && (
+          <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="glass-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="data-table w-full text-left text-[#0B071E]">
+                <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th className="text-right">Action</th></tr></thead>
+                <tbody>
+                  {contacts.map(c=>(
+                    <tr key={c.id}>
+                      <td className="font-semibold">{c.name}</td>
+                      <td className="text-[#0B071E]/70 font-semibold">{c.email}</td>
+                      <td><span className="tag-purple">{c.subject}</span></td>
+                      <td className="max-w-xs truncate text-[#0B071E]/80 font-semibold text-xs" title={c.message}>{c.message}</td>
+                      <td className="text-[#0B071E]/60 text-xs font-bold">
+                        {c.createdAt?.seconds 
+                          ? new Date(c.createdAt.seconds * 1000).toLocaleString('en-PK') 
+                          : c.createdAt 
+                          ? new Date(c.createdAt).toLocaleString('en-PK')
+                          : '—'}
+                      </td>
+                      <td className="text-right">
+                        <button onClick={()=>deleteContact(c.id)} className="btn-danger px-3 py-1.5 text-xs"><Trash2 size={13}/>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                  {contacts.length===0 && <tr><td colSpan={6} className="py-10 text-center text-[#0B071E]/40 font-semibold">No contact submissions found.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── CAREER APPLICATIONS ── */}
+        {tab==='careers' && (
+          <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="glass-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="data-table w-full text-left text-[#0B071E]">
+                <thead><tr><th>Name</th><th>Email / Phone</th><th>University</th><th>Why Apply</th><th>Date</th><th className="text-right">Action</th></tr></thead>
+                <tbody>
+                  {careers.map(c=>(
+                    <tr key={c.id}>
+                      <td className="font-semibold">{c.name}</td>
+                      <td className="text-[#0B071E]/80 font-semibold text-xs">
+                        <div>{c.email}</div>
+                        <div className="text-[#0B071E]/50 mt-0.5">{c.phone}</div>
+                      </td>
+                      <td><span className="tag-cyan">{c.university}</span></td>
+                      <td className="max-w-xs truncate text-[#0B071E]/80 font-semibold text-xs" title={c.whyApply}>{c.whyApply}</td>
+                      <td className="text-[#0B071E]/60 text-xs font-bold">
+                        {c.createdAt?.seconds 
+                          ? new Date(c.createdAt.seconds * 1000).toLocaleString('en-PK') 
+                          : c.createdAt 
+                          ? new Date(c.createdAt).toLocaleString('en-PK')
+                          : '—'}
+                      </td>
+                      <td className="text-right">
+                        <button onClick={()=>deleteCareer(c.id)} className="btn-danger px-3 py-1.5 text-xs"><Trash2 size={13}/>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                  {careers.length===0 && <tr><td colSpan={6} className="py-10 text-center text-[#0B071E]/40 font-semibold">No career applications found.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── CHATS & BIDS ── */}
+        {tab==='chats_bids' && (
+          <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="space-y-8">
+            <div className="glass-card p-6">
+              <h2 className="font-display text-xl mb-4 font-black text-[#0B071E] flex items-center gap-2">
+                <MessageSquare className="text-funky-purple" size={20}/>
+                Active Chats ({chats.length})
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="data-table w-full text-left text-[#0B071E]">
+                  <thead><tr><th>Request Title</th><th>Student</th><th>Tutor</th><th>Last Message</th><th>Last Msg Time</th><th className="text-right">Action</th></tr></thead>
+                  <tbody>
+                    {chats.map(c=>(
+                      <tr key={c.id}>
+                        <td className="font-semibold max-w-[150px] truncate">{c.requestTitle}</td>
+                        <td className="text-[#0B071E]/70 font-semibold">{c.studentName}</td>
+                        <td className="text-[#0B071E]/70 font-semibold">{c.tutorName}</td>
+                        <td className="text-[#0B071E]/60 text-xs italic font-semibold max-w-[150px] truncate">{c.lastMessage}</td>
+                        <td className="text-[#0B071E]/60 text-xs font-bold">
+                          {c.lastMessageAt ? new Date(c.lastMessageAt).toLocaleString('en-PK') : '—'}
+                        </td>
+                        <td className="text-right">
+                          <button onClick={()=>deleteChat(c.id)} className="btn-danger px-3 py-1.5 text-xs"><Trash2 size={13}/>Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                    {chats.length===0 && <tr><td colSpan={6} className="py-8 text-center text-[#0B071E]/40 font-semibold">No active negotiations/chats.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="glass-card p-6">
+              <h2 className="font-display text-xl mb-4 font-black text-[#0B071E] flex items-center gap-2">
+                <TrendingUp className="text-[#0EA5E9]" size={20}/>
+                Marketplace Bids ({bids.length})
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="data-table w-full text-left text-[#0B071E]">
+                  <thead><tr><th>Tutor</th><th>University</th><th>Amount</th><th>Status</th><th>Message</th><th className="text-right">Action</th></tr></thead>
+                  <tbody>
+                    {bids.map(b=>(
+                      <tr key={b.id}>
+                        <td className="font-semibold">{b.tutor?.name || '—'}</td>
+                        <td className="text-[#0B071E]/70 font-semibold">{b.tutor?.university || '—'}</td>
+                        <td className="text-[#15803D] font-bold">PKR {b.amount?.toLocaleString()}</td>
+                        <td>
+                          <span className={
+                            b.status==='accepted' ? 'tag-lime' :
+                            b.status==='rejected' ? 'tag-coral' :
+                            'tag-cyan'
+                          }>{b.status}</span>
+                        </td>
+                        <td className="max-w-xs truncate text-[#0B071E]/70 font-semibold text-xs" title={b.message}>{b.message}</td>
+                        <td className="text-right">
+                          <button onClick={()=>deleteBid(b.id)} className="btn-danger px-3 py-1.5 text-xs"><Trash2 size={13}/>Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                    {bids.length===0 && <tr><td colSpan={6} className="py-8 text-center text-[#0B071E]/40 font-semibold">No tutor bids placed yet.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── BLOGS ── */}
+        {tab==='blogs' && (
+          <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="space-y-5">
+            <div className="flex justify-end">
+              <Link href="/blog/write" className="btn-primary px-5 py-2.5 text-sm">
+                <Plus size={15}/> Write Blog Post
+              </Link>
+            </div>
+            
+            <div className="glass-card overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="data-table w-full text-left text-[#0B071E]">
+                  <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Date</th><th>Read Time</th><th className="text-right">Actions</th></tr></thead>
+                  <tbody>
+                    {blogs.map(b=>(
+                      <tr key={b.id}>
+                        <td className="font-semibold max-w-[200px] truncate">{b.title}</td>
+                        <td><span className="tag-cyan">{b.category}</span></td>
+                        <td className="text-[#0B071E]/70 font-semibold">{b.authorName}</td>
+                        <td className="text-[#0B071E]/70 font-semibold">{b.date}</td>
+                        <td className="text-[#0B071E]/60 text-xs font-bold">{b.readTime}</td>
+                        <td className="text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <a href={`/blog/${b.slug}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5 text-xs text-[#8B5CF6] border-black/10 hover:bg-[#8B5CF6]/10 flex items-center gap-1">
+                              View <ExternalLink size={12}/>
+                            </a>
+                            <button onClick={()=>deleteBlog(b.id)} className="btn-danger px-3 py-1.5 text-xs"><Trash2 size={13}/>Delete</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {blogs.length===0 && <tr><td colSpan={6} className="py-10 text-center text-[#0B071E]/40 font-semibold">No blog posts found. Write one using the button above.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </motion.div>
         )}

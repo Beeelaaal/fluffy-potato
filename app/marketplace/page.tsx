@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
@@ -8,6 +8,9 @@ import {
   MessageSquare, ChevronRight, Wifi, MapPin, MonitorSmartphone, Filter, X
 } from 'lucide-react';
 import { marketplaceRequests } from '@/data/marketplace';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { useAuth } from '@/context/AuthContext';
 
 const sessionIcons = { online: Wifi, 'in-person': MapPin, both: MonitorSmartphone };
 const statusColors = {
@@ -24,13 +27,86 @@ export default function MarketplacePage() {
     title: '', description: '', subject: '', budget: '', deadline: '', sessionType: 'online', duration: '',
   });
 
-  const filtered = marketplaceRequests.filter(r => {
+  const { user, profile } = useAuth();
+  const [dbRequests, setDbRequests] = useState<any[]>([]);
+  const [dbLoading, setDbLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(false);
+  const [postError, setPostError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const q = query(collection(db, 'marketplace'), orderBy('postedAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const items = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setDbRequests(items);
+      setDbLoading(false);
+    }, (err) => {
+      console.error("Error loading marketplace requests:", err);
+      setDbLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const allRequests = [
+    ...dbRequests,
+    ...marketplaceRequests.filter(m => !dbRequests.some(d => d.id === m.id))
+  ];
+
+  const filtered = allRequests.filter(r => {
     const matchSearch = r.title.toLowerCase().includes(search.toLowerCase()) ||
       r.subject.toLowerCase().includes(search.toLowerCase()) ||
-      r.tags.some(t => t.toLowerCase().includes(search.toLowerCase()));
+      r.tags?.some((t: string) => t.toLowerCase().includes(search.toLowerCase())) || false;
     const matchStatus = statusFilter === 'all' || r.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  const handlePostRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      alert("Please sign in to post a request! 🎓");
+      return;
+    }
+    if (!form.title || !form.description || !form.subject || !form.budget) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    setPostLoading(true);
+    setPostError(null);
+    try {
+      await addDoc(collection(db, 'marketplace'), {
+        title: form.title,
+        description: form.description,
+        subject: form.subject,
+        budget: Number(form.budget),
+        deadline: form.deadline || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        sessionType: form.sessionType,
+        duration: form.duration || '1 session',
+        status: 'open',
+        studentId: user.uid,
+        student: {
+          id: user.uid,
+          name: profile?.name || user.displayName || 'Anonymous Student',
+          avatar: profile?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}&backgroundColor=0f0f1a`,
+          university: profile?.university || 'University Student',
+          rating: 5.0,
+        },
+        bidsCount: 0,
+        postedAt: new Date().toISOString(),
+        tags: [form.subject, ...form.title.split(' ').filter(w => w.length > 3).slice(0, 4)],
+      });
+      setShowPostModal(false);
+      setForm({
+        title: '', description: '', subject: '', budget: '', deadline: '', sessionType: 'online', duration: '',
+      });
+    } catch (err: any) {
+      console.error("Error creating request:", err);
+      setPostError(err?.message || "Failed to post request. Please try again.");
+    } finally {
+      setPostLoading(false);
+    }
+  };
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(p => ({ ...p, [e.target.name]: e.target.value }));
@@ -113,8 +189,8 @@ export default function MarketplacePage() {
         <div className="space-y-5">
           <AnimatePresence>
             {filtered.map((req, i) => {
-              const sc = statusColors[req.status];
-              const SessionIcon = sessionIcons[req.sessionType];
+              const sc = statusColors[req.status as keyof typeof statusColors] || statusColors.open;
+              const SessionIcon = sessionIcons[req.sessionType as keyof typeof sessionIcons] || sessionIcons.online;
 
               return (
                 <motion.div
@@ -175,7 +251,9 @@ export default function MarketplacePage() {
                       <div className="flex items-center lg:justify-end gap-3 w-full lg:w-auto mt-2">
                         <div className="flex items-center gap-2 text-sm bg-white/70 px-4 py-2.5 rounded-xl border border-black/10 shadow-inner">
                           <MessageSquare size={16} className="text-funky-cyan" />
-                          <span className="font-black text-[#0B071E]">{req.bids.length}</span>
+                          <span className="font-black text-[#0B071E]">
+                            {req.bidsCount !== undefined ? req.bidsCount : (req.bids?.length || 0)}
+                          </span>
                           <span className="text-[#0B071E]/50 font-bold uppercase text-[10px] tracking-wider mt-0.5">bids</span>
                         </div>
 
@@ -226,66 +304,70 @@ export default function MarketplacePage() {
 
               <h2 className="font-display font-black text-3xl mb-8 tracking-tight">Post a Help Request</h2>
 
-              <div className="space-y-5">
-                <div>
-                  <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Title *</label>
-                  <input name="title" value={form.title} onChange={handleFormChange}
-                    placeholder="e.g. Need help with DSA - Graph Algorithms"
-                    className="input-field py-3" />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Description *</label>
-                  <textarea name="description" value={form.description} onChange={handleFormChange}
-                    placeholder="Describe what you need help with in detail..."
-                    rows={4} className="input-field py-3 resize-none" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handlePostRequest}>
+                <div className="space-y-5">
                   <div>
-                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Subject *</label>
-                    <input name="subject" value={form.subject} onChange={handleFormChange}
-                      placeholder="e.g. Data Structures" className="input-field py-3" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Budget (PKR) *</label>
-                    <input name="budget" type="number" value={form.budget} onChange={handleFormChange}
-                      placeholder="e.g. 2000" className="input-field py-3" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Deadline</label>
-                    <input name="deadline" type="date" value={form.deadline} onChange={handleFormChange}
+                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Title *</label>
+                    <input name="title" value={form.title} onChange={handleFormChange} required
+                      placeholder="e.g. Need help with DSA - Graph Algorithms"
                       className="input-field py-3" />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Session Type</label>
-                    <select name="sessionType" value={form.sessionType} onChange={handleFormChange}
-                      className="input-field py-3 cursor-pointer">
-                      <option value="online">Online</option>
-                      <option value="in-person">In-Person</option>
-                      <option value="both">Both</option>
-                    </select>
+                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Description *</label>
+                    <textarea name="description" value={form.description} onChange={handleFormChange} required
+                      placeholder="Describe what you need help with in detail..."
+                      rows={4} className="input-field py-3 resize-none" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Subject *</label>
+                      <input name="subject" value={form.subject} onChange={handleFormChange} required
+                        placeholder="e.g. Data Structures" className="input-field py-3" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Budget (PKR) *</label>
+                      <input name="budget" type="number" value={form.budget} onChange={handleFormChange} required
+                        placeholder="e.g. 2000" className="input-field py-3" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Deadline</label>
+                      <input name="deadline" type="date" value={form.deadline} onChange={handleFormChange}
+                        className="input-field py-3" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Session Type</label>
+                      <select name="sessionType" value={form.sessionType} onChange={handleFormChange}
+                        className="input-field py-3 cursor-pointer">
+                        <option value="online">Online</option>
+                        <option value="in-person">In-Person</option>
+                        <option value="both">Both</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Duration</label>
+                    <input name="duration" value={form.duration} onChange={handleFormChange}
+                      placeholder="e.g. 2 sessions (2 hrs each)" className="input-field py-3" />
                   </div>
                 </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#0B071E]/60 mb-2 block uppercase tracking-wider">Duration</label>
-                  <input name="duration" value={form.duration} onChange={handleFormChange}
-                    placeholder="e.g. 2 sessions (2 hrs each)" className="input-field py-3" />
-                </div>
-              </div>
 
-              <div className="flex gap-3 mt-8">
-                <button onClick={() => setShowPostModal(false)} className="btn-ghost flex-1 py-3 font-bold">Cancel</button>
-                <button 
-                  onClick={() => {
-                    alert('Help request posted successfully! Tutors will bid on your request shortly. 🎓');
-                    setShowPostModal(false);
-                  }}
-                  className="btn-primary flex-1 py-3 font-bold"
-                >
-                  Post Request
-                </button>
-              </div>
+                {postError && (
+                  <p className="text-red-500 text-xs font-semibold mt-4">{postError}</p>
+                )}
+
+                <div className="flex gap-3 mt-8">
+                  <button type="button" onClick={() => setShowPostModal(false)} className="btn-ghost flex-1 py-3 font-bold">Cancel</button>
+                  <button 
+                    type="submit"
+                    disabled={postLoading}
+                    className="btn-primary flex-1 py-3 font-bold disabled:opacity-60"
+                  >
+                    {postLoading ? 'Posting...' : 'Post Request'}
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </motion.div>
         )}

@@ -102,12 +102,12 @@ export default function SignupPage() {
           <TuteLogo size={34} />
         </div>
 
-        <h1 className="font-display font-bold text-3xl mb-2">Create an Account</h1>
-        <p className="text-white/45 mb-8">
+        <h1 className="font-display font-black text-4xl mb-2">Create an Account</h1>
+        <p className="text-dark/60 mb-8 text-sm">
           Already have an account?{' '}
           <Link
             href="/login"
-            className="text-funky-orange hover:text-funky-orange2 transition-colors"
+            className="text-funky-purple hover:text-funky-orange transition-colors font-semibold"
           >
             Sign in
           </Link>
@@ -122,9 +122,9 @@ export default function SignupPage() {
               key={value}
               type="button"
               onClick={() => setRole(value)}
-              className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all border ${role === value
-                ? 'border-funky-orange/50 bg-funky-orange/15 text-funky-orange'
-                : 'border-white/8 bg-white/3 text-white/50 hover:text-white/70'
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold transition-all border-2 ${role === value
+                ? 'border-dark bg-funky-orange/15 text-dark shadow-[2px_2px_0px_rgba(11,7,30,1)]'
+                : 'border-dark/10 bg-white/50 text-dark/50 hover:text-dark hover:border-dark/30'
                 }`}
               dangerouslySetInnerHTML={{ __html: label }}
             />
@@ -133,7 +133,7 @@ export default function SignupPage() {
 
         <div className="space-y-4 mb-6">
           <div>
-            <label className="text-xs text-white/50 mb-1.5 block">Full Name</label>
+            <label className="form-label">Full Name</label>
             <input
               name="name"
               value={form.name}
@@ -144,7 +144,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="text-xs text-white/50 mb-1.5 block">Email Address</label>
+            <label className="form-label">Email Address</label>
             <input
               name="email"
               type="email"
@@ -156,7 +156,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="text-xs text-white/50 mb-1.5 block">University</label>
+            <label className="form-label">University</label>
             <input
               name="university"
               value={form.university}
@@ -167,7 +167,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="text-xs text-white/50 mb-1.5 block">Password</label>
+            <label className="form-label">Password</label>
             <div className="relative">
               <input
                 name="password"
@@ -180,7 +180,7 @@ export default function SignupPage() {
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-dark/30 hover:text-dark/60 transition-colors"
               >
                 {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -188,15 +188,15 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {err ? <p className="text-red-400 text-sm mb-4">{err}</p> : null}
+        {err && <div className="mb-4 px-4 py-3 rounded-xl text-sm text-red-600 bg-red-50 border border-red-200">{err}</div>}
 
-        <p className="text-white/30 text-xs mb-5">
+        <p className="text-dark/45 text-xs mb-5">
           By creating an account, you agree to our{' '}
-          <a href="#" className="text-funky-orange">
+          <a href="#" className="text-funky-purple hover:text-funky-orange font-semibold transition-colors">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href="#" className="text-funky-orange">
+          <a href="#" className="text-funky-purple hover:text-funky-orange font-semibold transition-colors">
             Privacy Policy
           </a>
           .
@@ -213,10 +213,10 @@ export default function SignupPage() {
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/8" />
+            <div className="w-full border-t border-dark/10" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-dark-900 px-3 text-white/30">or sign up with</span>
+            <span className="bg-[#FDFBF7] px-3 text-dark/30 font-bold">or sign up with</span>
           </div>
         </div>
 
@@ -228,7 +228,7 @@ export default function SignupPage() {
             className="btn-ghost py-3 text-sm font-medium disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {loadingProvider === 'google' ? (
-              <span className="w-4 h-4 border-2 border-white/30 border-t-funky-orange rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-dark/30 border-t-funky-orange rounded-full animate-spin" />
             ) : (
               <svg width="15" height="15" viewBox="0 0 48 48" fill="none">
                 <path fill="#EA4335" d="M24 9.5c3.2 0 6 1.1 8.2 2.9l6.1-6.1C34.5 3.1 29.6 1 24 1 14.6 1 6.7 6.5 3.2 14.4l7.1 5.5C12 14.2 17.5 9.5 24 9.5z"/>
@@ -247,7 +247,7 @@ export default function SignupPage() {
             className="btn-ghost py-3 text-sm font-medium disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {loadingProvider === 'github' ? (
-              <span className="w-4 h-4 border-2 border-white/30 border-t-funky-orange rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-dark/30 border-t-funky-orange rounded-full animate-spin" />
             ) : (
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />

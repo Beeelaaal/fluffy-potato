@@ -22,8 +22,9 @@ export function useProtectedRoute(options?: ProtectedRouteOptions) {
       return;
     }
 
-    if (options?.requiredRole && profile?.role) {
-      if (profile.role !== options.requiredRole && profile.role !== 'admin') {
+    if (options?.requiredRole) {
+      const currentRole = profile?.role;
+      if (currentRole !== options.requiredRole && currentRole !== 'admin') {
         const shouldRedirect = options.redirectOnRoleMismatch ?? true;
         if (shouldRedirect) {
           router.replace('/');

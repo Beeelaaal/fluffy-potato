@@ -59,9 +59,9 @@ export default function LoginPage() {
         </Link>
 
         <h1 className="font-display text-4xl mb-2">Welcome back</h1>
-        <p className="text-white/45 mb-8 text-sm">
+        <p className="text-dark/60 mb-8 text-sm">
           No account?{' '}
-          <Link href="/signup" className="text-funky-cyan hover:text-funky-lime transition-colors font-semibold">Sign up free</Link>
+          <Link href="/signup" className="text-funky-purple hover:text-funky-orange transition-colors font-semibold">Sign up free</Link>
         </p>
 
         {/* Social */}
@@ -71,7 +71,7 @@ export default function LoginPage() {
               disabled={loading||provider!==null}
               className="btn-ghost py-3 text-sm disabled:opacity-60 flex items-center justify-center gap-2">
               {provider===p
-                ? <span className="w-4 h-4 border-2 border-white/25 border-t-funky-cyan rounded-full animate-spin"/>
+                ? <span className="w-4 h-4 border-2 border-dark/20 border-t-funky-purple rounded-full animate-spin"/>
                 : p==='google'
                   ? <svg width="15" height="15" viewBox="0 0 48 48" fill="none">
                       <path fill="#EA4335" d="M24 9.5c3.2 0 6 1.1 8.2 2.9l6.1-6.1C34.5 3.1 29.6 1 24 1 14.6 1 6.7 6.5 3.2 14.4l7.1 5.5C12 14.2 17.5 9.5 24 9.5z"/>
@@ -89,9 +89,9 @@ export default function LoginPage() {
         </div>
 
         <div className="relative mb-6">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/8"/></div>
+          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-dark/10"/></div>
           <div className="relative flex justify-center text-xs">
-            <span className="px-3 text-white/30" style={{background:'var(--dark-bg)'}}>or email</span>
+            <span className="px-3 text-dark/30 bg-[#FDFBF7]">or email</span>
           </div>
         </div>
 
@@ -109,24 +109,24 @@ export default function LoginPage() {
                 placeholder="••••••••" className="input-field pr-10"
                 onKeyDown={e=>e.key==='Enter'&&emailSignIn()}/>
               <button type="button" onClick={()=>setShowPass(!showPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-dark/30 hover:text-dark/60 transition-colors">
                 {showPass?<EyeOff size={16}/>:<Eye size={16}/>}
               </button>
             </div>
           </div>
         </div>
 
-        {err && <div className="mb-4 px-4 py-3 rounded-xl text-sm text-red-300 bg-red-500/10 border border-red-500/20">{err}</div>}
+        {err && <div className="mb-4 px-4 py-3 rounded-xl text-sm text-red-600 bg-red-50 border border-red-200">{err}</div>}
 
         <button onClick={emailSignIn} disabled={loading||provider!==null}
           className="btn-primary w-full py-3.5 text-base disabled:opacity-60">
           {loading
-            ? <><span className="w-4 h-4 border-2 border-dark-900/30 border-t-dark-900 rounded-full animate-spin"/>Signing in…</>
+            ? <><span className="w-4 h-4 border-2 border-dark/30 border-t-dark rounded-full animate-spin mr-2"/>Signing in…</>
             : 'Sign In'}
         </button>
 
-        <p className="mt-6 text-center text-xs text-white/30">
-          <a href="#" className="text-funky-cyan hover:text-funky-lime transition-colors">Forgot password?</a>
+        <p className="mt-6 text-center text-xs text-dark/30">
+          <a href="#" className="text-funky-purple hover:text-funky-orange transition-colors">Forgot password?</a>
         </p>
       </motion.div>
     </div>

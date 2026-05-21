@@ -2,43 +2,161 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper: checks if the current user is an admin
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
     match /users/{uid} {
       // Any signed-in user can read profiles (necessary for marketplace, viewing tutors, etc.)
       allow read: if request.auth != null;
 
-      // Only the user themselves or an admin can write
-      allow write: if request.auth != null && (
-        request.auth.uid == uid ||
-        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin")
+      // Split write:
+      // 1. Create: only if signing up as student or tutor (prevents self-creation as admin)
+      allow create: if request.auth != null && 
+                    request.auth.uid == uid && 
+                    (request.resource.data.role == 'student' || request.resource.data.role == 'tutor');
+
+      // 2. Update: users can update their own non-role profile fields, admins can update any field
+      allow update: if request.auth != null && (
+        (request.auth.uid == uid && request.resource.data.role == resource.data.role) ||
+        isAdmin()
       );
+
+      // 3. Delete: users can delete their own accounts, or admins
+      allow delete: if request.auth != null && (request.auth.uid == uid || isAdmin());
     }
 
     // ── Resources ──────────────────────────────────────────────────────────
     match /resources/{id} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create: if request.auth != null && (
+        request.resource.data.uploadedByUid == request.auth.uid || 
+        isAdmin()
+      );
+      allow update, delete: if request.auth != null && (
+        resource.data.uploadedByUid == request.auth.uid || 
+        isAdmin()
+      );
     }
 
     // ── Universities ───────────────────────────────────────────────────────
+    // Only admins can write (create/update/delete) university records
     match /universities/{id} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && isAdmin();
     }
 
     // ── Marketplace ────────────────────────────────────────────────────────
     match /marketplace/{id} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && (
+        request.resource.data.studentId == request.auth.uid || 
+        isAdmin()
+      );
+      allow update, delete: if request.auth != null && (
+        resource.data.studentId == request.auth.uid || 
+        isAdmin()
+      );
     }
 
     // ── Bids ───────────────────────────────────────────────────────────────
     match /bids/{id} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && (
+        request.resource.data.tutorId == request.auth.uid || 
+        isAdmin()
+      );
+      allow update, delete: if request.auth != null && (
+        resource.data.tutorId == request.auth.uid || 
+        isAdmin()
+      );
     }
 
     // ── Help Requests ──────────────────────────────────────────────────────
     match /helpRequests/{id} {
-      allow read, write: if request.auth != null;
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && (
+        request.resource.data.userId == request.auth.uid || 
+        isAdmin()
+      );
+      allow update, delete: if request.auth != null && (
+        resource.data.userId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+
+    // ── Testimonials ───────────────────────────────────────────────────────
+    // Testimonials are open for anyone to submit (create), but only admins can edit/delete
+    // Used in TestimonialPrompt popup to display ratings and reviews on landing page
+    match /testimonials/{id} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if request.auth != null && isAdmin();
+    }
+
+    // ── Contact Submissions ────────────────────────────────────────────────
+    match /contactSubmissions/{id} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && isAdmin();
+    }
+
+    // ── Career Applications ────────────────────────────────────────────────
+    match /careerApplications/{id} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && isAdmin();
+    }
+
+    // ── Blogs ──────────────────────────────────────────────────────────────
+    match /blogs/{id} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.authorId == request.auth.uid || 
+        isAdmin()
+      );
+      allow delete: if request.auth != null && (
+        resource.data.authorId == request.auth.uid || 
+        isAdmin()
+      );
+    }
+
+    // ── Chats ──────────────────────────────────────────────────────────────
+    match /chats/{id} {
+      allow read: if request.auth != null && (
+        request.auth.uid == resource.data.studentId || 
+        request.auth.uid == resource.data.tutorId || 
+        isAdmin()
+      );
+      allow create: if request.auth != null && (
+        request.resource.data.studentId == request.auth.uid ||
+        request.resource.data.tutorId == request.auth.uid ||
+        isAdmin()
+      );
+      allow update: if request.auth != null && (
+        request.auth.uid == resource.data.studentId || 
+        request.auth.uid == resource.data.tutorId || 
+        isAdmin()
+      );
+      allow delete: if request.auth != null && isAdmin();
+    }
+
+    // ── Chats Messages ─────────────────────────────────────────────────────
+    match /chats/{chatId}/messages/{messageId} {
+      allow read: if request.auth != null && (
+        get(/databases/$(database)/documents/chats/$(chatId)).data.studentId == request.auth.uid ||
+        get(/databases/$(database)/documents/chats/$(chatId)).data.tutorId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if request.auth != null && (
+        request.resource.data.senderId == request.auth.uid && (
+          get(/databases/$(database)/documents/chats/$(chatId)).data.studentId == request.auth.uid ||
+          get(/databases/$(database)/documents/chats/$(chatId)).data.tutorId == request.auth.uid
+        ) || isAdmin()
+      );
+      allow update, delete: if request.auth != null && isAdmin();
     }
   }
 }

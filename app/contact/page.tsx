@@ -4,15 +4,35 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Mail, Phone, Send, CheckCircle2, Heart } from 'lucide-react';
 import Link from 'next/link';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) return;
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      await addDoc(collection(db, 'contactSubmissions'), {
+        name: form.name,
+        email: form.email,
+        subject: form.subject || 'No Subject',
+        message: form.message,
+        createdAt: serverTimestamp(),
+      });
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error('Contact submission error:', err);
+      setError(err?.message || 'Failed to submit message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,7 +67,7 @@ export default function ContactPage() {
                 <h2 className="font-display font-bold text-2xl mb-6">Contact Information</h2>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-funky-cyan/10 border border-funky-cyan/20 flex items-center justify-center flex-shrink-0">
+                     <div className="w-10 h-10 rounded-xl bg-funky-cyan/10 border border-funky-cyan/20 flex items-center justify-center flex-shrink-0">
                       <MapPin size={18} className="text-funky-cyan" />
                     </div>
                     <div>
@@ -155,8 +175,11 @@ export default function ContactPage() {
                         placeholder="Tell us what you need help with..." 
                       />
                     </div>
-                    <button type="submit" className="btn-primary w-full py-3.5 mt-2">
-                      Send Message <Send size={15} />
+                    {error && (
+                      <p className="text-red-500 text-xs font-semibold">{error}</p>
+                    )}
+                    <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 mt-2 disabled:opacity-60">
+                      {loading ? 'Sending...' : 'Send Message'} <Send size={15} />
                     </button>
                   </motion.form>
                 ) : (

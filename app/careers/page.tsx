@@ -3,15 +3,36 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, Send, CheckCircle2, GraduationCap, Star, ShieldCheck } from 'lucide-react';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function CareersPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', university: '', whyApply: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.university) return;
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      await addDoc(collection(db, 'careerApplications'), {
+        name: form.name,
+        email: form.email,
+        phone: form.phone || '',
+        university: form.university,
+        whyApply: form.whyApply,
+        createdAt: serverTimestamp(),
+      });
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error('Career submission error:', err);
+      setError(err?.message || 'Failed to submit application. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -155,8 +176,11 @@ export default function CareersPage() {
                         placeholder="Tell us about yourself and why you're a good fit..." 
                       />
                     </div>
-                    <button type="submit" className="btn-primary w-full py-3.5 mt-2">
-                      Submit Application <Send size={15} />
+                    {error && (
+                      <p className="text-red-500 text-xs font-semibold">{error}</p>
+                    )}
+                    <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 mt-2 disabled:opacity-60">
+                      {loading ? 'Submitting...' : 'Submit Application'} <Send size={15} />
                     </button>
                   </motion.form>
                 ) : (
