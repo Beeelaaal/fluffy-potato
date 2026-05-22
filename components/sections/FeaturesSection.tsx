@@ -253,12 +253,12 @@ export default function FeaturesSection() {
                   <div className="w-3 h-3 rounded-full bg-yellow border border-dark/20" />
                   <div className="w-3 h-3 rounded-full bg-funky-cyan border border-dark/20" />
                   <span className="text-[10px] font-black uppercase tracking-wider text-text-muted ml-2">
-                    tute_dashboard.app
+                    tmy_tute🤞
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-dark/5 px-2.5 py-1 rounded-full text-[10px] font-black text-[#0B071E]/80">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span>Interactive Sandbox</span>
+                  <span>Online</span>
                 </div>
               </div>
 
@@ -668,8 +668,8 @@ export default function FeaturesSection() {
 
               {/* Bottom Sandbox Guide Info */}
               <div className="border-t-2 border-dark/8 pt-3 mt-3 flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-text-muted">
-                <span>Active Step: {activeStepData.title.split(' ')[0]}</span>
-                <span className="text-[#0B071E]">Tute Sandbox v2.4</span>
+                <span> {activeStepData.title.split(' ')[0]}</span>
+                <span className="text-[#0B071E]">Tute Live</span>
               </div>
 
             </div>
