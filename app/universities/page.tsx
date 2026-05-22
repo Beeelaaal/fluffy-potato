@@ -7,6 +7,7 @@ import { Search, MapPin, GraduationCap, Users, BookOpen, X, Building2, Globe, Ca
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { categorizedDegrees } from '@/data/resources';
+import { universities as staticUniversities } from '@/data/universities';
 
 interface UniDoc {
   id: string;
@@ -23,6 +24,35 @@ interface UniDoc {
   degrees?: string[];
 }
 
+function getEntryTestTypes(uni: UniDoc) {
+  const staticUni = staticUniversities.find(
+    s => s.id.toLowerCase() === uni.id.toLowerCase() || 
+         s.shortName.toLowerCase() === uni.shortName.toLowerCase()
+  );
+  
+  const requirements = [
+    ...(uni.admissionCriteria ? uni.admissionCriteria.split('\n') : []),
+    ...(staticUni?.requirements || []),
+    uni.name || '',
+    uni.description || ''
+  ].map(r => r.toLowerCase());
+
+  const acceptsSat = requirements.some(r => /\bsat\b/.test(r) || r.includes('sat score') || r.includes('sat i') || r.includes('sat ii') || r.includes('lsat'));
+  const acceptsNet = requirements.some(r => /\bnet\b/.test(r) || r.includes('nust entry test') || r.includes('nust test'));
+  const acceptsOwn = requirements.some(r => 
+    r.includes('entry test') || 
+    r.includes('admission test') || 
+    r.includes('nu-fast') || 
+    r.includes('lsat') || 
+    r.includes('pu test') || 
+    r.includes('aku test') ||
+    r.includes('mdcat') ||
+    r.includes('ecat')
+  ) || (!acceptsSat && !acceptsNet);
+
+  return { acceptsSat, acceptsNet, acceptsOwn };
+}
+
 export default function UniversitiesPage() {
   const [universities, setUniversities] = useState<UniDoc[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +61,7 @@ export default function UniversitiesPage() {
   const [city, setCity] = useState('All Cities');
   const [type, setType] = useState('All Types');
   const [selectedDegree, setSelectedDegree] = useState('All Degrees');
+  const [entryTest, setEntryTest] = useState('All');
   const [sortBy, setSortBy] = useState('name-asc');
   const headerRef = useRef(null);
   const inView = useInView(headerRef, { once: true });
@@ -61,7 +92,14 @@ export default function UniversitiesPage() {
     const matchCity = city === 'All Cities' || u.city === city;
     const matchType = type === 'All Types' || u.type === type;
     const matchDegree = selectedDegree === 'All Degrees' || u.degrees?.includes(selectedDegree);
-    return matchSearch && matchCity && matchType && matchDegree;
+    
+    const testTypes = getEntryTestTypes(u);
+    const matchEntryTest = entryTest === 'All' || 
+      (entryTest === 'sat' && testTypes.acceptsSat) ||
+      (entryTest === 'net' && testTypes.acceptsNet) ||
+      (entryTest === 'own' && testTypes.acceptsOwn);
+      
+    return matchSearch && matchCity && matchType && matchDegree && matchEntryTest;
   });
 
   const sorted = [...filtered].sort((a, b) => {
@@ -87,10 +125,11 @@ export default function UniversitiesPage() {
     setCity('All Cities'); 
     setType('All Types'); 
     setSelectedDegree('All Degrees');
+    setEntryTest('All');
     setSortBy('name-asc');
   };
 
-  const hasFilters = search || city !== 'All Cities' || type !== 'All Types' || selectedDegree !== 'All Degrees' || sortBy !== 'name-asc';
+  const hasFilters = search || city !== 'All Cities' || type !== 'All Types' || selectedDegree !== 'All Degrees' || entryTest !== 'All' || sortBy !== 'name-asc';
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -137,7 +176,13 @@ export default function UniversitiesPage() {
                 </optgroup>
               ))}
             </select>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full sm:w-auto">
+              <select value={entryTest} onChange={e => setEntryTest(e.target.value)} className="input-field w-full sm:w-48 cursor-pointer font-bold">
+                <option value="All">All Entry Tests</option>
+                <option value="sat">Accepts SAT</option>
+                <option value="net">Accepts NET</option>
+                <option value="own">Admission/Own Test</option>
+              </select>
               <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="input-field w-full sm:w-48 cursor-pointer font-bold">
                 <option value="name-asc">Sort: Name (A-Z)</option>
                 <option value="name-desc">Sort: Name (Z-A)</option>
@@ -215,7 +260,7 @@ export default function UniversitiesPage() {
                   {/* Content */}
                   <div className="p-5 flex-1 flex flex-col">
                     <Link href={`/universities/${uni.id}`}>
-                      <h2 className="font-display font-black text-lg mb-1 text-[#0B071E] group-hover:text-funky-cyan transition-colors cursor-pointer">{uni.name}</h2>
+                      <h2 className="font-display font-black text-lg mb-1 text-[#0B071E] group-hover:text-[#8B5CF6] transition-colors cursor-pointer">{uni.name}</h2>
                     </Link>
                     <span className="text-[#8B5CF6] text-xs font-bold mb-3">{uni.shortName}</span>
 

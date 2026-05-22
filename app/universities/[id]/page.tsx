@@ -9,7 +9,7 @@ import {
   ArrowLeft, CheckCircle, Clock, DollarSign, Award, ChevronRight,
   Building2, GraduationCap
 } from 'lucide-react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { universities as staticUniversities } from '@/data/universities';
 import { categorizedDegrees } from '@/data/resources';
@@ -21,17 +21,47 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
   useEffect(() => {
     async function load() {
       try {
-        // Try Firestore first using the lowercased ID or regular ID
-        const snap = await getDoc(doc(db, 'universities', params.id));
-        if (snap.exists()) {
-          const data = snap.data();
+        const decodedId = decodeURIComponent(params.id);
+        let docSnap = null;
+        const candidates = [
+          decodedId,
+          decodedId.toUpperCase(),
+          decodedId.toLowerCase(),
+          decodedId.charAt(0).toUpperCase() + decodedId.slice(1).toLowerCase()
+        ];
+        
+        // Remove duplicates
+        const uniqueCandidates = Array.from(new Set(candidates));
+        
+        for (const candidate of uniqueCandidates) {
+          const snap = await getDoc(doc(db, 'universities', candidate));
+          if (snap.exists()) {
+            docSnap = snap;
+            break;
+          }
+        }
+        
+        // If not found by direct ID, scan collection
+        if (!docSnap) {
+          const querySnap = await getDocs(collection(db, 'universities'));
+          const found = querySnap.docs.find(d => 
+            d.id.toLowerCase() === decodedId.toLowerCase() ||
+            (d.data().shortName || '').toLowerCase() === decodedId.toLowerCase()
+          );
+          if (found) {
+            docSnap = found;
+          }
+        }
+
+        if (docSnap && docSnap.exists()) {
+          const data = docSnap.data();
           const staticUni = staticUniversities.find(
-            u => u.id.toLowerCase() === params.id.toLowerCase() || 
+            u => u.id.toLowerCase() === docSnap!.id.toLowerCase() || 
                  u.shortName.toLowerCase() === (data.shortName || '').toLowerCase()
           );
 
           setUni({
-            id: snap.id,
+            id: docSnap.id,
             name: data.name,
             shortName: data.shortName,
             city: data.city,
@@ -70,7 +100,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
           });
         } else {
           // If not in Firestore, check if we have it in static data
-          const staticUni = staticUniversities.find(u => u.id.toLowerCase() === params.id.toLowerCase());
+          const staticUni = staticUniversities.find(u => u.id.toLowerCase() === decodedId.toLowerCase() || u.shortName.toLowerCase() === decodedId.toLowerCase());
           if (staticUni) {
             setUni({
               ...staticUni,
@@ -82,7 +112,8 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
         }
       } catch (err) {
         console.error('Error fetching university details:', err);
-        const staticUni = staticUniversities.find(u => u.id.toLowerCase() === params.id.toLowerCase());
+        const decodedId = decodeURIComponent(params.id);
+        const staticUni = staticUniversities.find(u => u.id.toLowerCase() === decodedId.toLowerCase() || u.shortName.toLowerCase() === decodedId.toLowerCase());
         setUni(staticUni ? { ...staticUni, degrees: (staticUni as any).degrees || [] } : null);
       } finally {
         setLoading(false);
@@ -125,28 +156,28 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
 
         {/* Hero image */}
         <motion.div
-          className="relative h-64 sm:h-80 rounded-3xl overflow-hidden mb-8"
+          className="relative min-h-[280px] sm:h-80 rounded-3xl overflow-hidden mb-8 flex flex-col justify-end p-6 sm:p-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <img src={uni.image} alt={uni.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          <img src={uni.image} alt={uni.name} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
           {/* Badges inside image */}
-          <div className="absolute bottom-6 left-6 flex items-end gap-4 z-10">
+          <div className="relative flex flex-col sm:flex-row sm:items-end gap-4 z-10 w-full">
             <img src={uni.logo} alt={uni.shortName}
-              className="w-16 h-16 rounded-2xl border-2 border-white/20 bg-white object-cover shadow-lg" />
-            <div>
-              <h1 className="font-display font-black text-2xl sm:text-3xl text-white leading-tight drop-shadow-md">{uni.name}</h1>
-              <div className="flex items-center gap-3 mt-1 text-white/90 text-sm font-bold">
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border-2 border-white/20 bg-white object-cover shadow-lg flex-shrink-0" />
+            <div className="min-w-0">
+              <h1 className="font-display font-black text-xl sm:text-3xl text-white leading-tight drop-shadow-md break-words">{uni.name}</h1>
+              <div className="flex flex-wrap items-center gap-3 mt-1.5 text-white/90 text-xs sm:text-sm font-bold">
                 <span className="flex items-center gap-1 drop-shadow-sm"><MapPin size={13} /> {uni.city}</span>
                 <span className="drop-shadow-sm">Est. {uni.established}</span>
               </div>
             </div>
           </div>
 
-          <div className="absolute top-4 right-4 flex gap-2 z-10">
-            <span className={`text-xs px-3 py-1.5 rounded-full font-bold backdrop-blur-md shadow-md ${
+          <div className="absolute top-4 right-4 flex flex-wrap gap-2 z-10 max-w-[calc(100%-2rem)] justify-end">
+            <span className={`text-[10px] sm:text-xs px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full font-bold backdrop-blur-md shadow-md ${
               uni.type === 'public'
                 ? 'bg-emerald-500/80 text-white border border-emerald-400/20'
                 : 'bg-purple-500/80 text-white border border-purple-400/20'
@@ -154,7 +185,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               {uni.type.charAt(0).toUpperCase() + uni.type.slice(1)} University
             </span>
             {uni.admissionOpen && (
-              <span className="text-xs px-3 py-1.5 rounded-full font-bold backdrop-blur-md bg-funky-cyan/95 text-white border border-funky-cyan/20 shadow-md animate-pulse">
+              <span className="text-[10px] sm:text-xs px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full font-bold backdrop-blur-md bg-funky-cyan/95 text-white border border-funky-cyan/20 shadow-md animate-pulse">
                 🟢 Admissions Open
               </span>
             )}

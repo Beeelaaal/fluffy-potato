@@ -217,7 +217,7 @@ export default function MarketplacePage() {
                       </div>
 
                       <Link href={`/marketplace/${req.id}`}>
-                        <h2 className="font-display font-black text-2xl leading-snug mb-3 text-[#0B071E] group-hover:text-funky-cyan transition-colors">
+                        <h2 className="font-display font-black text-2xl leading-snug mb-3 text-[#0B071E] group-hover:text-[#8B5CF6] transition-colors">
                           {req.title}
                         </h2>
                       </Link>

@@ -44,12 +44,18 @@ export default function ResourcesPage() {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [search, setSearch] = useState('');
+  const [downloadingResource, setDownloadingResource] = useState<string | null>(null);
 
   const handleDownload = (resourceId: string, fileUrl?: string) => {
     if (!fileUrl) {
       alert("No download URL available for this resource.");
       return;
     }
+    
+    // Set downloading state for feedback toast
+    const resource = resources.find(r => r.id === resourceId);
+    setDownloadingResource(resource?.title || 'Resource');
+
     // Increment downloads in Firestore in the background (non-blocking) so window.open is not blocked as a popup
     updateDoc(doc(db, 'resources', resourceId), {
       downloads: increment(1)
@@ -99,6 +105,15 @@ export default function ResourcesPage() {
     }
     fetchResources();
   }, []);
+
+  useEffect(() => {
+    if (downloadingResource) {
+      const timer = setTimeout(() => {
+        setDownloadingResource(null);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [downloadingResource]);
 
   const availableCourses = selectedDegree ? (courses[selectedDegree] || []) : [];
 
@@ -351,6 +366,37 @@ export default function ResourcesPage() {
             </div>
           </div>
         )}
+
+        {/* Toast Notification */}
+        <AnimatePresence>
+          {downloadingResource && (
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.9 }}
+              className="fixed bottom-6 right-6 z-50 max-w-sm w-[calc(100%-3rem)] sm:w-80 bg-white/95 backdrop-blur-md border border-[#8B5CF6]/20 shadow-[0_12px_40px_rgba(139,92,246,0.15)] rounded-2xl p-4 flex items-center justify-between gap-4 border-l-4 border-l-[#8B5CF6]"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
+                  <Download size={16} className="text-[#8B5CF6] animate-bounce" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold text-[#8B5CF6] uppercase tracking-wider">Downloading</p>
+                  <p className="text-sm font-extrabold text-[#0B071E] truncate" title={downloadingResource}>
+                    {downloadingResource}
+                  </p>
+                  <p className="text-[10px] text-[#0B071E]/60 font-semibold mt-0.5">Please wait, starting download...</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setDownloadingResource(null)}
+                className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-black/5 transition-colors text-[#0B071E]/40 hover:text-[#0B071E] flex-shrink-0"
+              >
+                <X size={14} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

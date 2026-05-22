@@ -326,20 +326,20 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               )}
 
               {/* Request stats */}
-              <div className="grid grid-cols-3 gap-4 p-5 rounded-2xl bg-white/60 border border-black/5">
-                <div className="text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 p-5 rounded-2xl bg-white/60 border border-black/5">
+                <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5">
                   <DollarSign size={16} className="text-[#8B5CF6] mx-auto mb-1" />
-                  <div className="font-display font-black text-xl text-[#0B071E]">PKR {request.budget.toLocaleString()}</div>
+                  <div className="font-display font-black text-lg sm:text-xl text-[#0B071E]">PKR {request.budget.toLocaleString()}</div>
                   <div className="text-[#0B071E]/50 text-xs font-bold">Budget</div>
                 </div>
-                <div className="text-center">
+                <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5">
                   <Clock size={16} className="text-[#0891B2] mx-auto mb-1" />
-                  <div className="font-bold text-sm text-[#0B071E]">{request.duration}</div>
+                  <div className="font-bold text-sm sm:text-base text-[#0B071E]">{request.duration}</div>
                   <div className="text-[#0B071E]/50 text-xs font-bold">Duration</div>
                 </div>
                 <div className="text-center">
                   <MessageSquare size={16} className="text-[#EA580C] mx-auto mb-1" />
-                  <div className="font-display font-black text-xl text-[#0B071E]">{bids.length}</div>
+                  <div className="font-display font-black text-lg sm:text-xl text-[#0B071E]">{bids.length}</div>
                   <div className="text-[#0B071E]/50 text-xs font-bold">Bids Received</div>
                 </div>
               </div>
@@ -380,7 +380,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                         className="p-5 rounded-2xl bg-white/60 border border-black/5"
                         initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.08 }}>
-                        <div className="flex items-start justify-between gap-4 mb-3">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3 pb-3 border-b border-black/5 sm:border-0 sm:pb-0">
                           <div className="flex items-center gap-3">
                             <img src={bid.tutor.avatar} alt={bid.tutor.name}
                               className="w-10 h-10 rounded-full border border-black/10" />
@@ -389,9 +389,9 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                               <div className="text-[#0B071E]/50 text-xs font-semibold">{bid.tutor.university}</div>
                             </div>
                           </div>
-                          <div className="text-right flex-shrink-0">
+                          <div className="text-left sm:text-right">
                             <div className="font-display font-black text-lg text-[#8B5CF6]">PKR {bid.amount.toLocaleString()}</div>
-                            <div className="flex items-center justify-end gap-1 text-xs text-[#0B071E]/50 font-bold mt-0.5">
+                            <div className="flex items-center sm:justify-end gap-1 text-xs text-[#0B071E]/50 font-bold mt-0.5">
                               <Star size={10} className="fill-yellow-500 text-yellow-500" />
                               {bid.tutor.rating} · {bid.tutor.completedSessions} sessions
                             </div>
