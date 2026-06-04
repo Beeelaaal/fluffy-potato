@@ -39,58 +39,111 @@
   --text-muted: #9CA3AF;
 }
 
-/* Dark theme selector overrides to fix hardcoded light-mode texts/backgrounds */
-.dark .text-\[\#0B071E\] { color: var(--text-primary) !important; }
-.dark .text-\[\#0B071E\]\/95 { color: rgba(243, 244, 246, 0.95) !important; }
-.dark .text-\[\#0B071E\]\/90 { color: rgba(243, 244, 246, 0.9) !important; }
-.dark .text-\[\#0B071E\]\/80 { color: rgba(243, 244, 246, 0.8) !important; }
-.dark .text-\[\#0B071E\]\/75 { color: rgba(243, 244, 246, 0.75) !important; }
-.dark .text-\[\#0B071E\]\/70 { color: rgba(243, 244, 246, 0.7) !important; }
-.dark .text-\[\#0B071E\]\/60 { color: rgba(243, 244, 246, 0.6) !important; }
-.dark .text-\[\#0B071E\]\/50 { color: rgba(243, 244, 246, 0.5) !important; }
-.dark .text-\[\#0B071E\]\/45 { color: rgba(243, 244, 246, 0.45) !important; }
-.dark .text-\[\#0B071E\]\/40 { color: rgba(243, 244, 246, 0.4) !important; }
-.dark .text-\[\#0B071E\]\/30 { color: rgba(243, 244, 246, 0.3) !important; }
-.dark .text-\[\#0B071E\]\/20 { color: rgba(243, 244, 246, 0.2) !important; }
+/* Bulletproof Dark theme overrides using case-insensitive attribute selectors */
+.dark [class*="text-[#0b071e]" i] { color: var(--text-primary) !important; }
+.dark [class*="text-[#0b071e]/95" i] { color: rgba(243, 244, 246, 0.95) !important; }
+.dark [class*="text-[#0b071e]/90" i] { color: rgba(243, 244, 246, 0.90) !important; }
+.dark [class*="text-[#0b071e]/85" i] { color: rgba(243, 244, 246, 0.85) !important; }
+.dark [class*="text-[#0b071e]/80" i] { color: rgba(243, 244, 246, 0.80) !important; }
+.dark [class*="text-[#0b071e]/75" i] { color: rgba(243, 244, 246, 0.75) !important; }
+.dark [class*="text-[#0b071e]/70" i] { color: rgba(243, 244, 246, 0.70) !important; }
+.dark [class*="text-[#0b071e]/60" i] { color: rgba(243, 244, 246, 0.60) !important; }
+.dark [class*="text-[#0b071e]/50" i] { color: rgba(243, 244, 246, 0.50) !important; }
+.dark [class*="text-[#0b071e]/45" i] { color: rgba(243, 244, 246, 0.45) !important; }
+.dark [class*="text-[#0b071e]/40" i] { color: rgba(243, 244, 246, 0.40) !important; }
+.dark [class*="text-[#0b071e]/30" i] { color: rgba(243, 244, 246, 0.30) !important; }
+.dark [class*="text-[#0b071e]/20" i] { color: rgba(243, 244, 246, 0.20) !important; }
+.dark [class*="text-[#0b071e]/10" i] { color: rgba(243, 244, 246, 0.10) !important; }
 
-.dark .text-dark { color: var(--text-primary) !important; }
-.dark .text-dark\/80 { color: rgba(243, 244, 246, 0.8) !important; }
-.dark .text-dark\/60 { color: rgba(243, 244, 246, 0.6) !important; }
-.dark .text-dark\/50 { color: rgba(243, 244, 246, 0.5) !important; }
-.dark .text-dark\/45 { color: rgba(243, 244, 246, 0.45) !important; }
-.dark .text-dark\/30 { color: rgba(243, 244, 246, 0.3) !important; }
+.dark [class*="text-dark" i]:not([class*="text-dark-900" i]) { color: var(--text-primary) !important; }
+.dark [class*="text-dark/95" i] { color: rgba(243, 244, 246, 0.95) !important; }
+.dark [class*="text-dark/90" i] { color: rgba(243, 244, 246, 0.90) !important; }
+.dark [class*="text-dark/85" i] { color: rgba(243, 244, 246, 0.85) !important; }
+.dark [class*="text-dark/80" i] { color: rgba(243, 244, 246, 0.80) !important; }
+.dark [class*="text-dark/75" i] { color: rgba(243, 244, 246, 0.75) !important; }
+.dark [class*="text-dark/70" i] { color: rgba(243, 244, 246, 0.70) !important; }
+.dark [class*="text-dark/60" i] { color: rgba(243, 244, 246, 0.60) !important; }
+.dark [class*="text-dark/50" i] { color: rgba(243, 244, 246, 0.50) !important; }
+.dark [class*="text-dark/45" i] { color: rgba(243, 244, 246, 0.45) !important; }
+.dark [class*="text-dark/40" i] { color: rgba(243, 244, 246, 0.40) !important; }
+.dark [class*="text-dark/30" i] { color: rgba(243, 244, 246, 0.30) !important; }
+.dark [class*="text-dark/20" i] { color: rgba(243, 244, 246, 0.20) !important; }
+.dark [class*="text-dark/10" i] { color: rgba(243, 244, 246, 0.10) !important; }
 .dark .text-dark-900 { color: var(--text-primary) !important; }
 
 /* Dark theme background overrides for light/white containers */
-.dark .bg-white {
-  background-color: var(--surface) !important;
+.dark .bg-white { background-color: var(--surface) !important; }
+.dark [class*="bg-white/95" i] { background-color: rgba(17, 10, 32, 0.95) !important; }
+.dark [class*="bg-white/90" i] { background-color: rgba(17, 10, 32, 0.90) !important; }
+.dark [class*="bg-white/80" i] { background-color: rgba(17, 10, 32, 0.80) !important; }
+.dark [class*="bg-white/70" i] { background-color: rgba(17, 10, 32, 0.70) !important; }
+.dark [class*="bg-white/60" i] { background-color: rgba(17, 10, 32, 0.60) !important; }
+.dark [class*="bg-white/50" i] { background-color: rgba(17, 10, 32, 0.50) !important; }
+.dark [class*="bg-white/40" i] { background-color: rgba(17, 10, 32, 0.40) !important; }
+.dark [class*="bg-white/35" i] { background-color: rgba(17, 10, 32, 0.35) !important; }
+.dark [class*="bg-white/30" i] { background-color: rgba(17, 10, 32, 0.30) !important; }
+.dark [class*="bg-white/20" i] { background-color: rgba(17, 10, 32, 0.20) !important; }
+.dark [class*="bg-white/10" i] { background-color: rgba(17, 10, 32, 0.10) !important; }
+.dark [class*="bg-white/5" i]  { background-color: rgba(17, 10, 32, 0.05) !important; }
+
+.dark [class*="bg-[#fdfbf7]" i] { background-color: var(--bg-light) !important; }
+.dark [class*="bg-[#0b071e]" i] { background-color: var(--bg-light) !important; }
+
+/* Dark theme border overrides */
+.dark .border-black\/5 { border-color: rgba(255, 255, 255, 0.05) !important; }
+.dark .border-black\/10 { border-color: rgba(255, 255, 255, 0.08) !important; }
+.dark .border-black\/20 { border-color: rgba(255, 255, 255, 0.12) !important; }
+.dark [class*="border-[#0b071e]" i] { border-color: rgba(255, 255, 255, 0.12) !important; }
+.dark [class*="border-[#0b071e]/10" i] { border-color: rgba(255, 255, 255, 0.08) !important; }
+.dark [class*="border-[#0b071e]/20" i] { border-color: rgba(255, 255, 255, 0.12) !important; }
+.dark [class*="border-black/5" i] { border-color: rgba(255, 255, 255, 0.05) !important; }
+.dark [class*="border-black/10" i] { border-color: rgba(255, 255, 255, 0.08) !important; }
+.dark [class*="border-black/20" i] { border-color: rgba(255, 255, 255, 0.12) !important; }
+
+/* Premium Dark Mode Visual Enhancements */
+.dark body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    radial-gradient(rgba(46, 242, 255, 0.08) 1px, transparent 0),
+    radial-gradient(rgba(139, 92, 246, 0.06) 1px, transparent 0);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.8;
 }
-.dark .bg-white\/60 {
-  background-color: rgba(17, 10, 32, 0.6) !important;
+
+.dark .glass-card {
+  box-shadow: 4px 4px 0px rgba(46, 242, 255, 0.15);
+  border-color: rgba(46, 242, 255, 0.15) !important;
 }
-.dark .bg-white\/80 {
-  background-color: rgba(17, 10, 32, 0.8) !important;
+
+.dark .glass-card:hover {
+  transform: translateY(-4px) rotate(0.5deg);
+  border-color: var(--cyan) !important;
+  box-shadow: 8px 8px 0px var(--cyan) !important;
 }
-.dark .bg-white\/50 {
-  background-color: rgba(17, 10, 32, 0.5) !important;
+
+.dark .btn-primary {
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+  box-shadow: 4px 4px 0px var(--cyan);
+  border-color: var(--cyan);
+  color: #0B071E !important;
 }
-.dark .bg-\[\#FDFBF7\] {
-  background-color: var(--bg-light) !important;
+
+.dark .btn-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--cyan);
 }
-.dark .bg-\[\#0B071E\] {
-  background-color: var(--bg-light) !important;
-}
-.dark .border-black\/5 {
-  border-color: rgba(255, 255, 255, 0.05) !important;
-}
-.dark .border-black\/10 {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-.dark .border-\[\#0B071E\]\/10 {
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-.dark .border-\[\#0B071E\]\/20 {
-  border-color: rgba(255, 255, 255, 0.12) !important;
+
+.dark .btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--cyan);
 }
 
 .dark html {
@@ -99,9 +152,9 @@
 
 .dark body {
   background:
-    radial-gradient(circle at 10% 20%, rgba(255, 75, 114, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 50% 80%, rgba(255, 210, 20, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 10% 20%, rgba(46, 242, 255, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(255, 210, 20, 0.03) 0%, transparent 50%),
     var(--bg-light);
 }
 
