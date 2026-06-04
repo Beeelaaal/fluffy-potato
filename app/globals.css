@@ -22,6 +22,147 @@
   --font-body: var(--font-body, 'Plus Jakarta Sans', system-ui, sans-serif);
 }
 
+.dark {
+  --cyan: #2EF2FF;
+  --coral: #FF5C7A;
+  --yellow: #FFD214;
+  --purple: #A78BFA;
+  --dark: #F3F4F6;
+  --surface: #110A20;
+  --bg-light: #070310;
+  
+  --glass-bg: rgba(17, 10, 32, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --text-primary: #F3F4F6;
+  --text-secondary: #D1D5DB;
+  --text-muted: #9CA3AF;
+}
+
+/* Dark theme selector overrides to fix hardcoded light-mode texts/backgrounds */
+.dark .text-\[\#0B071E\] { color: var(--text-primary) !important; }
+.dark .text-\[\#0B071E\]\/95 { color: rgba(243, 244, 246, 0.95) !important; }
+.dark .text-\[\#0B071E\]\/90 { color: rgba(243, 244, 246, 0.9) !important; }
+.dark .text-\[\#0B071E\]\/80 { color: rgba(243, 244, 246, 0.8) !important; }
+.dark .text-\[\#0B071E\]\/75 { color: rgba(243, 244, 246, 0.75) !important; }
+.dark .text-\[\#0B071E\]\/70 { color: rgba(243, 244, 246, 0.7) !important; }
+.dark .text-\[\#0B071E\]\/60 { color: rgba(243, 244, 246, 0.6) !important; }
+.dark .text-\[\#0B071E\]\/50 { color: rgba(243, 244, 246, 0.5) !important; }
+.dark .text-\[\#0B071E\]\/45 { color: rgba(243, 244, 246, 0.45) !important; }
+.dark .text-\[\#0B071E\]\/40 { color: rgba(243, 244, 246, 0.4) !important; }
+.dark .text-\[\#0B071E\]\/30 { color: rgba(243, 244, 246, 0.3) !important; }
+.dark .text-\[\#0B071E\]\/20 { color: rgba(243, 244, 246, 0.2) !important; }
+
+.dark .text-dark { color: var(--text-primary) !important; }
+.dark .text-dark\/80 { color: rgba(243, 244, 246, 0.8) !important; }
+.dark .text-dark\/60 { color: rgba(243, 244, 246, 0.6) !important; }
+.dark .text-dark\/50 { color: rgba(243, 244, 246, 0.5) !important; }
+.dark .text-dark\/45 { color: rgba(243, 244, 246, 0.45) !important; }
+.dark .text-dark\/30 { color: rgba(243, 244, 246, 0.3) !important; }
+.dark .text-dark-900 { color: var(--text-primary) !important; }
+
+/* Dark theme background overrides for light/white containers */
+.dark .bg-white {
+  background-color: var(--surface) !important;
+}
+.dark .bg-white\/60 {
+  background-color: rgba(17, 10, 32, 0.6) !important;
+}
+.dark .bg-white\/80 {
+  background-color: rgba(17, 10, 32, 0.8) !important;
+}
+.dark .bg-white\/50 {
+  background-color: rgba(17, 10, 32, 0.5) !important;
+}
+.dark .bg-\[\#FDFBF7\] {
+  background-color: var(--bg-light) !important;
+}
+.dark .bg-\[\#0B071E\] {
+  background-color: var(--bg-light) !important;
+}
+.dark .border-black\/5 {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+.dark .border-black\/10 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark .border-\[\#0B071E\]\/10 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark .border-\[\#0B071E\]\/20 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark html {
+  background-color: var(--bg-light);
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 75, 114, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(255, 210, 20, 0.04) 0%, transparent 50%),
+    var(--bg-light);
+}
+
+.dark select option {
+  background: #110A20;
+  color: var(--text-primary);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  border-color: var(--bg-light);
+}
+
+.dark .btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--dark);
+}
+
+.dark .input-field {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .input-field:focus {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--purple);
+}
+
+.dark .sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark .sidebar-item.active {
+  background: #110A20;
+  border-color: var(--dark);
+}
+
+.dark .data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dark .custom-checkbox {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: #110A20;
+}
+
+.dark .tag-pill {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
 @layer base {
   *,
   *::before,

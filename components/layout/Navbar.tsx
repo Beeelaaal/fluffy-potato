@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, GraduationCap, Users, LayoutDashboard, Menu, X, LogOut, User as UserIcon } from 'lucide-react';
+import { BookOpen, GraduationCap, Users, LayoutDashboard, Menu, X, LogOut, User as UserIcon, Sun, Moon } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { logoutUser } from '@/lib/auth';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,12 +20,39 @@ export default function Navbar() {
   const [open, setOpen]         = useState(false);
   const pathname                = usePathname();
   const { user, profile, loading } = useAuth();
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('tute-theme') as 'light' | 'dark' | null;
+    const isDark = saved === 'dark';
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      setTheme('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      setTheme('light');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('tute-theme', 'dark');
+      setTheme('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('tute-theme', 'light');
+      setTheme('light');
+    }
+  };
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', h);
     return () => window.removeEventListener('scroll', h);
   }, []);
+
+  if (profile?.role === 'admin') return null;
 
   return (
     <>
@@ -60,11 +87,21 @@ export default function Navbar() {
 
           {/* Auth */}
           <div className="hidden md:flex items-center gap-2.5">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-all mr-1.5"
+              aria-label="Toggle theme"
+              type="button"
+            >
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+
             {loading ? (
               <div className="w-8 h-8 rounded-full bg-white/10 animate-pulse" />
             ) : user ? (
               <div className="flex items-center gap-2">
-                {profile?.role === 'admin' && (
+                {(profile?.role as string) === 'admin' && (
                   <Link
                     href="/admin"
                     className="flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all border border-[#2EF2FF]/20 bg-[#2EF2FF]/5 text-[#2EF2FF]"
@@ -87,7 +124,7 @@ export default function Navbar() {
                     )}
                   </div>
                   <span className="text-sm font-semibold text-white/90">
-                    {profile?.name?.split(' ')[0] || 'User'}
+                    {profile?.name || user?.displayName || user?.email?.split('@')[0] || 'User'}
                   </span>
                 </Link>
                 <button
@@ -151,11 +188,27 @@ export default function Navbar() {
                 ))}
               </div>
               <div className="pt-4 flex flex-col gap-2.5 border-t border-white/5">
+                {/* Theme Toggle Mobile */}
+                <button
+                  onClick={() => { toggleTheme(); setOpen(false); }}
+                  className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold bg-white/5 border border-white/10 text-white/80 hover:text-white transition-all mb-1.5"
+                  type="button"
+                >
+                  {theme === 'light' ? (
+                    <>
+                      <Moon size={15} /> Dark Theme
+                    </>
+                  ) : (
+                    <>
+                      <Sun size={15} /> Light Theme
+                    </>
+                  )}
+                </button>
                 {loading ? (
                   <div className="h-10 rounded-xl animate-pulse bg-white/5" />
                 ) : user ? (
                   <>
-                    {profile?.role === 'admin' && (
+                    {(profile?.role as string) === 'admin' && (
                       <Link
                         href="/admin"
                         onClick={() => setOpen(false)}

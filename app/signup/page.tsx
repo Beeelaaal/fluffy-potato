@@ -1,15 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Eye, EyeOff } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signInWithGoogle, signInWithGitHub, signUpWithEmail } from '@/lib/auth';
 import { TuteLogo } from '@/components/brand/TuteLogo';
+import { useAuth } from '@/context/AuthContext';
 
 export default function SignupPage() {
   const router = useRouter();
+  const { user, profile, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      if (profile?.role === 'admin') {
+        router.replace('/admin');
+      } else {
+        router.replace('/');
+      }
+    }
+  }, [user, profile, authLoading, router]);
 
   const [showPass, setShowPass] = useState(false);
   const [role, setRole] = useState<'student' | 'tutor'>('student');
@@ -57,7 +69,6 @@ export default function SignupPage() {
         role,
         university: form.university,
       });
-      router.push('/');
     } catch (error: any) {
       console.error('Email signup error:', error);
       setErr(error?.message || 'Signup failed');
@@ -72,9 +83,12 @@ export default function SignupPage() {
     setErr('');
     setLoadingProvider(provider);
     try {
-      if (provider === 'google') await signInWithGoogle();
-      else await signInWithGitHub();
-      router.push('/');
+      const extraData = {
+        role,
+        university: form.university.trim() || 'Other'
+      };
+      if (provider === 'google') await signInWithGoogle(extraData);
+      else await signInWithGitHub(extraData);
     } catch (error: any) {
       const code = error?.code || '';
       if (code === 'auth/popup-closed-by-user') {

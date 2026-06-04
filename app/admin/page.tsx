@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BookOpen, Building, Database, ExternalLink, GraduationCap, Plus, RefreshCw, Shield, Trash2, TrendingUp, Users, X, Edit2, CheckCircle, Clock, AlertCircle, Mail, Briefcase, MessageSquare, FileText } from 'lucide-react';
+import { BookOpen, Building, Database, ExternalLink, GraduationCap, Plus, RefreshCw, Shield, Trash2, TrendingUp, Users, X, Edit2, CheckCircle, Clock, AlertCircle, Mail, Briefcase, MessageSquare, FileText, LogOut } from 'lucide-react';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { seedDatabase } from '@/lib/seed';
@@ -12,6 +12,8 @@ import { useAuth } from '@/context/AuthContext';
 import { normalizeResource } from '@/lib/resources';
 import { Resource } from '@/data/resources';
 import { degrees, categorizedDegrees } from '@/data/resources';
+import { logoutUser } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 
 type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'contacts' | 'careers' | 'chats_bids' | 'blogs';
 
@@ -42,6 +44,7 @@ const emptyRes = { title:'', university:'NUST', degree: degrees[0]??'', course:'
 const emptyUni = { name:'', shortName:'', city:'', type:'public', programs: 0, description:'', logoUrl:'', coverUrl:'', websiteUrl:'', deadline:'', admissionCriteria:'', degrees: [] as string[] };
 
 export default function AdminPage() {
+  const router = useRouter();
   const { loading, profile } = useProtectedRoute({ requiredRole:'admin', redirectOnRoleMismatch:false });
   const { refetchProfile } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
@@ -266,6 +269,10 @@ export default function AdminPage() {
             <RefreshCw size={13} className={busy?'animate-spin':''}/> Refresh
           </button>
           <Link href="/" className="btn-ghost w-full py-2.5 text-xs text-center block border-black/10 text-[#0B071E]">← Back to Site</Link>
+          <button onClick={async () => { await logoutUser(); router.push('/login'); }}
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-500/10 border border-red-500/20 py-2.5 text-xs font-black text-red-600 hover:bg-red-500/20 transition-all">
+            <LogOut size={13} /> Logout
+          </button>
         </div>
       </aside>
 
@@ -300,15 +307,6 @@ export default function AdminPage() {
                   <div className="text-xs font-black uppercase tracking-[0.2em] text-[#0B071E]/40">{s.label}</div>
                 </div>
               ))}
-            </div>
-            <div className="glass-card p-6">
-              <h2 className="font-display text-xl mb-4 font-black text-[#0B071E]">Admin Credentials</h2>
-              <div className="space-y-2 text-sm font-mono bg-black/5 rounded-xl p-4 text-[#0B071E]">
-                <p><span className="text-[#0B071E]/50 font-semibold">Email:</span> <span className="text-[#8B5CF6] font-bold">admin@tute.pk</span></p>
-                <p><span className="text-[#0B071E]/50 font-semibold">Password:</span> <span className="text-[#15803D] font-bold">Tute@2025</span></p>
-                <p><span className="text-[#0B071E]/50 font-semibold">Role field:</span> <span className="text-[#B45309] font-bold">role = &quot;admin&quot;</span> in Firestore users collection</p>
-              </div>
-              <p className="mt-3 text-xs text-[#0B071E]/50 font-semibold">Create this account via Firebase Auth, then set role to admin in Firestore.</p>
             </div>
           </motion.div>
         )}

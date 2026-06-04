@@ -14,6 +14,15 @@ export interface UserProfile {
   university: string;
   photoURL?: string;
   isVerified?: boolean;
+  bio?: string;
+  preferences?: string;
+  rating?: number;
+  ratingsCount?: number;
+  completedSessions?: number;
+  sessions?: number;
+  hourlyRate?: number;
+  budgetPreference?: string;
+  resourcesSharedCount?: number;
 }
 
 interface AuthContextType {

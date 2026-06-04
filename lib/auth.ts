@@ -44,15 +44,15 @@ async function ensureUserDoc(user: User, extraData?: { name?: string; role?: str
   }
 }
 
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (extraData?: { role?: string; university?: string }) => {
   const result = await signInWithPopup(auth, googleProvider);
-  await ensureUserDoc(result.user);
+  await ensureUserDoc(result.user, extraData);
   return result.user;
 };
 
-export const signInWithGitHub = async () => {
+export const signInWithGitHub = async (extraData?: { role?: string; university?: string }) => {
   const result = await signInWithPopup(auth, githubProvider);
-  await ensureUserDoc(result.user);
+  await ensureUserDoc(result.user, extraData);
   return result.user;
 };
 

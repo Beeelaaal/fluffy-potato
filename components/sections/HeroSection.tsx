@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { ArrowRight, GraduationCap, Zap } from 'lucide-react';
+import { ArrowRight, GraduationCap, Zap, BookOpen } from 'lucide-react';
 import { stats } from '@/data/testimonials';
 import { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
@@ -60,6 +60,15 @@ export default function HeroSection() {
       <div className="relative z-10 section-container text-center pt-32 pb-24">
         <motion.div variants={ctr} initial="hidden" animate="show" className="max-w-4xl mx-auto">
 
+          {/* Resources Badge */}
+          <motion.div 
+            variants={itm} 
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-dark/10 bg-white/70 text-xs font-black uppercase tracking-[0.18em] text-[#8B5CF6] mb-4 cursor-default select-none"
+          >
+            <BookOpen size={14} className="text-[#8B5CF6]" />
+            <span>Pakistan's Largest Peer-to-Peer Academic Resource Hub</span>
+          </motion.div>
+
           {/* Headline */}
           <motion.h1
             variants={itm}
@@ -80,21 +89,20 @@ export default function HeroSection() {
           </motion.h1>
 
           {/* Sub */}
-          <motion.p variants={itm} className="text-[#0B071E]/60 text-base sm:text-lg max-w-xl mx-auto leading-relaxed mb-10 font-semibold">
-            Discover universities, access course resources, and connect with expert tutors —
-            built exclusively for Pakistani students.
+          <motion.p variants={itm} className="text-[#0B071E]/60 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10 font-semibold">
+            Access a massive repository of solved past papers, hand-written notes, and lecture slides uploaded by top students. Prepare for your exams with course resources tailored to your university, or connect with expert peer tutors.
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={itm} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-            <Link href="/universities" className="btn-primary px-8 py-4 text-base group">
-              <GraduationCap size={18} />
-              Explore Universities
+            <Link href="/signup" className="btn-primary px-8 py-4 text-base group">
+              <Zap size={16} />
+              Get Started Free
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/signup" className="btn-ghost px-8 py-4 text-base">
-              <Zap size={16} className="text-[#8B5CF6]" />
-              Get Started Free
+            <Link href="#services" className="btn-ghost px-8 py-4 text-base">
+              <GraduationCap size={18} className="text-[#8B5CF6]" />
+              Explore Core Services
             </Link>
           </motion.div>
 

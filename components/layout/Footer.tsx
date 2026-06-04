@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { TuteLogo } from '@/components/brand/TuteLogo';
+import { useAuth } from '@/context/AuthContext';
 
 const footerLinks = {
   Platform: [
@@ -31,6 +34,9 @@ const socials = [
 ];
 
 export default function Footer() {
+  const { profile } = useAuth();
+  if ((profile?.role as string) === 'admin') return null;
+
   return (
     <footer className="relative mt-24 border-t border-black/10 overflow-hidden bg-white/70">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-[#8B5CF6]/5 blur-[100px] pointer-events-none" />

@@ -136,12 +136,12 @@ export default function FeaturesSection() {
       <div className="section-container relative">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <div className="section-badge mb-5 mx-auto w-fit">⚡ Tute Infographic Journey</div>
+          <div className="section-badge mb-5 mx-auto w-fit">⚡ How Tute Works</div>
           <h2 className="font-display font-black text-4xl sm:text-6xl tracking-tight mb-6">
-            How does Tute <span className="gradient-text">Simplify University Life?</span>
+            Everything you need, <span className="gradient-text">made simple.</span>
           </h2>
           <p className="text-[#0B071E]/70 text-lg max-w-2xl mx-auto font-semibold">
-            An interactive roadmap designed to guide you from high-school confusion to university mastery.
+            Navigate through university applications, download key course resources, or hire expert peer tutors.
           </p>
         </div>
 

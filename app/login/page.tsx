@@ -1,15 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import { signInWithGoogle, signInWithGitHub, signInWithEmail } from '@/lib/auth';
 import { TuteLogo } from '@/components/brand/TuteLogo';
+import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { user, profile, loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      if (profile?.role === 'admin') {
+        router.replace('/admin');
+      } else {
+        router.replace('/');
+      }
+    }
+  }, [user, profile, authLoading, router]);
   const [showPass, setShowPass] = useState(false);
   const [loading,  setLoading]  = useState(false);
   const [provider, setProvider] = useState<string|null>(null);
@@ -26,7 +38,6 @@ export default function LoginPage() {
     try {
       setLoading(true);
       await signInWithEmail(form.email, form.password);
-      router.push('/');
     } catch(e:any) {
       const c = e?.code||'';
       if(c.includes('invalid-credential')||c.includes('wrong-password')||c.includes('user-not-found'))
@@ -40,7 +51,6 @@ export default function LoginPage() {
     setErr(''); setProvider(p);
     try {
       if(p==='google') await signInWithGoogle(); else await signInWithGitHub();
-      router.push('/');
     } catch(e:any) {
       if(!e?.code?.includes('popup-closed')) setErr(e?.message||`${p} sign-in failed.`);
     } finally { setProvider(null); }

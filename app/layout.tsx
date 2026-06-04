@@ -6,6 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import TestimonialPrompt from '@/components/popup/TestimonialPrompt';
 import { AuthProvider } from '@/context/AuthContext';
+import AdminRedirectGuard from '@/components/guards/AdminRedirectGuard';
 
 const displayFont = Syne({
   subsets: ['latin'],
@@ -40,10 +41,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth">
       <body className={`${displayFont.variable} ${bodyFont.variable} font-body bg-[#FDFBF7] text-[#0B071E] antialiased`}>
         <AuthProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <TestimonialPrompt />
+          <AdminRedirectGuard>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+            <TestimonialPrompt />
+          </AdminRedirectGuard>
         </AuthProvider>
       </body>
     </html>

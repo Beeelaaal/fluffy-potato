@@ -16,6 +16,17 @@ import {
 } from 'firebase/firestore';
 import { useAuth } from '@/context/AuthContext';
 
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div className="flex items-center justify-center gap-1">
+      {[...Array(5)].map((_, i) => (
+        <Star key={i} size={14} className={i < Math.round(rating) ? 'fill-amber-400 text-amber-400' : 'fill-black/10 dark:fill-white/10 text-black/10 dark:text-white/10'} />
+      ))}
+      <span className="ml-1.5 text-sm font-semibold">{rating.toFixed(1)}</span>
+    </div>
+  );
+}
+
 function ChatPanel({
   chatId,
   onClose,
@@ -77,7 +88,7 @@ function ChatPanel({
         </button>
       </div>
 
-      <div className="h-64 overflow-y-auto space-y-3 mb-4 p-4 bg-white/50 rounded-xl border border-black/5 flex flex-col">
+      <div className="h-64 overflow-y-auto space-y-3 mb-4 p-4 bg-white/50 dark:bg-white/5 rounded-xl border border-black/5 flex flex-col">
         {loading ? (
           <p className="text-center text-xs text-[#0B071E]/50 my-auto font-bold">Loading messages...</p>
         ) : messages.length === 0 ? (
@@ -89,7 +100,7 @@ function ChatPanel({
               <div key={m.id} className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm font-semibold ${
                 isMe
                   ? 'bg-[#8B5CF6] text-white self-end rounded-tr-none'
-                  : 'bg-white text-[#0B071E] border border-black/5 self-start rounded-tl-none'
+                  : 'bg-white dark:bg-[#1C1238] text-[#0B071E] border border-black/5 self-start rounded-tl-none'
               }`}>
                 {!isMe && <div className="text-[9px] text-[#8B5CF6] font-black mb-0.5">{m.senderName}</div>}
                 <div>{m.text}</div>
@@ -121,6 +132,11 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
   const [bids, setBids] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Dynamic user profiles from Firestore
+  const [studentProfile, setStudentProfile] = useState<any>(null);
+  const [tutorProfiles, setTutorProfiles] = useState<Record<string, any>>({});
+
+  // Bid submission state
   const [showBidForm, setShowBidForm] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
   const [bidMessage, setBidMessage] = useState('');
@@ -128,43 +144,55 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
   const [submittingBid, setSubmittingBid] = useState(false);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
-  useEffect(() => {
-    // 1. Fetch request document from Firestore or fall back to mock requests
-    const fetchRequest = async () => {
-      try {
-        const reqRef = doc(db, 'marketplace', params.id);
-        const reqSnap = await getDoc(reqRef);
+  // Ratings session state
+  const [ratingVal, setRatingVal] = useState(5);
+  const [ratingComment, setRatingComment] = useState('');
+  const [submittingRating, setSubmittingRating] = useState(false);
 
-        if (reqSnap.exists()) {
-          setRequest({ id: reqSnap.id, ...reqSnap.data() });
-        } else {
-          // Check mock requests
-          const mockReq = marketplaceRequests.find(r => r.id === params.id);
-          if (mockReq) {
-            setRequest(mockReq);
-          } else {
-            setRequest(null);
+  const fetchRequest = async () => {
+    try {
+      const reqRef = doc(db, 'marketplace', params.id);
+      const reqSnap = await getDoc(reqRef);
+
+      let reqData: any = null;
+      if (reqSnap.exists()) {
+        reqData = { id: reqSnap.id, ...reqSnap.data() };
+      } else {
+        const mockReq = marketplaceRequests.find(r => r.id === params.id);
+        if (mockReq) {
+          reqData = mockReq;
+        }
+      }
+      
+      setRequest(reqData);
+
+      if (reqData) {
+        const studentUid = reqData.studentId || reqData.student?.id;
+        if (studentUid) {
+          const studentSnap = await getDoc(doc(db, 'users', studentUid));
+          if (studentSnap.exists()) {
+            setStudentProfile(studentSnap.data());
           }
         }
-      } catch (err) {
-        console.error("Error fetching request:", err);
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (err) {
+      console.error("Error fetching request details:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchRequest();
   }, [params.id]);
 
   useEffect(() => {
-    // 2. Fetch bids from Firestore dynamically & merge with mock bids if mock exists
     const bidsQuery = query(collection(db, 'bids'), where('requestId', '==', params.id));
     const unsubscribe = onSnapshot(bidsQuery, (snapshot) => {
       const dbBids = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       const mockReq = marketplaceRequests.find(r => r.id === params.id);
       const mockBids = mockReq ? mockReq.bids : [];
 
-      // Merge: dbBids takes priority, mockBids filtered out if duplicates exist
       const mergedBids = [
         ...dbBids,
         ...mockBids.filter(mb => !dbBids.some(db => db.id === mb.id))
@@ -174,6 +202,33 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
 
     return () => unsubscribe();
   }, [params.id]);
+
+  // Fetch tutor profiles when bids list changes
+  useEffect(() => {
+    if (bids.length === 0) return;
+    const fetchTutorProfiles = async () => {
+      const uids = [...new Set(bids.map(b => b.tutorId || b.tutor?.id).filter(Boolean))];
+      const missing = uids.filter(uid => !tutorProfiles[uid]);
+      if (missing.length === 0) return;
+
+      try {
+        const fetched: Record<string, any> = {};
+        await Promise.all(missing.map(async (uid) => {
+          const docRef = doc(db, 'users', uid);
+          const snap = await getDoc(docRef);
+          if (snap.exists()) {
+            fetched[uid] = snap.data();
+          }
+        }));
+        if (Object.keys(fetched).length > 0) {
+          setTutorProfiles(prev => ({ ...prev, ...fetched }));
+        }
+      } catch (err) {
+        console.error("Error fetching tutor profiles:", err);
+      }
+    };
+    fetchTutorProfiles();
+  }, [bids]);
 
   if (loading) {
     return (
@@ -185,6 +240,14 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
 
   if (!request) notFound();
 
+  const studentId = request.studentId || request.student?.id;
+  const studentName = studentProfile?.name || request.student?.name || 'Anonymous Student';
+  const studentUniv = studentProfile?.university || request.student?.university || 'University Student';
+  const studentRating = studentProfile?.rating || request.student?.rating || 5.0;
+  
+  const acceptedBid = bids.find(b => b.status === 'accepted');
+  const acceptedTutorId = acceptedBid ? (acceptedBid.tutorId || acceptedBid.tutor?.id) : null;
+
   const handleSubmitBid = async () => {
     if (!user) {
       alert("Please sign in to place a bid! 🎓");
@@ -193,7 +256,6 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
     if (!bidAmount || !bidMessage) return;
     setSubmittingBid(true);
     try {
-      // Create bid document in Firestore
       await addDoc(collection(db, 'bids'), {
         requestId: params.id,
         tutorId: user.uid,
@@ -202,9 +264,9 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
           name: profile?.name || user.displayName || 'Anonymous Tutor',
           avatar: profile?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}&backgroundColor=0f0f1a`,
           university: profile?.university || 'University Tutor',
-          rating: 4.8,
-          completedSessions: 14,
-          expertise: profile?.role === 'tutor' ? ['Academic Tutoring'] : ['Expert Helper'],
+          rating: profile?.rating || 4.8,
+          completedSessions: profile?.completedSessions || 14,
+          expertise: profile?.preferences ? profile.preferences.split(',') : ['Academic Tutoring'],
         },
         amount: Number(bidAmount),
         message: bidMessage,
@@ -212,7 +274,6 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
         postedAt: new Date().toISOString(),
       });
 
-      // Update bids count on Firestore request if it exists there
       const reqRef = doc(db, 'marketplace', params.id);
       const reqSnap = await getDoc(reqRef);
       if (reqSnap.exists()) {
@@ -236,8 +297,8 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
       alert("Please sign in first!");
       return;
     }
-    const tutorId = bid.tutorId || bid.tutor.id;
-    const chatId = `${params.id}_${tutorId}`;
+    const tutorUid = bid.tutorId || bid.tutor.id;
+    const chatId = `${params.id}_${tutorUid}`;
     try {
       const chatRef = doc(db, 'chats', chatId);
       const chatSnap = await getDoc(chatRef);
@@ -245,11 +306,11 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
         await setDoc(chatRef, {
           requestId: params.id,
           requestTitle: request.title,
-          studentId: request.studentId || request.student.id,
-          tutorId: tutorId,
-          studentName: request.student.name,
+          studentId: studentId,
+          tutorId: tutorUid,
+          studentName: studentName,
           tutorName: bid.tutor.name,
-          studentAvatar: request.student.avatar,
+          studentAvatar: studentProfile?.photoURL || request.student?.avatar,
           tutorAvatar: bid.tutor.avatar,
           status: 'active',
           lastMessage: 'Chat started',
@@ -258,11 +319,9 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
       }
 
       if (newStatus === 'accepted') {
-        // Update bid status
         if (bid.id && !bid.id.startsWith('b0')) {
           await updateDoc(doc(db, 'bids', bid.id), { status: 'accepted' });
         }
-        // Update request status
         const reqRef = doc(db, 'marketplace', params.id);
         const reqSnap = await getDoc(reqRef);
         if (reqSnap.exists()) {
@@ -272,9 +331,78 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
       }
 
       setActiveChatId(chatId);
+      await fetchRequest();
     } catch (err: any) {
       console.error("Error initiating chat:", err);
       alert("Failed to start chat: " + (err?.message || "Please check your network rules."));
+    }
+  };
+
+  const handleSubmitRating = async (ratedRole: 'tutor' | 'student') => {
+    if (!user) return;
+    setSubmittingRating(true);
+    try {
+      const ratedUid = ratedRole === 'tutor' ? acceptedTutorId : studentId;
+      if (!ratedUid) throw new Error("Target user ID not found");
+
+      // 1. Recalculate average rating
+      const ratedUserRef = doc(db, 'users', ratedUid);
+      const ratedUserSnap = await getDoc(ratedUserRef);
+      
+      let oldCount = 0;
+      let oldRating = 5.0;
+      let currentCompletedSessions = 0;
+
+      if (ratedUserSnap.exists()) {
+        const data = ratedUserSnap.data();
+        oldCount = data.ratingsCount || 0;
+        oldRating = data.rating || 5.0;
+        currentCompletedSessions = data.completedSessions || data.sessions || 0;
+      }
+
+      const newCount = oldCount + 1;
+      const newRating = ((oldRating * oldCount) + ratingVal) / newCount;
+
+      const userUpdate: any = {
+        rating: Number(newRating.toFixed(2)),
+        ratingsCount: newCount,
+      };
+
+      if (ratedRole === 'tutor') {
+        userUpdate.completedSessions = currentCompletedSessions + 1;
+      }
+
+      await updateDoc(ratedUserRef, userUpdate);
+
+      // 2. Update request status/rating info in Firestore
+      const reqRef = doc(db, 'marketplace', params.id);
+      const reqUpdate: any = {};
+      if (ratedRole === 'tutor') {
+        reqUpdate.studentRatedTutor = true;
+        reqUpdate.tutorRatingFromStudent = ratingVal;
+        reqUpdate.tutorReviewFromStudent = ratingComment;
+      } else {
+        reqUpdate.tutorRatedStudent = true;
+        reqUpdate.studentRatingFromTutor = ratingVal;
+        reqUpdate.studentReviewFromTutor = ratingComment;
+      }
+
+      // Mark request as closed once rated
+      reqUpdate.status = 'closed';
+
+      await updateDoc(reqRef, reqUpdate);
+      
+      // Update local state
+      setRequest((p: any) => p ? { ...p, ...reqUpdate } : null);
+      setRatingVal(5);
+      setRatingComment('');
+      alert("Rating submitted successfully! 🌟");
+      await fetchRequest();
+    } catch (err: any) {
+      console.error("Error submitting rating:", err);
+      alert("Failed to submit rating: " + err.message);
+    } finally {
+      setSubmittingRating(false);
     }
   };
 
@@ -289,7 +417,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
         </Link>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main */}
+          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Header card */}
             <motion.div className="glass-card p-7"
@@ -318,7 +446,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               {request.tags && (
                 <div className="flex flex-wrap gap-2 mb-6">
                   {request.tags.map((tag: string) => (
-                    <span key={tag} className="text-xs px-2.5 py-1 rounded-full text-[#0B071E]/60 font-bold border border-black/10 bg-white/60">
+                    <span key={tag} className="text-xs px-2.5 py-1 rounded-full text-[#0B071E]/60 font-bold border border-black/10 bg-white/60 dark:bg-white/5">
                       #{tag}
                     </span>
                   ))}
@@ -326,13 +454,13 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               )}
 
               {/* Request stats */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 p-5 rounded-2xl bg-white/60 border border-black/5">
-                <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 p-5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/5 dark:border-white/5">
+                <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5 dark:border-white/5">
                   <DollarSign size={16} className="text-[#8B5CF6] mx-auto mb-1" />
                   <div className="font-display font-black text-lg sm:text-xl text-[#0B071E]">PKR {request.budget.toLocaleString()}</div>
                   <div className="text-[#0B071E]/50 text-xs font-bold">Budget</div>
                 </div>
-                <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5">
+                <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5 dark:border-white/5">
                   <Clock size={16} className="text-[#0891B2] mx-auto mb-1" />
                   <div className="font-bold text-sm sm:text-base text-[#0B071E]">{request.duration}</div>
                   <div className="text-[#0B071E]/50 text-xs font-bold">Duration</div>
@@ -345,7 +473,146 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               </div>
             </motion.div>
 
-            {/* Negotiation Chat Panel (If active) */}
+            {/* Active Session & Rating Actions */}
+            {request.status === 'in-progress' && acceptedBid && (
+              <motion.div 
+                className="glass-card p-6 border-[#8B5CF6]/30 shadow-lime"
+                initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+              >
+                <h3 className="font-display font-black text-xl mb-4 text-[#0B071E] flex items-center gap-2">
+                  <Star className="text-amber-500 fill-amber-500" size={20} />
+                  Active Learning Session
+                </h3>
+                <p className="text-sm font-semibold text-[#0B071E]/70 mb-5">
+                  Your session is actively ongoing with tutor <strong>{acceptedBid.tutor.name}</strong>. Once complete, please rate each other below to close the request.
+                </p>
+
+                {/* Case A: Current user is the Student (Request Owner) */}
+                {user && user.uid === studentId && (
+                  !request.studentRatedTutor ? (
+                    <div className="space-y-4 border-t border-black/5 pt-4">
+                      <h4 className="font-display font-bold text-sm text-[#0B071E]">Rate your Tutor: {acceptedBid.tutor.name}</h4>
+                      <div className="flex items-center gap-1.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button 
+                            key={star} 
+                            type="button" 
+                            onClick={() => setRatingVal(star)}
+                            className="p-1 hover:scale-115 transition-transform"
+                          >
+                            <Star 
+                              size={26} 
+                              className={star <= ratingVal ? 'fill-yellow-500 text-yellow-500' : 'text-black/20 dark:text-white/20'} 
+                            />
+                          </button>
+                        ))}
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#0B071E]/60 font-bold block mb-1.5 uppercase">Review Message</label>
+                        <textarea
+                          value={ratingComment}
+                          onChange={e => setRatingComment(e.target.value)}
+                          placeholder="Introduce how helpful the tutor was..."
+                          rows={3}
+                          className="input-field resize-none"
+                        />
+                      </div>
+                      <button
+                        onClick={() => handleSubmitRating('tutor')}
+                        disabled={submittingRating}
+                        className="btn-primary py-2.5 px-5 text-xs font-bold"
+                      >
+                        {submittingRating ? 'Submitting...' : 'Complete Session & Rate Tutor'}
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-emerald-600 font-bold bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20">
+                      ✓ You have submitted your rating for tutor {acceptedBid.tutor.name}.
+                    </p>
+                  )
+                )}
+
+                {/* Case B: Current user is the accepted Tutor */}
+                {user && user.uid === acceptedTutorId && (
+                  !request.tutorRatedStudent ? (
+                    <div className="space-y-4 border-t border-black/5 pt-4">
+                      <h4 className="font-display font-bold text-sm text-[#0B071E]">Rate your Student: {studentName}</h4>
+                      <div className="flex items-center gap-1.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button 
+                            key={star} 
+                            type="button" 
+                            onClick={() => setRatingVal(star)}
+                            className="p-1 hover:scale-115 transition-transform"
+                          >
+                            <Star 
+                              size={26} 
+                              className={star <= ratingVal ? 'fill-yellow-500 text-yellow-500' : 'text-black/20 dark:text-white/20'} 
+                            />
+                          </button>
+                        ))}
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#0B071E]/60 font-bold block mb-1.5 uppercase">Review Message</label>
+                        <textarea
+                          value={ratingComment}
+                          onChange={e => setRatingComment(e.target.value)}
+                          placeholder="How prepared was the student? Did they coordinate well?"
+                          rows={3}
+                          className="input-field resize-none"
+                        />
+                      </div>
+                      <button
+                        onClick={() => handleSubmitRating('student')}
+                        disabled={submittingRating}
+                        className="btn-primary py-2.5 px-5 text-xs font-bold"
+                      >
+                        {submittingRating ? 'Submitting...' : 'Complete Session & Rate Student'}
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-emerald-600 font-bold bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20">
+                      ✓ You have submitted your rating for student {studentName}.
+                    </p>
+                  )
+                )}
+              </motion.div>
+            )}
+
+            {/* Session Rating Outcomes for Completed requests */}
+            {request.status === 'closed' && (request.tutorRatingFromStudent || request.studentRatingFromTutor) && (
+              <motion.div 
+                className="glass-card p-6 border-emerald-500/30 bg-emerald-500/5"
+                initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+              >
+                <h3 className="font-display font-black text-xl mb-4 text-[#0B071E] flex items-center gap-2">
+                  <CheckCircle className="text-emerald-500" size={20} />
+                  Session Feedback & Reviews
+                </h3>
+                <div className="space-y-4">
+                  {request.tutorRatingFromStudent && (
+                    <div className="bg-white/40 dark:bg-white/5 p-4 rounded-xl border border-black/5">
+                      <div className="text-xs font-bold text-[#8B5CF6] mb-1.5 uppercase tracking-wider">Student's Review of Tutor</div>
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <StarRating rating={request.tutorRatingFromStudent} />
+                      </div>
+                      <p className="text-[#0B071E]/80 text-sm italic">"{request.tutorReviewFromStudent || 'No comments left.'}"</p>
+                    </div>
+                  )}
+                  {request.studentRatingFromTutor && (
+                    <div className="bg-white/40 dark:bg-white/5 p-4 rounded-xl border border-black/5">
+                      <div className="text-xs font-bold text-[#8B5CF6] mb-1.5 uppercase tracking-wider">Tutor's Review of Student</div>
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <StarRating rating={request.studentRatingFromTutor} />
+                      </div>
+                      <p className="text-[#0B071E]/80 text-sm italic">"{request.studentReviewFromTutor || 'No comments left.'}"</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Negotiation Chat Panel */}
             {activeChatId && user && (
               <ChatPanel
                 chatId={activeChatId}
@@ -371,39 +638,62 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               ) : (
                 <div className="space-y-4">
                   {bids.map((bid, i) => {
-                    const tutorId = bid.tutorId || bid.tutor.id;
-                    const studentId = request.studentId || request.student.id;
-                    const canNegotiate = user && (user.uid === studentId || user.uid === tutorId || profile?.role === 'admin');
+                    const tutorUid = bid.tutorId || bid.tutor.id;
+                    const canNegotiate = user && (user.uid === studentId || user.uid === tutorUid || profile?.role === 'admin');
+
+                    // Read dynamic tutor details from Firestore profiles dictionary
+                    const dynamicTutor = tutorProfiles[tutorUid];
+                    const tutorNameText = dynamicTutor?.name || bid.tutor.name;
+                    const tutorUnivText = dynamicTutor?.university || bid.tutor.university;
+                    const tutorRatingVal = dynamicTutor?.rating || bid.tutor.rating || 4.8;
+                    const tutorSessionsCount = dynamicTutor?.completedSessions || dynamicTutor?.sessions || bid.tutor.completedSessions || 0;
+                    const tutorBio = dynamicTutor?.bio || '';
+                    const tutorPrefs = dynamicTutor?.preferences || '';
 
                     return (
                       <motion.div key={bid.id || i}
-                        className="p-5 rounded-2xl bg-white/60 border border-black/5"
+                        className="p-5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-[#8B5CF6]/30 hover:bg-white dark:hover:bg-[#1C1238] hover:shadow-[4px_4px_0px_#8B5CF6] hover:-translate-y-1 transition-all duration-200 cursor-pointer text-[#0B071E] dark:text-white"
                         initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.08 }}>
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3 pb-3 border-b border-black/5 sm:border-0 sm:pb-0">
                           <div className="flex items-center gap-3">
-                            <img src={bid.tutor.avatar} alt={bid.tutor.name}
+                            <img src={bid.tutor.avatar} alt={tutorNameText}
                               className="w-10 h-10 rounded-full border border-black/10" />
                             <div>
-                              <div className="font-bold text-sm text-[#0B071E]">{bid.tutor.name}</div>
-                              <div className="text-[#0B071E]/50 text-xs font-semibold">{bid.tutor.university}</div>
+                              <div className="font-bold text-sm text-[#0B071E] dark:text-white">{tutorNameText}</div>
+                              <div className="text-[#0B071E]/50 dark:text-white/60 text-xs font-semibold">{tutorUnivText}</div>
                             </div>
                           </div>
                           <div className="text-left sm:text-right">
-                            <div className="font-display font-black text-lg text-[#8B5CF6]">PKR {bid.amount.toLocaleString()}</div>
-                            <div className="flex items-center sm:justify-end gap-1 text-xs text-[#0B071E]/50 font-bold mt-0.5">
+                            <div className="font-display font-black text-lg text-[#8B5CF6] dark:text-[#A78BFA]">PKR {bid.amount.toLocaleString()}</div>
+                            <div className="flex items-center sm:justify-end gap-1 text-xs text-[#0B071E]/50 dark:text-white/40 font-bold mt-0.5">
                               <Star size={10} className="fill-yellow-500 text-yellow-500" />
-                              {bid.tutor.rating} · {bid.tutor.completedSessions} sessions
+                              {tutorRatingVal.toFixed(1)} · {tutorSessionsCount} sessions
                             </div>
                           </div>
                         </div>
 
-                        <p className="text-[#0B071E]/75 text-sm leading-relaxed mb-4 font-semibold">{bid.message}</p>
+                        <p className="text-[#0B071E]/75 dark:text-white/80 text-sm leading-relaxed mb-3 font-semibold">{bid.message}</p>
+
+                        {/* Display Tutor Bio & Preferences if loaded */}
+                        {(tutorBio || tutorPrefs) && (
+                          <div className="my-3 p-3 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5 text-xs space-y-2">
+                            {tutorBio && (
+                              <p className="text-[#0B071E]/60 dark:text-white/70 italic font-semibold">"About: {tutorBio}"</p>
+                            )}
+                            {tutorPrefs && (
+                              <div>
+                                <span className="font-bold text-[#8B5CF6] dark:text-[#A78BFA]">Preferences: </span>
+                                <span className="text-[#0B071E]/70 dark:text-white/80 font-medium">{tutorPrefs}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         {bid.tutor.expertise && (
                           <div className="flex flex-wrap gap-1.5 mb-4">
-                            {bid.tutor.expertise.map((e: string) => (
-                              <span key={e} className="tag-pill text-xs font-bold">{e}</span>
+                            {bid.tutor.expertise.map((exp: string) => (
+                              <span key={exp} className="tag-pill text-xs font-bold">{exp}</span>
                             ))}
                           </div>
                         )}
@@ -416,7 +706,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                                   onClick={() => handleStartChat(bid, 'accepted')}
                                   className="btn-primary text-xs py-2 px-4 font-bold"
                                 >
-                                  <CheckCircle size={13} /> Accept
+                                  <CheckCircle size={13} /> Accept Bid
                                 </button>
                               )}
 
@@ -433,7 +723,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
 
                           {bid.status === 'accepted' && (
                             <span className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-bold bg-emerald-500/15 text-emerald-600 border border-emerald-500/25">
-                              <CheckCircle size={12} /> Accepted
+                              <CheckCircle size={12} /> Accepted Partner
                             </span>
                           )}
 
@@ -470,21 +760,42 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
             {/* Posted by */}
             <motion.div className="glass-card p-6"
               initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-              <h3 className="text-[#0B071E]/50 text-xs font-bold mb-4 uppercase tracking-widest">Posted by</h3>
+              <h3 className="text-[#0B071E]/50 dark:text-white/40 text-xs font-bold mb-4 uppercase tracking-widest">Posted by</h3>
               <div className="flex items-center gap-3 mb-4">
-                <img src={request.student.avatar} alt={request.student.name}
+                <img src={studentProfile?.photoURL || request.student?.avatar} alt={studentName}
                   className="w-12 h-12 rounded-full border border-black/10" />
                 <div>
-                  <div className="font-bold text-[#0B071E]">{request.student.name}</div>
-                  <div className="text-[#0B071E]/50 text-xs font-semibold">{request.student.university}</div>
+                  <div className="font-bold text-[#0B071E] dark:text-white">{studentName}</div>
+                  <div className="text-[#0B071E]/50 dark:text-white/60 text-xs font-semibold">{studentUniv}</div>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-sm mb-4">
+              
+              {/* Dynamic Student Rating */}
+              <div className="flex items-center gap-1.5 text-sm mb-4">
                 <Star size={13} className="fill-yellow-500 text-yellow-500" />
-                <span className="font-extrabold text-[#0B071E]">{request.student.rating}</span>
-                <span className="text-[#0B071E]/50 font-bold">student rating</span>
+                <span className="font-extrabold text-[#0B071E] dark:text-white">{studentRating.toFixed(1)}</span>
+                <span className="text-[#0B071E]/50 dark:text-white/50 font-bold">student rating</span>
               </div>
-              <div className="text-xs text-[#0B071E]/40 font-bold">
+
+              {/* Dynamic Student Bio and Preferences */}
+              {(studentProfile?.bio || studentProfile?.preferences) && (
+                <div className="border-t border-black/5 dark:border-white/5 pt-4 mt-3 space-y-3 text-xs">
+                  {studentProfile?.bio && (
+                    <div>
+                      <span className="font-bold text-[#8B5CF6] dark:text-[#A78BFA] block mb-1">About Student:</span>
+                      <p className="text-[#0B071E]/70 dark:text-white/80 leading-relaxed font-semibold italic">"{studentProfile.bio}"</p>
+                    </div>
+                  )}
+                  {studentProfile?.preferences && (
+                    <div>
+                      <span className="font-bold text-[#8B5CF6] dark:text-[#A78BFA] block mb-1">Student Interests:</span>
+                      <p className="text-[#0B071E]/70 dark:text-white/80 font-semibold">{studentProfile.preferences}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="text-xs text-[#0B071E]/40 dark:text-white/30 font-bold border-t border-black/5 dark:border-white/5 pt-4 mt-4">
                 Posted {new Date(request.postedAt).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' })}
               </div>
             </motion.div>
@@ -494,8 +805,8 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               <motion.div
                 className="p-6 rounded-2xl bg-gradient-to-br from-[#8B5CF6]/10 to-[#0891B2]/5 border border-[#8B5CF6]/20"
                 initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
-                <h3 className="font-display font-black text-lg mb-2 text-[#0B071E]">Want to help?</h3>
-                <p className="text-[#0B071E]/60 text-xs mb-4 font-semibold">Place your bid and start teaching immediately after acceptance.</p>
+                <h3 className="font-display font-black text-lg mb-2 text-[#0B071E] dark:text-white">Want to help?</h3>
+                <p className="text-[#0B071E]/60 dark:text-white/60 text-xs mb-4 font-semibold">Place your bid and start teaching immediately after acceptance.</p>
                 <button onClick={() => setShowBidForm(!showBidForm)} className="btn-primary w-full font-bold">
                   <SendHorizontal size={15} />
                   {showBidForm ? 'Hide Bid Form' : 'Place a Bid'}
@@ -509,15 +820,15 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                 <motion.div className="glass-card p-6"
                   initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}>
-                  <h3 className="font-display font-black text-sm mb-4 text-[#0B071E]">Your Bid</h3>
+                  <h3 className="font-display font-black text-sm mb-4 text-[#0B071E] dark:text-white">Your Bid</h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="text-xs text-[#0B071E]/60 font-bold mb-1.5 block">Bid Amount (PKR)</label>
+                      <label className="text-xs text-[#0B071E]/60 dark:text-white/60 font-bold mb-1.5 block">Bid Amount (PKR)</label>
                       <input type="number" value={bidAmount} onChange={e => setBidAmount(e.target.value)}
                         placeholder={`≤ ${request.budget}`} className="input-field" />
                     </div>
                     <div>
-                      <label className="text-xs text-[#0B071E]/60 font-bold mb-1.5 block">Message to Student</label>
+                      <label className="text-xs text-[#0B071E]/60 dark:text-white/60 font-bold mb-1.5 block">Message to Student</label>
                       <textarea value={bidMessage} onChange={e => setBidMessage(e.target.value)}
                         placeholder="Introduce yourself and explain why you're the best fit..."
                         rows={4} className="input-field resize-none" />
