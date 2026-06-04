@@ -7,6 +7,7 @@ import { BookOpen, GraduationCap, Users, LayoutDashboard, Menu, X, LogOut, User 
 import { useAuth } from '@/context/AuthContext';
 import { logoutUser } from '@/lib/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
 import { TuteLogo } from '@/components/brand/TuteLogo';
 
 const NAV = [
@@ -20,31 +21,7 @@ export default function Navbar() {
   const [open, setOpen]         = useState(false);
   const pathname                = usePathname();
   const { user, profile, loading } = useAuth();
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
-  useEffect(() => {
-    const saved = localStorage.getItem('tute-theme') as 'light' | 'dark' | null;
-    const isDark = saved === 'dark';
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      setTheme('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      setTheme('light');
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('tute-theme', 'dark');
-      setTheme('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('tute-theme', 'light');
-      setTheme('light');
-    }
-  };
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
@@ -115,7 +92,7 @@ export default function Navbar() {
                 >
                   <div
                     className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg, #FF4B72, #8B5CF6)' }}
+                    style={{ background: 'linear-gradient(135deg, #FF4B72, #0066FF)' }}
                   >
                     {profile?.photoURL ? (
                       <img src={profile.photoURL} alt="" className="w-full h-full object-cover" />
@@ -212,7 +189,7 @@ export default function Navbar() {
                       <Link
                         href="/admin"
                         onClick={() => setOpen(false)}
-                        className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold bg-[#8B5CF6]/20 text-[#c084fc] border border-[#8B5CF6]/30"
+                        className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold bg-[#0066FF]/20 text-[#60A5FA] border border-[#0066FF]/30"
                       >
                         <LayoutDashboard size={15} /> Admin Dashboard
                       </Link>

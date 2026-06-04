@@ -17,7 +17,7 @@ const steps = [
     icon: Search,
     title: 'Find What You Need',
     description: 'Browse universities, filter resources by course and instructor, or post a help request in the marketplace.',
-    color: '#7c3aed',
+    color: '#0052CC',
   },
   {
     number: '03',

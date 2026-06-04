@@ -229,7 +229,7 @@ export default function UniversitiesPage() {
         {/* Count */}
         {!loading && sorted.length > 0 && (
           <p className="text-[#0B071E]/60 text-sm mb-6 font-bold">
-            Showing <span className="text-[#8B5CF6] font-extrabold">{sorted.length}</span> universities
+            Showing <span className="text-[#0066FF] font-extrabold">{sorted.length}</span> universities
           </p>
         )}
 
@@ -250,7 +250,7 @@ export default function UniversitiesPage() {
                         </div>
                       )}
                       <div className="absolute top-3 left-3 flex gap-2">
-                        <span className={uni.type === 'public' ? 'tag-lime font-bold' : 'tag-purple font-bold'}>
+                        <span className={uni.type === 'public' ? 'tag-lime font-bold' : 'tag-blue font-bold'}>
                           {uni.type?.charAt(0).toUpperCase() + uni.type?.slice(1)}
                         </span>
                       </div>
@@ -260,9 +260,9 @@ export default function UniversitiesPage() {
                   {/* Content */}
                   <div className="p-5 flex-1 flex flex-col">
                     <Link href={`/universities/${uni.id}`}>
-                      <h2 className="font-display font-black text-lg mb-1 text-[#0B071E] group-hover:text-[#8B5CF6] transition-colors cursor-pointer">{uni.name}</h2>
+                      <h2 className="font-display font-black text-lg mb-1 text-[#0B071E] group-hover:text-[#0066FF] transition-colors cursor-pointer">{uni.name}</h2>
                     </Link>
-                    <span className="text-[#8B5CF6] text-xs font-bold mb-3">{uni.shortName}</span>
+                    <span className="text-[#0066FF] text-xs font-bold mb-3">{uni.shortName}</span>
 
                     {uni.description && (
                       <p className="text-[#0B071E]/70 text-xs leading-relaxed mb-4 line-clamp-2 font-semibold">{uni.description}</p>
@@ -283,7 +283,7 @@ export default function UniversitiesPage() {
                           </span>
                         ))}
                         {uni.degrees.length > 3 && (
-                          <span className="px-2 py-0.5 rounded-lg bg-[#8B5CF6]/5 border border-[#8B5CF6]/15 text-[10px] text-[#8B5CF6] font-bold">
+                          <span className="px-2 py-0.5 rounded-lg bg-[#0066FF]/5 border border-[#0066FF]/15 text-[10px] text-[#0066FF] font-bold">
                             +{uni.degrees.length - 3} more
                           </span>
                         )}
@@ -296,7 +296,7 @@ export default function UniversitiesPage() {
                           <Globe size={11} /> Visit Website
                         </a>
                       ) : <span />}
-                      <Link href={`/universities/${uni.id}`} className="flex items-center gap-1 text-xs text-[#0B071E]/60 hover:text-[#8B5CF6] transition-colors font-bold">
+                      <Link href={`/universities/${uni.id}`} className="flex items-center gap-1 text-xs text-[#0B071E]/60 hover:text-[#0066FF] transition-colors font-bold">
                         View Details <ChevronRight size={12} />
                       </Link>
                     </div>

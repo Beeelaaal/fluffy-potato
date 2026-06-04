@@ -29,7 +29,7 @@ const STATIC_POSTS = [
     date: 'May 12, 2026',
     readTime: '8 min read',
     category: 'Academics',
-    color: '#7c3aed',
+    color: '#0052CC',
   },
   {
     id: '5-side-hustles-for-pakistani-university-students-in-2026',
@@ -73,7 +73,7 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10">
@@ -120,15 +120,15 @@ export default function BlogPage() {
                   <span
                     className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider mb-4 inline-block"
                     style={{
-                      background: `${post.color || '#8B5CF6'}15`,
-                      border: `1px solid ${post.color || '#8B5CF6'}25`,
-                      color: post.color || '#8B5CF6',
+                      background: `${post.color || '#0066FF'}15`,
+                      border: `1px solid ${post.color || '#0066FF'}25`,
+                      color: post.color || '#0066FF',
                     }}
                   >
                     {post.category}
                   </span>
                   <Link href={`/blog/${post.slug}`}>
-                    <h2 className="font-display font-bold text-xl mb-3 text-[#0B071E] hover:text-[#8B5CF6] transition-colors cursor-pointer">
+                    <h2 className="font-display font-bold text-xl mb-3 text-[#0B071E] hover:text-[#0066FF] transition-colors cursor-pointer">
                       {post.title}
                     </h2>
                   </Link>

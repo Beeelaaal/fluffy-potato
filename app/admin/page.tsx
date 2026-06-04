@@ -212,7 +212,7 @@ export default function AdminPage() {
           <Shield size={30} className="text-[#FF5C7A]" />
         </div>
         <h1 className="mb-3 font-display text-3xl text-[#0B071E] font-black">Access Denied</h1>
-        <p className="mb-6 text-[#0B071E]/60 font-semibold">Your role is <span className="font-bold text-[#8B5CF6]">{profile?.role||'(loading…)'}</span>. Admin access required.</p>
+        <p className="mb-6 text-[#0B071E]/60 font-semibold">Your role is <span className="font-bold text-[#0066FF]">{profile?.role||'(loading…)'}</span>. Admin access required.</p>
         <div className="mb-6 rounded-2xl border border-black/10 bg-black/5 p-4 text-left text-sm text-[#0B071E]/70 font-semibold">
           <p className="mb-1 font-bold text-[#15803D]">Admin Role Activation:</p>
           <p className="text-xs leading-relaxed">Please set <code className="text-[#B45309]">role = &quot;admin&quot;</code> (string) in Firebase Console → Firestore → users → your UID.</p>
@@ -236,7 +236,7 @@ export default function AdminPage() {
     { label:'Users', val:users.length, icon:<Users size={22}/>, color:'text-[#06b6d4]', border:'border-[#06b6d4]/20 bg-[#06b6d4]/5' },
     { label:'Resources', val:resources.length, icon:<BookOpen size={22}/>, color:'text-[#10b981]', border:'border-[#10b981]/20 bg-[#10b981]/5' },
     { label:'Universities', val:universities.length, icon:<Building size={22}/>, color:'text-[#f59e0b]', border:'border-[#f59e0b]/20 bg-[#f59e0b]/5' },
-    { label:'Requests', val:requests.length, icon:<GraduationCap size={22}/>, color:'text-[#8B5CF6]', border:'border-[#8B5CF6]/20 bg-[#8B5CF6]/5' },
+    { label:'Requests', val:requests.length, icon:<GraduationCap size={22}/>, color:'text-[#0066FF]', border:'border-[#0066FF]/20 bg-[#0066FF]/5' },
     { label:'Contacts', val:contacts.length, icon:<Mail size={22}/>, color:'text-[#FF5C7A]', border:'border-[#FF5C7A]/20 bg-[#FF5C7A]/5' },
     { label:'Careers', val:careers.length, icon:<Briefcase size={22}/>, color:'text-[#EC4899]', border:'border-[#EC4899]/20 bg-[#EC4899]/5' },
     { label:'Chats/Bids', val:`${chats.length}/${bids.length}`, icon:<MessageSquare size={22}/>, color:'text-[#0ea5e9]', border:'border-[#0ea5e9]/20 bg-[#0ea5e9]/5' },
@@ -248,7 +248,7 @@ export default function AdminPage() {
       {/* Sidebar */}
       <aside className="hidden w-64 flex-shrink-0 border-r border-black/10 bg-white/40 px-4 pt-8 backdrop-blur-xl lg:flex lg:flex-col">
         <div className="mb-8 px-3">
-          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8B5CF6]">Tute</div>
+          <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#0066FF]">Tute</div>
           <div className="font-display text-2xl font-black">Admin Portal</div>
         </div>
         <div className="space-y-1 flex-1 overflow-y-auto pr-1">
@@ -261,7 +261,7 @@ export default function AdminPage() {
         </div>
         <div className="pb-8 space-y-2">
           <button onClick={handleSeed} disabled={seeding}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8B5CF6] py-3 text-sm font-black text-white hover:bg-[#7c3aed] transition-all disabled:opacity-60">
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0066FF] py-3 text-sm font-black text-white hover:bg-[#0052CC] transition-all disabled:opacity-60">
             <Database size={15}/> {seeding?'Seeding…':'Seed Firebase'}
           </button>
           <button onClick={load} disabled={busy}
@@ -282,7 +282,7 @@ export default function AdminPage() {
         <div className="mb-6 flex flex-wrap gap-2 lg:hidden">
           {TABS.map(({id,label})=>(
             <button key={id} onClick={()=>setTab(id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${tab===id?'bg-[#8B5CF6]/15 text-[#8B5CF6] border border-[#8B5CF6]/30':'btn-ghost'}`}>
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${tab===id?'bg-[#0066FF]/15 text-[#0066FF] border border-[#0066FF]/30':'btn-ghost'}`}>
               {label}
             </button>
           ))}
@@ -290,7 +290,7 @@ export default function AdminPage() {
 
         <div className="mb-6 flex items-center justify-between">
           <h1 className="font-display text-3xl capitalize font-black">{TABS.find(t=>t.id===tab)?.label}</h1>
-          <div className="text-xs text-[#0B071E]/60 font-semibold">Logged in as <span className="text-[#8B5CF6] font-bold">{profile?.email}</span></div>
+          <div className="text-xs text-[#0B071E]/60 font-semibold">Logged in as <span className="text-[#0066FF] font-bold">{profile?.email}</span></div>
         </div>
 
         {ok && <div className="mb-4 flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 font-semibold"><CheckCircle size={14}/>{ok}<button onClick={()=>setOk(null)} className="ml-auto"><X size={12}/></button></div>}
@@ -416,9 +416,9 @@ export default function AdminPage() {
                       <tr key={r.id}>
                         <td className="font-semibold max-w-[180px] truncate">{r.title}</td>
                         <td className="text-[#0B071E]/70 font-semibold">{r.course}</td>
-                        <td><span className="tag-purple">{r.university}</span></td>
+                        <td><span className="tag-blue">{r.university}</span></td>
                         <td><span className="tag-cyan">{r.type}</span></td>
-                        <td>{r.fileUrl?<a href={r.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[#8B5CF6] hover:text-[#7c3aed] text-xs font-bold">Open<ExternalLink size={11}/></a>:<span className="text-[#0B071E]/30 text-xs">—</span>}</td>
+                        <td>{r.fileUrl?<a href={r.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[#0066FF] hover:text-[#0052CC] text-xs font-bold">Open<ExternalLink size={11}/></a>:<span className="text-[#0B071E]/30 text-xs">—</span>}</td>
                         <td className="text-right">
                           <button
                             onClick={() => {
@@ -436,7 +436,7 @@ export default function AdminPage() {
                               setEditingResId(r.id);
                               setShowResForm(true);
                             }}
-                            className="btn-ghost px-3 py-1.5 text-xs mr-2 text-[#8B5CF6] border-black/10 hover:bg-[#8B5CF6]/10"
+                            className="btn-ghost px-3 py-1.5 text-xs mr-2 text-[#0066FF] border-black/10 hover:bg-[#0066FF]/10"
                           >
                             <Edit2 size={13} className="inline mr-1" />Edit
                           </button>
@@ -539,9 +539,9 @@ export default function AdminPage() {
                           <div key={category} className="rounded-xl border border-black/5 bg-white/50 p-4 backdrop-blur-sm">
                             <div className="flex items-center justify-between mb-3 border-b border-black/5 pb-2">
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-black uppercase tracking-wider text-[#8B5CF6]">{category}</span>
+                                <span className="text-xs font-black uppercase tracking-wider text-[#0066FF]">{category}</span>
                                 {checkedCount > 0 && (
-                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#8B5CF6]/10 text-[#8B5CF6] font-bold">
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#0066FF]/10 text-[#0066FF] font-bold">
                                     {checkedCount} selected
                                   </span>
                                 )}
@@ -556,7 +556,7 @@ export default function AdminPage() {
                                       return { ...p, degrees: next };
                                     });
                                   }}
-                                  className="text-[#8B5CF6] hover:underline"
+                                  className="text-[#0066FF] hover:underline"
                                 >
                                   Select Category
                                 </button>
@@ -584,7 +584,7 @@ export default function AdminPage() {
                                     key={deg}
                                     className={`flex items-start gap-2.5 rounded-xl border p-2.5 cursor-pointer transition-all duration-200 select-none ${
                                       checked
-                                        ? 'border-[#8B5CF6]/30 bg-[#8B5CF6]/5 text-[#8B5CF6] font-bold shadow-sm'
+                                        ? 'border-[#0066FF]/30 bg-[#0066FF]/5 text-[#0066FF] font-bold shadow-sm'
                                         : 'border-black/5 bg-white/40 text-[#0B071E]/70 font-semibold hover:border-black/10 hover:bg-white/70'
                                     }`}
                                   >
@@ -601,7 +601,7 @@ export default function AdminPage() {
                                           return { ...p, degrees: next };
                                         });
                                       }}
-                                      className="mt-0.5 rounded border-black/20 text-[#8B5CF6] focus:ring-[#8B5CF6]/30 cursor-pointer"
+                                      className="mt-0.5 rounded border-black/20 text-[#0066FF] focus:ring-[#0066FF]/30 cursor-pointer"
                                     />
                                     <span className="text-xs leading-tight">{deg}</span>
                                   </label>
@@ -642,7 +642,7 @@ export default function AdminPage() {
                         <td className="font-semibold">{u.name}</td>
                         <td><span className="tag-cyan">{u.shortName}</span></td>
                         <td className="text-[#0B071E]/70 font-semibold">{u.city}</td>
-                        <td><span className={u.type==='public'?'tag-lime':'tag-purple'}>{u.type}</span></td>
+                        <td><span className={u.type==='public'?'tag-lime':'tag-blue'}>{u.type}</span></td>
                         <td className="text-[#0B071E]/70 font-semibold">{u.programs||'—'}</td>
                         <td className="text-right">
                           <button
@@ -664,7 +664,7 @@ export default function AdminPage() {
                               setEditingUniId(u.id);
                               setShowUniForm(true);
                             }}
-                            className="btn-ghost px-3 py-1.5 text-xs mr-2 text-[#8B5CF6] border-black/10 hover:bg-[#8B5CF6]/10"
+                            className="btn-ghost px-3 py-1.5 text-xs mr-2 text-[#0066FF] border-black/10 hover:bg-[#0066FF]/10"
                           >
                             <Edit2 size={13} className="inline mr-1" />Edit
                           </button>
@@ -692,7 +692,7 @@ export default function AdminPage() {
                     <tr key={c.id}>
                       <td className="font-semibold">{c.name}</td>
                       <td className="text-[#0B071E]/70 font-semibold">{c.email}</td>
-                      <td><span className="tag-purple">{c.subject}</span></td>
+                      <td><span className="tag-blue">{c.subject}</span></td>
                       <td className="max-w-xs truncate text-[#0B071E]/80 font-semibold text-xs" title={c.message}>{c.message}</td>
                       <td className="text-[#0B071E]/60 text-xs font-bold">
                         {c.createdAt?.seconds 
@@ -753,7 +753,7 @@ export default function AdminPage() {
           <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="space-y-8">
             <div className="glass-card p-6">
               <h2 className="font-display text-xl mb-4 font-black text-[#0B071E] flex items-center gap-2">
-                <GraduationCap className="text-[#8B5CF6]" size={20}/>
+                <GraduationCap className="text-[#0066FF]" size={20}/>
                 Tutor Requests ({requests.length})
               </h2>
               <div className="overflow-x-auto">
@@ -790,7 +790,7 @@ export default function AdminPage() {
 
             <div className="glass-card p-6">
               <h2 className="font-display text-xl mb-4 font-black text-[#0B071E] flex items-center gap-2">
-                <MessageSquare className="text-funky-purple" size={20}/>
+                <MessageSquare className="text-funky-blue" size={20}/>
                 Active Chats ({chats.length})
               </h2>
               <div className="overflow-x-auto">
@@ -875,7 +875,7 @@ export default function AdminPage() {
                         <td className="text-[#0B071E]/60 text-xs font-bold">{b.readTime}</td>
                         <td className="text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <a href={`/blog/${b.slug}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5 text-xs text-[#8B5CF6] border-black/10 hover:bg-[#8B5CF6]/10 flex items-center gap-1">
+                            <a href={`/blog/${b.slug}`} target="_blank" rel="noreferrer" className="btn-ghost px-3 py-1.5 text-xs text-[#0066FF] border-black/10 hover:bg-[#0066FF]/10 flex items-center gap-1">
                               View <ExternalLink size={12}/>
                             </a>
                             <button onClick={()=>deleteBlog(b.id)} className="btn-danger px-3 py-1.5 text-xs"><Trash2 size={13}/>Delete</button>

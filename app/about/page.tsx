@@ -6,7 +6,7 @@ import { Target, Users, Landmark, Heart } from 'lucide-react';
 export default function AboutPage() {
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10 max-w-4xl">
@@ -48,8 +48,8 @@ export default function AboutPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <div className="w-12 h-12 rounded-2xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mb-5">
-                <Users size={22} className="text-[#8B5CF6]" />
+              <div className="w-12 h-12 rounded-2xl bg-[#0066FF]/10 border border-[#0066FF]/20 flex items-center justify-center mb-5">
+                <Users size={22} className="text-[#0066FF]" />
               </div>
               <h2 className="font-display font-bold text-2xl mb-3">Our Vision</h2>
               <p className="text-[#0B071E]/75 text-sm leading-relaxed font-semibold">

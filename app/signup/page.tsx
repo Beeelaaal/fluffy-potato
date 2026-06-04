@@ -121,7 +121,7 @@ export default function SignupPage() {
           Already have an account?{' '}
           <Link
             href="/login"
-            className="text-funky-purple hover:text-funky-orange transition-colors font-semibold"
+            className="text-funky-blue hover:text-funky-orange transition-colors font-semibold"
           >
             Sign in
           </Link>
@@ -206,11 +206,11 @@ export default function SignupPage() {
 
         <p className="text-dark/45 text-xs mb-5">
           By creating an account, you agree to our{' '}
-          <a href="#" className="text-funky-purple hover:text-funky-orange font-semibold transition-colors">
+          <a href="#" className="text-funky-blue hover:text-funky-orange font-semibold transition-colors">
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href="#" className="text-funky-purple hover:text-funky-orange font-semibold transition-colors">
+          <a href="#" className="text-funky-blue hover:text-funky-orange font-semibold transition-colors">
             Privacy Policy
           </a>
           .

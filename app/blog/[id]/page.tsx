@@ -20,7 +20,7 @@ const STATIC_POSTS = [
     date: 'May 12, 2026',
     readTime: '8 min read',
     category: 'Academics',
-    color: '#7c3aed',
+    color: '#0052CC',
   },
   {
     slug: '5-side-hustles-for-pakistani-university-students-in-2026',
@@ -53,7 +53,7 @@ async function getBlogPost(id: string) {
         category: fields.category?.stringValue || 'General',
         date: fields.date?.stringValue || '',
         readTime: fields.readTime?.stringValue || '5 min read',
-        color: fields.color?.stringValue || '#8B5CF6',
+        color: fields.color?.stringValue || '#0066FF',
         createdAt: fields.createdAt?.stringValue || '',
       };
     }
@@ -176,11 +176,11 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container max-w-3xl relative z-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#8B5CF6] text-sm mb-8 transition-colors font-bold">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
           <ArrowLeft size={15} /> Back to Blog
         </Link>
 
@@ -189,9 +189,9 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
             <span
               className="px-3 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider mb-4 inline-block"
               style={{
-                background: `${post.color || '#8B5CF6'}15`,
-                border: `1px solid ${post.color || '#8B5CF6'}25`,
-                color: post.color || '#8B5CF6',
+                background: `${post.color || '#0066FF'}15`,
+                border: `1px solid ${post.color || '#0066FF'}25`,
+                color: post.color || '#0066FF',
               }}
             >
               {post.category}
@@ -201,23 +201,23 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
             </h1>
             <div className="flex flex-wrap gap-4 text-xs text-[#0B071E]/60 font-bold items-center">
               <span className="flex items-center gap-1.5">
-                <User size={14} className="text-[#8B5CF6]" />
+                <User size={14} className="text-[#0066FF]" />
                 {post.authorName}
               </span>
               <span className="text-[#0B071E]/20">•</span>
               <span className="flex items-center gap-1.5">
-                <Calendar size={14} className="text-[#8B5CF6]" />
+                <Calendar size={14} className="text-[#0066FF]" />
                 {post.date}
               </span>
               <span className="text-[#0B071E]/20">•</span>
               <span className="flex items-center gap-1.5">
-                <Clock size={14} className="text-[#8B5CF6]" />
+                <Clock size={14} className="text-[#0066FF]" />
                 {post.readTime}
               </span>
             </div>
           </header>
 
-          <div className="prose prose-purple max-w-none">
+          <div className="prose prose-blue max-w-none">
             {renderContent(post.content)}
           </div>
         </article>

@@ -71,7 +71,7 @@ export default function LoginPage() {
         <h1 className="font-display text-4xl mb-2">Welcome back</h1>
         <p className="text-dark/60 mb-8 text-sm">
           No account?{' '}
-          <Link href="/signup" className="text-funky-purple hover:text-funky-orange transition-colors font-semibold">Sign up free</Link>
+          <Link href="/signup" className="text-funky-blue hover:text-funky-orange transition-colors font-semibold">Sign up free</Link>
         </p>
 
         {/* Social */}
@@ -81,7 +81,7 @@ export default function LoginPage() {
               disabled={loading||provider!==null}
               className="btn-ghost py-3 text-sm disabled:opacity-60 flex items-center justify-center gap-2">
               {provider===p
-                ? <span className="w-4 h-4 border-2 border-dark/20 border-t-funky-purple rounded-full animate-spin"/>
+                ? <span className="w-4 h-4 border-2 border-dark/20 border-t-funky-blue rounded-full animate-spin"/>
                 : p==='google'
                   ? <svg width="15" height="15" viewBox="0 0 48 48" fill="none">
                       <path fill="#EA4335" d="M24 9.5c3.2 0 6 1.1 8.2 2.9l6.1-6.1C34.5 3.1 29.6 1 24 1 14.6 1 6.7 6.5 3.2 14.4l7.1 5.5C12 14.2 17.5 9.5 24 9.5z"/>
@@ -136,7 +136,7 @@ export default function LoginPage() {
         </button>
 
         <p className="mt-6 text-center text-xs text-dark/30">
-          <a href="#" className="text-funky-purple hover:text-funky-orange transition-colors">Forgot password?</a>
+          <a href="#" className="text-funky-blue hover:text-funky-orange transition-colors">Forgot password?</a>
         </p>
       </motion.div>
     </div>

@@ -6,7 +6,7 @@ import { Newspaper, ArrowDownToLine, Radio } from 'lucide-react';
 export default function PressPage() {
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10 max-w-4xl">
@@ -28,7 +28,7 @@ export default function PressPage() {
           <motion.div className="glass-card p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
             initial={{ opacity: 0, y: 15 }}>
             <div>
-              <span className="text-[#8B5CF6] text-xs font-black uppercase tracking-widest block mb-1">Official Resource</span>
+              <span className="text-[#0066FF] text-xs font-black uppercase tracking-widest block mb-1">Official Resource</span>
               <h2 className="font-display font-bold text-2xl text-[#0B071E] mb-2">Tute Media Kit (2026)</h2>
               <p className="text-[#0B071E]/75 text-sm font-semibold">Download official logos, screenshots, and team photos for publication.</p>
             </div>
@@ -50,8 +50,8 @@ export default function PressPage() {
             </motion.div>
 
             <motion.div className="glass-card p-6" initial={{ opacity: 0, x: 15 }} transition={{ delay: 0.2 }}>
-              <div className="w-10 h-10 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mb-4">
-                <Radio size={18} className="text-[#8B5CF6]" />
+              <div className="w-10 h-10 rounded-xl bg-[#0066FF]/10 border border-[#0066FF]/20 flex items-center justify-center mb-4">
+                <Radio size={18} className="text-[#0066FF]" />
               </div>
               <span className="text-[#0B071E]/40 text-xs font-bold block mb-1">ProPakistani · Feb 2026</span>
               <h3 className="font-display font-bold text-lg mb-2 text-[#0B071E]">Bridging the Academic Resources Gap</h3>

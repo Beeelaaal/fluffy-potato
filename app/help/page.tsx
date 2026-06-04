@@ -33,7 +33,7 @@ export default function HelpPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10 max-w-3xl">
@@ -75,15 +75,15 @@ export default function HelpPage() {
               >
                 <button
                   onClick={() => setOpenIndex(open ? null : idx)}
-                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-display font-bold text-base sm:text-lg text-[#0B071E] hover:text-[#8B5CF6] transition-colors"
+                  className="w-full p-6 text-left flex items-center justify-between gap-4 font-display font-bold text-base sm:text-lg text-[#0B071E] hover:text-[#0066FF] transition-colors"
                 >
                   <span className="flex items-center gap-3">
-                    <HelpCircle size={18} className="text-[#8B5CF6] flex-shrink-0" />
+                    <HelpCircle size={18} className="text-[#0066FF] flex-shrink-0" />
                     {faq.q}
                   </span>
                   <ChevronDown
                     size={16}
-                    className={`text-[#0B071E]/40 transition-transform duration-300 ${open ? 'rotate-180 text-[#8B5CF6]' : ''}`}
+                    className={`text-[#0B071E]/40 transition-transform duration-300 ${open ? 'rotate-180 text-[#0066FF]' : ''}`}
                   />
                 </button>
 

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 export default function TermsPage() {
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10 max-w-3xl">
         <motion.div

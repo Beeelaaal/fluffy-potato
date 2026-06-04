@@ -150,7 +150,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
       <div className="section-container">
         {/* Back link */}
         <Link href="/universities"
-          className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#8B5CF6] text-sm mb-8 transition-colors font-bold">
+          className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
           <ArrowLeft size={15} /> Back to Universities
         </Link>
 
@@ -180,7 +180,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
             <span className={`text-[10px] sm:text-xs px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full font-bold backdrop-blur-md shadow-md ${
               uni.type === 'public'
                 ? 'bg-emerald-500/80 text-white border border-emerald-400/20'
-                : 'bg-purple-500/80 text-white border border-purple-400/20'
+                : 'bg-blue-500/80 text-white border border-blue-400/20'
             }`}>
               {uni.type.charAt(0).toUpperCase() + uni.type.slice(1)} University
             </span>
@@ -213,7 +213,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             >
               <h2 className="font-display font-black text-xl mb-5 flex items-center gap-2 text-[#0B071E]">
-                <BookOpen size={18} className="text-[#8B5CF6]" /> Programs Offered
+                <BookOpen size={18} className="text-[#0066FF]" /> Programs Offered
               </h2>
               <div className="space-y-3">
                 {uni.programs_list?.map((prog: any) => (
@@ -225,7 +225,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-extrabold text-[#8B5CF6]">
+                      <div className="text-sm font-extrabold text-[#0066FF]">
                         PKR {(prog.fee / 1000).toFixed(0)}K/yr
                       </div>
                       <div className="text-[#0B071E]/60 text-xs font-bold mt-0.5">Merit: {prog.merit}%+</div>
@@ -244,7 +244,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                 transition={{ delay: 0.25 }}
               >
                 <h2 className="font-display font-black text-xl mb-6 flex items-center gap-2 text-[#0B071E]">
-                  <GraduationCap size={18} className="text-[#8B5CF6]" /> Offered Degree Programs
+                  <GraduationCap size={18} className="text-[#0066FF]" /> Offered Degree Programs
                 </h2>
                 <div className="space-y-6">
                   {Object.entries(groupedDegrees).map(([category, catDegrees]) => (
@@ -256,7 +256,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                         {catDegrees.map((degree) => (
                           <span
                             key={degree}
-                            className="px-3 py-1.5 text-xs font-extrabold rounded-xl bg-white/40 border border-black/5 text-[#0B071E] backdrop-blur-sm shadow-sm transition-all duration-300 hover:border-[#8B5CF6]/30 hover:bg-[#8B5CF6]/5"
+                            className="px-3 py-1.5 text-xs font-extrabold rounded-xl bg-white/40 border border-black/5 text-[#0B071E] backdrop-blur-sm shadow-sm transition-all duration-300 hover:border-[#0066FF]/30 hover:bg-[#0066FF]/5"
                           >
                             {degree}
                           </span>
@@ -292,12 +292,12 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
             >
               <h2 className="font-display font-black text-xl mb-5 flex items-center gap-2 text-[#0B071E]">
-                <Clock size={18} className="text-[#8B5CF6]" /> How to Apply
+                <Clock size={18} className="text-[#0066FF]" /> How to Apply
               </h2>
               <div className="space-y-4">
                 {uni.howToApply?.map((step: string, i: number) => (
                   <div key={i} className="flex items-start gap-4">
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs flex-shrink-0 mt-0.5 bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#8B5CF6]">
+                    <div className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs flex-shrink-0 mt-0.5 bg-[#0066FF]/10 border border-[#0066FF]/20 text-[#0066FF]">
                       {i + 1}
                     </div>
                     <p className="text-[#0B071E]/80 text-sm leading-relaxed font-semibold">{step}</p>
@@ -324,7 +324,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex items-center justify-between py-2.5 border-b border-black/5 last:border-0">
                   <span className="flex items-center gap-2 text-[#0B071E]/60 text-sm font-bold">
-                    <Icon size={14} className="text-[#8B5CF6]" /> {label}
+                    <Icon size={14} className="text-[#0066FF]" /> {label}
                   </span>
                   <span className="text-[#0B071E]/90 text-sm font-extrabold">{value}</span>
                 </div>
@@ -338,11 +338,11 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
             >
               <h3 className="font-display font-black text-sm text-[#0B071E] uppercase tracking-wider mb-4">Contact</h3>
               <a href={`tel:${uni.contacts?.phone}`}
-                className="flex items-center gap-3 text-sm text-[#0B071E]/80 hover:text-[#8B5CF6] transition-colors font-semibold">
+                className="flex items-center gap-3 text-sm text-[#0B071E]/80 hover:text-[#0066FF] transition-colors font-semibold">
                 <Phone size={14} className="text-funky-cyan" /> {uni.contacts?.phone}
               </a>
               <a href={`mailto:${uni.contacts?.email}`}
-                className="flex items-center gap-3 text-sm text-[#0B071E]/80 hover:text-[#8B5CF6] transition-colors font-semibold">
+                className="flex items-center gap-3 text-sm text-[#0B071E]/80 hover:text-[#0066FF] transition-colors font-semibold">
                 <Mail size={14} className="text-funky-cyan" /> {uni.contacts?.email}
               </a>
               <div className="flex items-start gap-3 text-sm text-[#0B071E]/80 font-semibold">
@@ -357,11 +357,11 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
 
             {/* Find Tutor CTA */}
             <motion.div
-              className="p-6 rounded-2xl text-center bg-gradient-to-br from-[#8B5CF6]/10 to-teal-500/5 border border-[#8B5CF6]/20"
+              className="p-6 rounded-2xl text-center bg-gradient-to-br from-[#0066FF]/10 to-teal-500/5 border border-[#0066FF]/20"
               initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
             >
-              <div className="w-10 h-10 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-3">
-                <Users size={16} className="text-[#8B5CF6]" />
+              <div className="w-10 h-10 rounded-full bg-[#0066FF]/10 border border-[#0066FF]/20 flex items-center justify-center mx-auto mb-3">
+                <Users size={16} className="text-[#0066FF]" />
               </div>
               <h3 className="font-display font-black text-sm mb-2 text-[#0B071E]">Need a tutor from {uni.shortName}?</h3>
               <p className="text-[#0B071E]/60 text-xs mb-4 font-semibold">Find verified tutors who&apos;ve been through the same courses</p>

@@ -63,7 +63,7 @@ export default function WriteBlogPage() {
       authorAvatar: profile?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}&backgroundColor=0f0f1a`,
       createdAt: new Date().toISOString(),
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      color: category === 'Admissions' ? '#06b6d4' : category === 'Academics' ? '#7c3aed' : '#ec4899',
+      color: category === 'Admissions' ? '#06b6d4' : category === 'Academics' ? '#0052CC' : '#ec4899',
     };
 
     try {
@@ -80,11 +80,11 @@ export default function WriteBlogPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container max-w-3xl relative z-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#8B5CF6] text-sm mb-8 transition-colors font-bold">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
           <ArrowLeft size={15} /> Back to Blog
         </Link>
 
@@ -94,8 +94,8 @@ export default function WriteBlogPage() {
           className="glass-card p-8 sm:p-10"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-funky-purple/10 border border-funky-purple/20 flex items-center justify-center">
-              <BookOpen size={20} className="text-funky-purple" />
+            <div className="w-10 h-10 rounded-xl bg-funky-blue/10 border border-funky-blue/20 flex items-center justify-center">
+              <BookOpen size={20} className="text-funky-blue" />
             </div>
             <div>
               <h1 className="font-display font-black text-2xl sm:text-3xl tracking-tight text-[#0B071E]">

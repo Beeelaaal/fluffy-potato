@@ -37,7 +37,7 @@ export default function ProductsServicesSection() {
     <section className="py-24 relative overflow-hidden bg-white/40 border-t border-b border-black/5" id="services">
       {/* Background glow effects */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-10 w-[400px] h-[400px] bg-[#8B5CF6]/5 blur-[120px] rounded-full" />
+        <div className="absolute top-0 right-10 w-[400px] h-[400px] bg-[#0066FF]/5 blur-[120px] rounded-full" />
         <div className="absolute bottom-0 left-10 w-[400px] h-[400px] bg-[#FF4B72]/5 blur-[120px] rounded-full" />
       </div>
 
@@ -45,7 +45,7 @@ export default function ProductsServicesSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="section-badge mb-4 mx-auto w-fit">
-            <Sparkles size={12} className="text-[#8B5CF6]" />
+            <Sparkles size={12} className="text-[#0066FF]" />
             Product & Services
           </div>
           <h2 className="font-display font-black text-4xl sm:text-5xl tracking-tight mb-4 text-[#0B071E]">
@@ -65,15 +65,15 @@ export default function ProductsServicesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="glass-card p-8 flex flex-col justify-between relative overflow-hidden border-[#8B5CF6] ring-2 ring-[#8B5CF6]/20 bg-white/90 shadow-[8px_8px_0px_rgba(139,92,246,1)]"
+            className="glass-card p-8 flex flex-col justify-between relative overflow-hidden border-[#0066FF] ring-2 ring-[#0066FF]/20 bg-white/90 shadow-[8px_8px_0px_rgba(139,92,246,1)]"
           >
-            <div className="absolute top-0 right-0 bg-[#8B5CF6] text-white font-display text-[9px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-bl-xl flex items-center gap-1 shadow-sm">
+            <div className="absolute top-0 right-0 bg-[#0066FF] text-white font-display text-[9px] font-black uppercase tracking-wider px-3.5 py-1.5 rounded-bl-xl flex items-center gap-1 shadow-sm">
               <Sparkles size={10} />
               Most Popular
             </div>
 
             <div>
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider mb-5 bg-[#8B5CF6]/15 text-[#8B5CF6]">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider mb-5 bg-[#0066FF]/15 text-[#0066FF]">
                 Core Feature
               </span>
 
@@ -103,7 +103,7 @@ export default function ProductsServicesSection() {
                       onClick={() => setSelectedTag(tag)}
                       className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${
                         selectedTag === tag
-                          ? 'bg-[#8B5CF6] border-[#8B5CF6] text-white'
+                          ? 'bg-[#0066FF] border-[#0066FF] text-white'
                           : 'bg-white dark:bg-white/5 border-black/10 dark:border-white/10 text-[#0B071E]/60 dark:text-white/60 hover:bg-black/5'
                       }`}
                     >
@@ -123,13 +123,13 @@ export default function ProductsServicesSection() {
                       <div
                         key={i}
                         onClick={() => handleDownloadDemo(item.title)}
-                        className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#110A20] border border-black/5 dark:border-white/5 hover:border-[#8B5CF6]/30 hover:shadow-sm transition-all cursor-pointer group"
+                        className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#110A20] border border-black/5 dark:border-white/5 hover:border-[#0066FF]/30 hover:shadow-sm transition-all cursor-pointer group"
                       >
                         <span className="text-[11px] font-bold text-[#0B071E] truncate max-w-[150px] flex items-center gap-1.5">
-                          <BookOpen size={12} className="text-[#8B5CF6]" />
+                          <BookOpen size={12} className="text-[#0066FF]" />
                           {item.title}
                         </span>
-                        <button className="text-[9px] font-extrabold text-[#8B5CF6] bg-[#8B5CF6]/10 px-2 py-1 rounded-md flex items-center gap-1 group-hover:bg-[#8B5CF6] group-hover:text-white transition-all">
+                        <button className="text-[9px] font-extrabold text-[#0066FF] bg-[#0066FF]/10 px-2 py-1 rounded-md flex items-center gap-1 group-hover:bg-[#0066FF] group-hover:text-white transition-all">
                           <Download size={10} />
                           {item.dl}
                         </button>
@@ -150,7 +150,7 @@ export default function ProductsServicesSection() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute bottom-20 left-6 right-6 p-3 rounded-xl bg-[#8B5CF6] text-white text-xs font-bold text-center shadow-lg z-20 flex items-center justify-center gap-2"
+                    className="absolute bottom-20 left-6 right-6 p-3 rounded-xl bg-[#0066FF] text-white text-xs font-bold text-center shadow-lg z-20 flex items-center justify-center gap-2"
                   >
                     <CheckCircle size={14} /> File "{dlTrigger}" is downloading!
                   </motion.div>
@@ -170,7 +170,7 @@ export default function ProductsServicesSection() {
 
             <Link
               href="/resources"
-              className="w-full py-3.5 px-6 rounded-xl font-extrabold text-sm flex items-center justify-center gap-2 border-2 transition-all duration-200 bg-gradient-to-br from-[#8B5CF6] to-[#7c3aed] text-white border-[#8B5CF6] hover:shadow-[4px_4px_0px_#0B071E]"
+              className="w-full py-3.5 px-6 rounded-xl font-extrabold text-sm flex items-center justify-center gap-2 border-2 transition-all duration-200 bg-gradient-to-br from-[#0066FF] to-[#0052CC] text-white border-[#0066FF] hover:shadow-[4px_4px_0px_#0B071E]"
             >
               Browse Resource Hub
               <ArrowRight size={14} />
@@ -219,10 +219,10 @@ export default function ProductsServicesSection() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.4 }}
-                      className="absolute inset-x-0 p-2.5 rounded-xl bg-gradient-to-r from-[#FF4B72]/5 to-[#8B5CF6]/5 border border-dashed border-[#FF4B72]/30 flex items-center justify-between"
+                      className="absolute inset-x-0 p-2.5 rounded-xl bg-gradient-to-r from-[#FF4B72]/5 to-[#0066FF]/5 border border-dashed border-[#FF4B72]/30 flex items-center justify-between"
                     >
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF4B72] to-[#8B5CF6] flex items-center justify-center text-white font-extrabold text-[10px]">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF4B72] to-[#0066FF] flex items-center justify-center text-white font-extrabold text-[10px]">
                           {mockBids[activeBidIdx].name.charAt(0)}
                         </div>
                         <div>

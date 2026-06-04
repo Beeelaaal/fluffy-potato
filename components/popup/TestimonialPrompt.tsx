@@ -125,9 +125,9 @@ export default function TestimonialPrompt() {
           exit={{ opacity: 0, y: 50, scale: 0.9 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         >
-          <div className="glass-card p-6 shadow-2xl border-funky-purple/20 bg-white/95 backdrop-blur-md relative overflow-hidden">
+          <div className="glass-card p-6 shadow-2xl border-funky-blue/20 bg-white/95 backdrop-blur-md relative overflow-hidden">
             {/* Top decorative stripe */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-funky-cyan via-funky-purple to-funky-coral" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-funky-cyan via-funky-blue to-funky-coral" />
             
             {/* Close Button */}
             <button 
@@ -140,8 +140,8 @@ export default function TestimonialPrompt() {
             {step === 'prompt' && (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-funky-purple/10 border border-funky-purple/20 flex items-center justify-center">
-                    <MessageSquareHeart size={20} className="text-funky-purple animate-pulse" />
+                  <div className="w-10 h-10 rounded-xl bg-funky-blue/10 border border-funky-blue/20 flex items-center justify-center">
+                    <MessageSquareHeart size={20} className="text-funky-blue animate-pulse" />
                   </div>
                   <div>
                     <h3 className="font-display font-black text-lg text-[#0B071E]">Share Your Experience!</h3>

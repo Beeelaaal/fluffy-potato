@@ -148,7 +148,7 @@ export default function ResourcesPage() {
           className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         >
-          <div className="section-badge mb-5 mx-auto w-fit border-[#8B5CF6]/30 text-[#8B5CF6] bg-[#8B5CF6]/10 font-bold px-5 py-2">Resource Hub</div>
+          <div className="section-badge mb-5 mx-auto w-fit border-[#0066FF]/30 text-[#0066FF] bg-[#0066FF]/10 font-bold px-5 py-2">Resource Hub</div>
           <h1 className="font-display font-black text-5xl sm:text-6xl tracking-tighter mb-5">
             Academic <span className="gradient-text">Resources</span>
           </h1>
@@ -241,7 +241,7 @@ export default function ResourcesPage() {
 
           {hasFilters && (
             <button onClick={clearAll}
-              className="mt-4 flex items-center gap-1.5 text-xs text-[#0B071E]/60 hover:text-[#8B5CF6] font-bold transition-colors">
+              className="mt-4 flex items-center gap-1.5 text-xs text-[#0B071E]/60 hover:text-[#0066FF] font-bold transition-colors">
               <X size={12} /> Clear all filters
             </button>
           )}
@@ -250,14 +250,14 @@ export default function ResourcesPage() {
         {/* Result count */}
         {!loading && (
           <p className="text-[#0B071E]/60 text-sm mb-6 font-bold">
-            Found <span className="text-[#8B5CF6] font-extrabold">{filtered.length}</span> resources
+            Found <span className="text-[#0066FF] font-extrabold">{filtered.length}</span> resources
           </p>
         )}
 
         {/* Loading State */}
         {loading && (
           <div className="flex justify-center py-20">
-            <div className="w-10 h-10 border-4 border-[#8B5CF6]/20 border-t-[#8B5CF6] rounded-full animate-spin" />
+            <div className="w-10 h-10 border-4 border-[#0066FF]/20 border-t-[#0066FF] rounded-full animate-spin" />
           </div>
         )}
 
@@ -292,7 +292,7 @@ export default function ResourcesPage() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-display font-black text-xl leading-snug mb-2 text-[#0B071E] group-hover:text-[#8B5CF6] transition-colors line-clamp-2">
+                    <h3 className="font-display font-black text-xl leading-snug mb-2 text-[#0B071E] group-hover:text-[#0066FF] transition-colors line-clamp-2">
                       {res.title}
                     </h3>
 
@@ -374,14 +374,14 @@ export default function ResourcesPage() {
               initial={{ opacity: 0, y: 50, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              className="fixed bottom-6 right-6 z-50 max-w-sm w-[calc(100%-3rem)] sm:w-80 bg-white/95 backdrop-blur-md border border-[#8B5CF6]/20 shadow-[0_12px_40px_rgba(139,92,246,0.15)] rounded-2xl p-4 flex items-center justify-between gap-4 border-l-4 border-l-[#8B5CF6]"
+              className="fixed bottom-6 right-6 z-50 max-w-sm w-[calc(100%-3rem)] sm:w-80 bg-white/95 backdrop-blur-md border border-[#0066FF]/20 shadow-[0_12px_40px_rgba(139,92,246,0.15)] rounded-2xl p-4 flex items-center justify-between gap-4 border-l-4 border-l-[#0066FF]"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
-                  <Download size={16} className="text-[#8B5CF6] animate-bounce" />
+                <div className="w-9 h-9 rounded-xl bg-[#0066FF]/10 border border-[#0066FF]/20 flex items-center justify-center flex-shrink-0">
+                  <Download size={16} className="text-[#0066FF] animate-bounce" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[10px] font-bold text-[#8B5CF6] uppercase tracking-wider">Downloading</p>
+                  <p className="text-[10px] font-bold text-[#0066FF] uppercase tracking-wider">Downloading</p>
                   <p className="text-sm font-extrabold text-[#0B071E] truncate" title={downloadingResource}>
                     {downloadingResource}
                   </p>

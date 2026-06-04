@@ -22,7 +22,7 @@ module.exports = {
           orange: '#FF7A18',
           lime:   '#D8FF3E',
           // extended
-          purple: '#9B6DFF',
+          blue:   '#0066FF',
           coral:  '#FF5C7A',
         },
         dark: {

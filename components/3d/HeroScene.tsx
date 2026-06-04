@@ -49,7 +49,7 @@ export default function HeroScene() {
 
     // Initialize 3D particles in a box
     const particles: Particle[] = [];
-    const colors = ['#2EF2FF', '#FF4B72', '#8B5CF6', '#D8FF3E'];
+    const colors = ['#2EF2FF', '#FF4B72', '#0066FF', '#D8FF3E'];
     const pCount = 90;
     const boxSize = 800; // 3D boundary: -400 to 400
 
@@ -139,7 +139,7 @@ export default function HeroScene() {
           if (pt.zDepth <= 50) continue;
 
           const opacity = Math.max(0, Math.min(0.2, (1 - pt.zDepth / 1300) * 0.18));
-          ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`; // primary purple mesh
+          ctx.strokeStyle = `rgba(0, 102, 255, ${opacity})`; // primary blue mesh
 
           // Connect to right neighbor
           if (c + 1 < wavePoints[r].length) {

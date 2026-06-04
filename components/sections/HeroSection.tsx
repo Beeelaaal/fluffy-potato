@@ -63,9 +63,9 @@ export default function HeroSection() {
           {/* Resources Badge */}
           <motion.div 
             variants={itm} 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-dark/10 bg-white/70 text-xs font-black uppercase tracking-[0.18em] text-[#8B5CF6] mb-4 cursor-default select-none"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-dark/10 bg-white/70 text-xs font-black uppercase tracking-[0.18em] text-[#0066FF] mb-4 cursor-default select-none"
           >
-            <BookOpen size={14} className="text-[#8B5CF6]" />
+            <BookOpen size={14} className="text-[#0066FF]" />
             <span>Pakistan's Largest Peer-to-Peer Academic Resource Hub</span>
           </motion.div>
 
@@ -80,7 +80,7 @@ export default function HeroSection() {
               <span className="gradient-text">Simplified</span>
               <motion.span
                 className="absolute -bottom-1 left-0 right-0 h-[3px] rounded-full"
-                style={{ background: 'linear-gradient(90deg, #FF4B72, #8B5CF6, transparent)' }}
+                style={{ background: 'linear-gradient(90deg, #FF4B72, #0066FF, transparent)' }}
                 initial={{ scaleX: 0, originX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 1.0, duration: 0.8, ease: [0.22, 1, 0.36, 1] as const }}
@@ -101,7 +101,7 @@ export default function HeroSection() {
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link href="#services" className="btn-ghost px-8 py-4 text-base">
-              <GraduationCap size={18} className="text-[#8B5CF6]" />
+              <GraduationCap size={18} className="text-[#0066FF]" />
               Explore Core Services
             </Link>
           </motion.div>
@@ -116,8 +116,8 @@ export default function HeroSection() {
                 transition={{ duration: 0.2 }}
               >
                 <div className="flex justify-center mb-2">
-                  <div className="w-9 h-9 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center">
-                    <Icon size={16} className="text-[#8B5CF6]" />
+                  <div className="w-9 h-9 rounded-xl bg-[#0066FF]/10 border border-[#0066FF]/20 flex items-center justify-center">
+                    <Icon size={16} className="text-[#0066FF]" />
                   </div>
                 </div>
                 <div className="font-display text-xl font-bold gradient-text">{value}</div>
@@ -136,7 +136,7 @@ export default function HeroSection() {
         >
           <span className="tracking-widest uppercase text-[10px]">Scroll</span>
           <motion.div
-            className="w-px h-8 bg-gradient-to-b from-[#8B5CF6]/40 to-transparent"
+            className="w-px h-8 bg-gradient-to-b from-[#0066FF]/40 to-transparent"
             animate={{ scaleY: [0.5, 1, 0.5] }}
             transition={{ repeat: Infinity, duration: 1.6 }}
           />

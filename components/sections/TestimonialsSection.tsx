@@ -34,8 +34,8 @@ export default function TestimonialsSection() {
     <section className="py-28 relative overflow-hidden" id="testimonials">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/4 blur-[120px] rounded-full" />
-        <div className="absolute left-0 bottom-0 w-[400px] h-[400px] bg-[#8B5CF6]/5 blur-[100px] rounded-full" />
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#0066FF]/4 blur-[120px] rounded-full" />
+        <div className="absolute left-0 bottom-0 w-[400px] h-[400px] bg-[#0066FF]/5 blur-[100px] rounded-full" />
       </div>
 
       <div className="section-container relative" ref={ref}>
@@ -68,7 +68,7 @@ export default function TestimonialsSection() {
             >
               <div>
                 {/* Quote icon */}
-                <Quote size={28} className="text-[#8B5CF6]/20 mb-4" />
+                <Quote size={28} className="text-[#0066FF]/20 mb-4" />
 
                 {/* Stars */}
                 <StarRating rating={t.rating} />
@@ -114,7 +114,7 @@ export default function TestimonialsSection() {
             {testimonials.map((_, i) => (
               <button key={i} onClick={() => setCurrent(i)}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === current ? 'w-6 bg-[#8B5CF6]' : 'w-1.5 bg-black/10'
+                  i === current ? 'w-6 bg-[#0066FF]' : 'w-1.5 bg-black/10'
                 }`} />
             ))}
           </div>

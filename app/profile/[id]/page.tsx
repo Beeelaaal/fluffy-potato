@@ -117,7 +117,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
     <div className="min-h-screen pt-24 pb-20 relative">
       {/* Background Orbs */}
       <div className="absolute top-0 right-1/4 w-[500px] h-[400px] bg-neon-cyan/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-40 left-1/4 w-[400px] h-[300px] bg-neon-purple/5 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-40 left-1/4 w-[400px] h-[300px] bg-funky-blue/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10">
         <div className="grid lg:grid-cols-3 gap-8">
@@ -192,7 +192,7 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                 ] : [
                   { icon: Clock, label: 'Preferred Budget', value: profile.budgetPreference ? `PKR ${profile.budgetPreference}` : 'Not specified', color: 'text-neon-lime', bg: 'bg-neon-lime/10' },
                 ]),
-                { icon: BookOpen, label: 'Resources Shared', value: String(profile.resourcesSharedCount || 0), color: 'text-neon-purple', bg: 'bg-neon-purple/10' },
+                { icon: BookOpen, label: 'Resources Shared', value: String(profile.resourcesSharedCount || 0), color: 'text-funky-blue', bg: 'bg-funky-blue/10' },
               ].map(({ icon: Icon, label, value, color, bg }) => (
                 <div key={label} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0 last:pb-0 group">
                   <span className="flex items-center gap-4 text-white/60 text-sm font-bold">

@@ -13,7 +13,7 @@ export function TuteLogo({ size = 32, className = '', withText = true }: TuteLog
   const height = size;
 
   return (
-    <span className={`inline-flex items-center bg-[#0B071E] px-3 py-1.5 rounded-2xl border border-[#0B071E] hover:border-[#8B5CF6] transition-all ${className}`}>
+    <span className={`inline-flex items-center bg-[#0B071E] px-3 py-1.5 rounded-2xl border border-[#0B071E] hover:border-[#0066FF] transition-all ${className}`}>
       <span className="relative flex items-center justify-center overflow-hidden" style={{ width, height }}>
         <Image
           src="/logo.jpg"

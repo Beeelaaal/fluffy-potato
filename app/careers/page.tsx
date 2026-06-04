@@ -37,7 +37,7 @@ export default function CareersPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10">
@@ -75,15 +75,15 @@ export default function CareersPage() {
                 <h3 className="font-display font-bold text-lg text-[#0B071E]">What You Will Do:</h3>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2.5 text-[#0B071E]/75 text-sm font-semibold">
-                    <GraduationCap size={16} className="text-[#8B5CF6] mt-0.5 flex-shrink-0" />
+                    <GraduationCap size={16} className="text-[#0066FF] mt-0.5 flex-shrink-0" />
                     <span>Promote Tute on campus and academic student groups.</span>
                   </li>
                   <li className="flex items-start gap-2.5 text-[#0B071E]/75 text-sm font-semibold">
-                    <Star size={16} className="text-[#8B5CF6] mt-0.5 flex-shrink-0" />
+                    <Star size={16} className="text-[#0066FF] mt-0.5 flex-shrink-0" />
                     <span>Help onboard campus seniors to share study resources.</span>
                   </li>
                   <li className="flex items-start gap-2.5 text-[#0B071E]/75 text-sm font-semibold">
-                    <ShieldCheck size={16} className="text-[#8B5CF6] mt-0.5 flex-shrink-0" />
+                    <ShieldCheck size={16} className="text-[#0066FF] mt-0.5 flex-shrink-0" />
                     <span>Provide feedback directly to the product team to improve student experience.</span>
                   </li>
                 </ul>
@@ -92,10 +92,10 @@ export default function CareersPage() {
               <div className="space-y-4 mt-6 pt-6 border-t border-black/5">
                 <h3 className="font-display font-bold text-lg text-[#0B071E]">Perks &amp; Benefits:</h3>
                 <div className="grid grid-cols-2 gap-4 text-xs font-bold text-[#0B071E]/70">
-                  <div className="p-3 bg-[#8B5CF6]/5 rounded-xl border border-[#8B5CF6]/10">💵 Monthly Stipend</div>
-                  <div className="p-3 bg-[#8B5CF6]/5 rounded-xl border border-[#8B5CF6]/10">📜 Certificate of Ambassadorship</div>
-                  <div className="p-3 bg-[#8B5CF6]/5 rounded-xl border border-[#8B5CF6]/10">📈 Internship Opportunities</div>
-                  <div className="p-3 bg-[#8B5CF6]/5 rounded-xl border border-[#8B5CF6]/10">🌟 Network with top student leaders</div>
+                  <div className="p-3 bg-[#0066FF]/5 rounded-xl border border-[#0066FF]/10">💵 Monthly Stipend</div>
+                  <div className="p-3 bg-[#0066FF]/5 rounded-xl border border-[#0066FF]/10">📜 Certificate of Ambassadorship</div>
+                  <div className="p-3 bg-[#0066FF]/5 rounded-xl border border-[#0066FF]/10">📈 Internship Opportunities</div>
+                  <div className="p-3 bg-[#0066FF]/5 rounded-xl border border-[#0066FF]/10">🌟 Network with top student leaders</div>
                 </div>
               </div>
             </motion.div>

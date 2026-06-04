@@ -115,7 +115,7 @@ export default function MarketplacePage() {
   return (
     <div className="min-h-screen pt-24 pb-20 relative">
       {/* Background Orbs */}
-      <div className="absolute top-0 right-1/4 w-[500px] h-[400px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[400px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-40 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10">
@@ -183,7 +183,7 @@ export default function MarketplacePage() {
 
         {/* Results */}
         <p className="text-[#0B071E]/60 text-sm mb-6 font-bold">
-          <span className="text-[#8B5CF6] font-extrabold">{filtered.length}</span> request{filtered.length !== 1 ? 's' : ''} found
+          <span className="text-[#0066FF] font-extrabold">{filtered.length}</span> request{filtered.length !== 1 ? 's' : ''} found
         </p>
 
         <div className="space-y-5">
@@ -210,14 +210,14 @@ export default function MarketplacePage() {
                           {req.status === 'open' && <span className="inline-block w-2 h-2 rounded-full bg-funky-lime animate-pulse mr-2 shadow-[0_0_10px_rgba(173,255,47,0.8)]" />}
                           {req.status.replace('-', ' ')}
                         </span>
-                        <span className="text-xs font-bold px-3 py-1.5 rounded-md bg-funky-purple/10 text-funky-purple border border-funky-purple/20 uppercase tracking-wider">{req.subject}</span>
+                        <span className="text-xs font-bold px-3 py-1.5 rounded-md bg-funky-blue/10 text-funky-blue border border-funky-blue/20 uppercase tracking-wider">{req.subject}</span>
                         <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#0B071E]/70 bg-white/60 px-3 py-1.5 rounded-md border border-[#0B071E]/10">
                           <SessionIcon size={14} /> {req.sessionType}
                         </span>
                       </div>
 
                       <Link href={`/marketplace/${req.id}`}>
-                        <h2 className="font-display font-black text-2xl leading-snug mb-3 text-[#0B071E] group-hover:text-[#8B5CF6] transition-colors">
+                        <h2 className="font-display font-black text-2xl leading-snug mb-3 text-[#0B071E] group-hover:text-[#0066FF] transition-colors">
                           {req.title}
                         </h2>
                       </Link>
@@ -230,7 +230,7 @@ export default function MarketplacePage() {
                           <img src={req.student.avatar} alt={req.student.name} className="w-5 h-5 rounded-full border border-black/10" />
                           {req.student.name} <span className="text-[#0B071E]/20">·</span> {req.student.university}
                         </span>
-                        <span className="flex items-center gap-1.5"><Clock size={13} className="text-[#8B5CF6]/70" /> {req.duration}</span>
+                        <span className="flex items-center gap-1.5"><Clock size={13} className="text-[#0066FF]/70" /> {req.duration}</span>
                         <span className="flex items-center gap-1.5">
                           <Tag size={13} className="text-amber-500/70" />
                           Due: {new Date(req.deadline).toLocaleDateString('en-PK', { day: 'numeric', month: 'short' })}
@@ -243,7 +243,7 @@ export default function MarketplacePage() {
                       <div className="text-left lg:text-right">
                         <div className="text-[#0B071E]/50 text-xs font-bold mb-1 uppercase tracking-widest">Budget</div>
                         <div className="font-display font-black text-3xl text-[#0B071E]">
-                          <span className="text-sm text-funky-purple mr-1 font-bold">PKR</span>
+                          <span className="text-sm text-funky-blue mr-1 font-bold">PKR</span>
                           {req.budget.toLocaleString()}
                         </div>
                       </div>

@@ -6,7 +6,7 @@
   --cyan: #2EF2FF;
   --coral: #FF4B72;
   --yellow: #FFD214;
-  --purple: #8B5CF6;
+  --blue: #0066FF;
   --dark: #0B071E;
   --surface: #FFFFFF;
   --bg-light: #FDFBF7;
@@ -26,7 +26,7 @@
   --cyan: #2EF2FF;
   --coral: #FF5C7A;
   --yellow: #FFD214;
-  --purple: #A78BFA;
+  --blue: #4D90FF;
   --dark: #F3F4F6;
   --surface: #110A20;
   --bg-light: #070310;
@@ -130,7 +130,7 @@
 }
 
 .dark .btn-primary {
-  background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
   box-shadow: 4px 4px 0px var(--cyan);
   border-color: var(--cyan);
   color: #0B071E !important;
@@ -153,7 +153,7 @@
 .dark body {
   background:
     radial-gradient(circle at 10% 20%, rgba(46, 242, 255, 0.03) 0%, transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(0, 102, 255, 0.03) 0%, transparent 40%),
     radial-gradient(circle at 50% 80%, rgba(255, 210, 20, 0.03) 0%, transparent 50%),
     var(--bg-light);
 }
@@ -189,7 +189,7 @@
 
 .dark .input-field:focus {
   background: rgba(255, 255, 255, 0.05);
-  border-color: var(--purple);
+  border-color: var(--blue);
 }
 
 .dark .sidebar-item:hover {
@@ -283,7 +283,7 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--purple);
+    background: var(--blue);
     border: 2px solid var(--bg-light);
     border-radius: 999px;
   }
@@ -383,14 +383,14 @@
 
   /* ── Typography ── */
   .gradient-text {
-    background: linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+    background: linear-gradient(135deg, var(--coral) 0%, var(--blue) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gradient-text-orange {
-    background: linear-gradient(135deg, var(--purple) 0%, var(--coral) 100%);
+    background: linear-gradient(135deg, var(--blue) 0%, var(--coral) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -399,7 +399,7 @@
   /* ── Badge ── */
   .section-badge {
     @apply inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-[0.2em] border-2 border-dark/10 bg-white/80;
-    color: var(--purple);
+    color: var(--blue);
   }
 
   /* ── Inputs ── */
@@ -409,7 +409,7 @@
   }
 
   .input-field:focus {
-    border-color: var(--purple);
+    border-color: var(--blue);
     background: #FFFFFF;
     box-shadow: 3px 3px 0px var(--dark);
   }
@@ -453,10 +453,16 @@
     background: #DCFCE7;
   }
 
-  .tag-purple {
+  .tag-blue {
     @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-wide border border-dark/10;
-    color: #6D28D9;
-    background: #F3E8FF;
+    color: #1D4ED8;
+    background: #DBEAFE;
+  }
+
+  .dark .tag-blue {
+    color: #93C5FD !important;
+    background: rgba(30, 58, 138, 0.4) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
   }
 
   .tag-coral {
@@ -484,7 +490,7 @@
   }
 
   .sidebar-item.active {
-    color: var(--purple);
+    color: var(--blue);
     border-color: var(--dark);
     background: #FFFFFF;
     box-shadow: 3px 3px 0px var(--dark);

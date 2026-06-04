@@ -39,7 +39,7 @@ export default function Footer() {
 
   return (
     <footer className="relative mt-24 border-t border-black/10 overflow-hidden bg-white/70">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-[#8B5CF6]/5 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-[#0066FF]/5 blur-[100px] pointer-events-none" />
 
       <div className="section-container pt-16 pb-10 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
@@ -53,9 +53,9 @@ export default function Footer() {
               university insights, and expert tutoring in one unified place.
             </p>
             <div className="flex flex-col gap-2 text-[#0B071E]/60 text-sm font-bold">
-              <span className="flex items-center gap-2"><MapPin size={14} className="text-[#8B5CF6]" /> Karachi, Pakistan</span>
-              <span className="flex items-center gap-2"><Mail size={14} className="text-[#8B5CF6]" /> hello@tute.pk</span>
-              <span className="flex items-center gap-2"><Phone size={14} className="text-[#8B5CF6]" /> 03312030359</span>
+              <span className="flex items-center gap-2"><MapPin size={14} className="text-[#0066FF]" /> Karachi, Pakistan</span>
+              <span className="flex items-center gap-2"><Mail size={14} className="text-[#0066FF]" /> hello@tute.pk</span>
+              <span className="flex items-center gap-2"><Phone size={14} className="text-[#0066FF]" /> 03312030359</span>
             </div>
           </div>
 
@@ -68,7 +68,7 @@ export default function Footer() {
                   <li key={label}>
                     <Link
                       href={href}
-                      className="text-[#0B071E]/70 hover:text-[#8B5CF6] text-sm font-semibold transition-colors duration-200"
+                      className="text-[#0B071E]/70 hover:text-[#0066FF] text-sm font-semibold transition-colors duration-200"
                     >
                       {label}
                     </Link>
@@ -89,7 +89,7 @@ export default function Footer() {
               <a
                 key={label}
                 href={href}
-                className="text-xs text-[#0B071E]/50 hover:text-[#8B5CF6] font-semibold transition-colors"
+                className="text-xs text-[#0B071E]/50 hover:text-[#0066FF] font-semibold transition-colors"
               >
                 {label}
               </a>

@@ -37,7 +37,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-purple/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative z-10">
@@ -77,8 +77,8 @@ export default function ContactPage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 flex items-center justify-center flex-shrink-0">
-                      <Mail size={18} className="text-[#8B5CF6]" />
+                    <div className="w-10 h-10 rounded-xl bg-[#0066FF]/10 border border-[#0066FF]/20 flex items-center justify-center flex-shrink-0">
+                      <Mail size={18} className="text-[#0066FF]" />
                     </div>
                     <div>
                       <h4 className="font-display font-bold text-sm text-[#0B071E]">Email</h4>
@@ -99,12 +99,12 @@ export default function ContactPage() {
               </div>
 
               {/* Recruitment Promo */}
-              <div className="mt-8 pt-6 border-t border-black/5 bg-[#8B5CF6]/5 p-4 rounded-2xl border border-[#8B5CF6]/10">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#8B5CF6] block mb-1">We are hiring!</span>
+              <div className="mt-8 pt-6 border-t border-black/5 bg-[#0066FF]/5 p-4 rounded-2xl border border-[#0066FF]/10">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#0066FF] block mb-1">We are hiring!</span>
                 <h4 className="font-display font-bold text-sm text-[#0B071E] mb-1">Campus Ambassador Positions Open</h4>
                 <p className="text-[#0B071E]/70 text-xs font-semibold mb-3">Become the face of Tute at your university and earn stipends.</p>
-                <Link href="/careers" className="text-xs font-bold text-[#8B5CF6] hover:underline flex items-center gap-1">
-                  Apply for Careers <Heart size={10} className="fill-current text-[#8B5CF6]" />
+                <Link href="/careers" className="text-xs font-bold text-[#0066FF] hover:underline flex items-center gap-1">
+                  Apply for Careers <Heart size={10} className="fill-current text-[#0066FF]" />
                 </Link>
               </div>
             </motion.div>

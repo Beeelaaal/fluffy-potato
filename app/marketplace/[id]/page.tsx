@@ -99,10 +99,10 @@ function ChatPanel({
             return (
               <div key={m.id} className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm font-semibold ${
                 isMe
-                  ? 'bg-[#8B5CF6] text-white self-end rounded-tr-none'
+                  ? 'bg-[#0066FF] text-white self-end rounded-tr-none'
                   : 'bg-white dark:bg-[#1C1238] text-[#0B071E] border border-black/5 self-start rounded-tl-none'
               }`}>
-                {!isMe && <div className="text-[9px] text-[#8B5CF6] font-black mb-0.5">{m.senderName}</div>}
+                {!isMe && <div className="text-[9px] text-[#0066FF] font-black mb-0.5">{m.senderName}</div>}
                 <div>{m.text}</div>
               </div>
             );
@@ -408,11 +408,11 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative">
-      <div className="absolute top-0 left-1/4 w-[400px] h-[300px] bg-funky-purple/5 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[400px] h-[300px] bg-funky-blue/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="section-container relative">
         <Link href="/marketplace"
-          className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#8B5CF6] text-sm mb-8 transition-colors font-bold">
+          className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
           <ArrowLeft size={15} /> Back to Marketplace
         </Link>
 
@@ -456,7 +456,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
               {/* Request stats */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 p-5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/5 dark:border-white/5">
                 <div className="text-center pb-4 sm:pb-0 border-b sm:border-b-0 sm:border-r border-black/5 dark:border-white/5">
-                  <DollarSign size={16} className="text-[#8B5CF6] mx-auto mb-1" />
+                  <DollarSign size={16} className="text-[#0066FF] mx-auto mb-1" />
                   <div className="font-display font-black text-lg sm:text-xl text-[#0B071E]">PKR {request.budget.toLocaleString()}</div>
                   <div className="text-[#0B071E]/50 text-xs font-bold">Budget</div>
                 </div>
@@ -476,7 +476,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
             {/* Active Session & Rating Actions */}
             {request.status === 'in-progress' && acceptedBid && (
               <motion.div 
-                className="glass-card p-6 border-[#8B5CF6]/30 shadow-lime"
+                className="glass-card p-6 border-[#0066FF]/30 shadow-lime"
                 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
               >
                 <h3 className="font-display font-black text-xl mb-4 text-[#0B071E] flex items-center gap-2">
@@ -592,7 +592,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                 <div className="space-y-4">
                   {request.tutorRatingFromStudent && (
                     <div className="bg-white/40 dark:bg-white/5 p-4 rounded-xl border border-black/5">
-                      <div className="text-xs font-bold text-[#8B5CF6] mb-1.5 uppercase tracking-wider">Student's Review of Tutor</div>
+                      <div className="text-xs font-bold text-[#0066FF] mb-1.5 uppercase tracking-wider">Student's Review of Tutor</div>
                       <div className="flex items-center gap-1.5 mb-2">
                         <StarRating rating={request.tutorRatingFromStudent} />
                       </div>
@@ -601,7 +601,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                   )}
                   {request.studentRatingFromTutor && (
                     <div className="bg-white/40 dark:bg-white/5 p-4 rounded-xl border border-black/5">
-                      <div className="text-xs font-bold text-[#8B5CF6] mb-1.5 uppercase tracking-wider">Tutor's Review of Student</div>
+                      <div className="text-xs font-bold text-[#0066FF] mb-1.5 uppercase tracking-wider">Tutor's Review of Student</div>
                       <div className="flex items-center gap-1.5 mb-2">
                         <StarRating rating={request.studentRatingFromTutor} />
                       </div>
@@ -626,7 +626,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
             <motion.div className="glass-card p-7"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
               <h2 className="font-display font-black text-xl mb-5 flex items-center gap-2 text-[#0B071E]">
-                <MessageSquare size={18} className="text-[#8B5CF6]" />
+                <MessageSquare size={18} className="text-[#0066FF]" />
                 Bids ({bids.length})
               </h2>
 
@@ -652,7 +652,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
 
                     return (
                       <motion.div key={bid.id || i}
-                        className="p-5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-[#8B5CF6]/30 hover:bg-white dark:hover:bg-[#1C1238] hover:shadow-[4px_4px_0px_#8B5CF6] hover:-translate-y-1 transition-all duration-200 cursor-pointer text-[#0B071E] dark:text-white"
+                        className="p-5 rounded-2xl bg-white/60 dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-[#0066FF]/30 hover:bg-white dark:hover:bg-[#1C1238] hover:shadow-[4px_4px_0px_#0066FF] hover:-translate-y-1 transition-all duration-200 cursor-pointer text-[#0B071E] dark:text-white"
                         initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.08 }}>
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3 pb-3 border-b border-black/5 sm:border-0 sm:pb-0">
@@ -665,7 +665,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                             </div>
                           </div>
                           <div className="text-left sm:text-right">
-                            <div className="font-display font-black text-lg text-[#8B5CF6] dark:text-[#A78BFA]">PKR {bid.amount.toLocaleString()}</div>
+                            <div className="font-display font-black text-lg text-[#0066FF] dark:text-[#60A5FA]">PKR {bid.amount.toLocaleString()}</div>
                             <div className="flex items-center sm:justify-end gap-1 text-xs text-[#0B071E]/50 dark:text-white/40 font-bold mt-0.5">
                               <Star size={10} className="fill-yellow-500 text-yellow-500" />
                               {tutorRatingVal.toFixed(1)} · {tutorSessionsCount} sessions
@@ -683,7 +683,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                             )}
                             {tutorPrefs && (
                               <div>
-                                <span className="font-bold text-[#8B5CF6] dark:text-[#A78BFA]">Preferences: </span>
+                                <span className="font-bold text-[#0066FF] dark:text-[#60A5FA]">Preferences: </span>
                                 <span className="text-[#0B071E]/70 dark:text-white/80 font-medium">{tutorPrefs}</span>
                               </div>
                             )}
@@ -782,13 +782,13 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
                 <div className="border-t border-black/5 dark:border-white/5 pt-4 mt-3 space-y-3 text-xs">
                   {studentProfile?.bio && (
                     <div>
-                      <span className="font-bold text-[#8B5CF6] dark:text-[#A78BFA] block mb-1">About Student:</span>
+                      <span className="font-bold text-[#0066FF] dark:text-[#60A5FA] block mb-1">About Student:</span>
                       <p className="text-[#0B071E]/70 dark:text-white/80 leading-relaxed font-semibold italic">"{studentProfile.bio}"</p>
                     </div>
                   )}
                   {studentProfile?.preferences && (
                     <div>
-                      <span className="font-bold text-[#8B5CF6] dark:text-[#A78BFA] block mb-1">Student Interests:</span>
+                      <span className="font-bold text-[#0066FF] dark:text-[#60A5FA] block mb-1">Student Interests:</span>
                       <p className="text-[#0B071E]/70 dark:text-white/80 font-semibold">{studentProfile.preferences}</p>
                     </div>
                   )}
@@ -803,7 +803,7 @@ export default function RequestDetailPage({ params }: { params: { id: string } }
             {/* Place bid CTA */}
             {request.status === 'open' && !submitted && (
               <motion.div
-                className="p-6 rounded-2xl bg-gradient-to-br from-[#8B5CF6]/10 to-[#0891B2]/5 border border-[#8B5CF6]/20"
+                className="p-6 rounded-2xl bg-gradient-to-br from-[#0066FF]/10 to-[#0891B2]/5 border border-[#0066FF]/20"
                 initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
                 <h3 className="font-display font-black text-lg mb-2 text-[#0B071E] dark:text-white">Want to help?</h3>
                 <p className="text-[#0B071E]/60 dark:text-white/60 text-xs mb-4 font-semibold">Place your bid and start teaching immediately after acceptance.</p>

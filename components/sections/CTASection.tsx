@@ -24,7 +24,7 @@ export default function CTASection() {
         >
           {/* Glowing orbs inside card */}
           <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[300px] bg-[#FF4B72]/[0.08] blur-[100px] rounded-full pointer-events-none" />
-          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[300px] h-[250px] bg-[#8B5CF6]/[0.08] blur-[80px] rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[300px] h-[250px] bg-[#0066FF]/[0.08] blur-[80px] rounded-full pointer-events-none" />
 
           {/* Decorative background grid */}
           <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
