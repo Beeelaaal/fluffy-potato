@@ -13,15 +13,18 @@ service cloud.firestore {
       // Any signed-in user can read profiles (necessary for marketplace, viewing tutors, etc.)
       allow read: if request.auth != null;
 
-      // Split write:
-      // 1. Create: only if signing up as student or tutor (prevents self-creation as admin)
+      // 1. Create: only if signing up as student or tutor, or if admin email setting role = admin
       allow create: if request.auth != null && 
                     request.auth.uid == uid && 
-                    (request.resource.data.role == 'student' || request.resource.data.role == 'tutor');
+                    (request.resource.data.role == 'student' || 
+                     request.resource.data.role == 'tutor' ||
+                     ((request.auth.token.email == 'admin@tutortap.pk' || request.auth.token.email == 'admin@tute.pk') && request.resource.data.role == 'admin'));
 
-      // 2. Update: users can update their own non-role profile fields, admins can update any field
+      // 2. Update: users can update their own non-role profile fields, admins can update any field.
+      // We also allow the admin email to upgrade their own role to 'admin'.
       allow update: if request.auth != null && (
         (request.auth.uid == uid && request.resource.data.role == resource.data.role) ||
+        (request.auth.uid == uid && (request.auth.token.email == 'admin@tutortap.pk' || request.auth.token.email == 'admin@tute.pk') && request.resource.data.role == 'admin') ||
         isAdmin()
       );
 

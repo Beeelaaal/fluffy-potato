@@ -19,6 +19,7 @@ const githubProvider = new GithubAuthProvider();
 async function ensureUserDoc(user: User, extraData?: { name?: string; role?: string; university?: string }) {
   const ref = doc(db, 'users', user.uid);
   const snap = await getDoc(ref);
+  const isSystemAdmin = user.email === 'admin@tutortap.pk' || user.email === 'admin@tute.pk';
 
   if (!snap.exists()) {
     // First time — create document
@@ -26,21 +27,25 @@ async function ensureUserDoc(user: User, extraData?: { name?: string; role?: str
       uid: user.uid,
       email: user.email ?? '',
       name: extraData?.name || user.displayName || '',
-      role: extraData?.role || 'student',
+      role: isSystemAdmin ? 'admin' : (extraData?.role || 'student'),
       university: extraData?.university || '',
       photoURL: user.photoURL ?? '',
       isVerified: user.emailVerified,
       createdAt: new Date(),
     });
   } else {
-    // Existing user — ONLY update non-role fields so we never clobber admin role
-    await setDoc(ref, {
+    // Existing user — ONLY update non-role fields so we never clobber admin role (unless system admin)
+    const updateData: any = {
       email: user.email ?? '',
       photoURL: user.photoURL ?? snap.data().photoURL ?? '',
       isVerified: user.emailVerified,
       // name: only update if provided and not already set
       ...(extraData?.name ? { name: extraData.name } : {}),
-    }, { merge: true });
+    };
+    if (isSystemAdmin) {
+      updateData.role = 'admin';
+    }
+    await setDoc(ref, updateData, { merge: true });
   }
 }
 

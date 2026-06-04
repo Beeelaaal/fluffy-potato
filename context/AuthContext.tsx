@@ -59,24 +59,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   const fetchProfile = useCallback(async (firebaseUser: User): Promise<void> => {
     setProfileError(null);
+    const isSystemAdmin = firebaseUser.email === 'admin@tutortap.pk' || firebaseUser.email === 'admin@tute.pk';
 
     try {
       const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
 
       if (snap.exists()) {
-        // Document found — trust whatever role is stored in Firestore
+        // Document found — trust whatever role is stored in Firestore (unless system admin)
         const data = snap.data() as UserProfile;
+        if (isSystemAdmin && data.role !== 'admin') {
+          // Auto-upgrade the role in Firestore
+          await setDoc(doc(db, 'users', firebaseUser.uid), { role: 'admin' }, { merge: true });
+          data.role = 'admin';
+        }
         setProfile(data);
         return;
       }
 
-      // ── No document yet ── create a default 'student' profile ──
+      // ── No document yet ── create a default profile ──
       // Only done when the doc genuinely does not exist (first sign-up).
       const defaultProfile: UserProfile = {
         uid: firebaseUser.uid,
         email: firebaseUser.email ?? '',
         name: firebaseUser.displayName ?? '',
-        role: 'student',
+        role: isSystemAdmin ? 'admin' : 'student',
         university: '',
         photoURL: firebaseUser.photoURL ?? undefined,
         isVerified: firebaseUser.emailVerified,
@@ -110,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           uid: firebaseUser.uid,
           email: firebaseUser.email ?? '',
           name: firebaseUser.displayName ?? '',
-          role: 'student', // safe default only when truly nothing exists
+          role: isSystemAdmin ? 'admin' : 'student', // default system admins to admin role locally
           university: '',
           photoURL: firebaseUser.photoURL ?? undefined,
         };
