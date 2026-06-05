@@ -1,154 +1,166 @@
 'use client';
 
 import { useTheme } from '@/context/ThemeContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function ThemeShutter() {
   const { isTransitioning, targetTheme } = useTheme();
 
+  if (!isTransitioning) return null;
+
+  const isToDark = targetTheme === 'dark';
+
   return (
-    <AnimatePresence>
-      {isTransitioning && (
-        <div className="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center">
-          
-          {/* ─── ANIMATION A: TRANSITION TO DARK (LIGHTS OFF) ─── */}
-          {targetTheme === 'dark' && (
-            <motion.div
-              animate={{ opacity: [0, 1, 1, 0] }}
-              transition={{
-                times: [0, 0.25, 0.75, 1],
-                duration: 0.95,
-                ease: 'easeInOut'
-              }}
-              className="absolute inset-0 bg-[#0A0514] pointer-events-auto flex flex-col items-center justify-center"
-            >
-              {/* Outer Switch Plate */}
-              <motion.div
-                animate={{ 
-                  scale: [0.8, 1, 1, 0.8], 
-                  opacity: [0, 1, 1, 0] 
-                }}
-                transition={{
-                  times: [0, 0.25, 0.75, 1],
-                  duration: 0.95,
-                  ease: 'easeInOut'
-                }}
-                className="w-24 h-40 rounded-3xl bg-[#1A0F30] border-2 border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex items-center justify-center relative p-3"
-              >
-                {/* Switch Groove */}
-                <div className="w-10 h-28 rounded-full bg-[#0B071E] border border-white/5 flex flex-col justify-between py-2 items-center relative overflow-hidden">
-                  {/* ON/OFF Labels */}
-                  <span className="text-[8px] font-black text-white/20 select-none">ON</span>
-                  <span className="text-[8px] font-black text-white/20 select-none">OFF</span>
+    <div className="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center">
+      {/* ─── FULL SCREEN OVERLAY BACKGROUND ─── */}
+      <motion.div
+        animate={{
+          backgroundColor: isToDark
+            ? ['rgba(253, 251, 247, 0)', 'rgba(253, 251, 247, 0.85)', '#0A0514', '#0A0514', 'rgba(10, 5, 20, 0)']
+            : ['rgba(10, 5, 20, 0)', 'rgba(10, 5, 20, 0.9)', '#FDFBF7', '#FDFBF7', 'rgba(253, 251, 247, 0)']
+        }}
+        transition={{
+          times: [0, 0.25, 0.45, 0.75, 1],
+          duration: 0.95,
+          ease: 'easeInOut'
+        }}
+        className="absolute inset-0 pointer-events-auto"
+      />
 
-                  {/* Switch Handle Toggle */}
-                  <motion.div
-                    initial={{ y: 0 }}
-                    animate={{ y: 44 }} // Moves down to turn off
-                    transition={{
-                      delay: 0.25,
-                      type: 'spring',
-                      stiffness: 400,
-                      damping: 15
-                    }}
-                    className="absolute top-2 w-8 h-10 rounded-2xl bg-gradient-to-b from-[#2EF2FF] to-[#0066FF] border border-[#2EF2FF]/50 shadow-[0_0_20px_rgba(46,242,255,0.6)] cursor-pointer flex items-center justify-center"
-                  >
-                    {/* Ridge lines on switch */}
-                    <div className="flex flex-col gap-0.5">
-                      <div className="w-4 h-[2px] bg-white/60 rounded" />
-                      <div className="w-4 h-[2px] bg-white/60 rounded" />
-                      <div className="w-4 h-[2px] bg-white/60 rounded" />
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
+      {/* ─── HANGING CAFE LAMP CONTAINER ─── */}
+      <motion.div
+        animate={{
+          y: ['-100%', '0%', '0%', '-100%']
+        }}
+        transition={{
+          times: [0, 0.25, 0.75, 1],
+          duration: 0.95,
+          ease: [0.76, 0, 0.24, 1] // smooth cubic-bezier curve
+        }}
+        className="absolute top-0 flex flex-col items-center z-10"
+        style={{ width: '200px', height: '350px' }}
+      >
+        <svg viewBox="0 0 200 350" className="w-full h-full drop-shadow-lg">
+          <defs>
+            {/* Lamp Glow Gradients */}
+            <radialGradient id="bulbGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#FFF3A1" stopOpacity="0.8" />
+              <stop offset="30%" stopColor="#FFD214" stopOpacity="0.5" />
+              <stop offset="70%" stopColor="#FFD214" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#FFD214" stopOpacity="0" />
+            </radialGradient>
 
-              {/* Clicking ripple wave */}
-              <motion.div
-                animate={{ 
-                  scale: [0.2, 3], 
-                  opacity: [0, 1, 0] 
-                }}
-                transition={{
-                  times: [0, 0.1, 1],
-                  delay: 0.25,
-                  duration: 0.5,
-                  ease: 'easeOut'
-                }}
-                className="absolute w-80 h-80 rounded-full border border-[#2EF2FF] pointer-events-none"
-              />
+            <linearGradient id="shadeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2D1A52" />
+              <stop offset="100%" stopColor="#110A20" />
+            </linearGradient>
+          </defs>
 
-              {/* Click label text */}
-              <motion.span
-                animate={{ 
-                  opacity: [0, 1, 1, 0], 
-                  y: [10, 0, 0, -10] 
-                }}
-                transition={{
-                  times: [0, 0.2, 0.8, 1],
-                  delay: 0.25,
-                  duration: 0.5
-                }}
-                className="text-[9px] font-black text-[#2EF2FF] tracking-[0.3em] uppercase mt-6"
-              >
-                * CLICK *
-              </motion.span>
-            </motion.div>
-          )}
+          {/* Hanging Cord */}
+          <line x1="100" y1="0" x2="100" y2="140" stroke="#4A465B" strokeWidth="2.5" />
 
-          {/* ─── ANIMATION B: TRANSITION TO LIGHT (SHUTTERS OPENING) ─── */}
-          {targetTheme === 'light' && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              {/* Top shutter panel */}
-              <motion.div
-                animate={{ y: ['-100%', '0%', '0%', '-100%'] }}
-                transition={{
-                  times: [0, 0.45, 0.55, 1],
-                  duration: 0.95,
-                  ease: [0.76, 0, 0.24, 1]
-                }}
-                className="w-full h-1/2 bg-[#0A0514] border-b border-[#0066FF]/30 relative pointer-events-auto"
-              >
-                {/* Subtle glow edge */}
-                <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#0066FF] shadow-[0_0_15px_rgba(0,102,255,0.7)]" />
-              </motion.div>
+          {/* Cord Attachment Loop */}
+          <circle cx="100" cy="140" r="4" fill="none" stroke="#4A465B" strokeWidth="2" />
 
-              {/* Bottom shutter panel */}
-              <motion.div
-                animate={{ y: ['100%', '0%', '0%', '100%'] }}
-                transition={{
-                  times: [0, 0.45, 0.55, 1],
-                  duration: 0.95,
-                  ease: [0.76, 0, 0.24, 1]
-                }}
-                className="w-full h-1/2 bg-[#0A0514] border-t border-[#0066FF]/30 relative pointer-events-auto"
-              >
-                {/* Subtle glow edge */}
-                <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-[#0066FF] shadow-[0_0_15px_rgba(0,102,255,0.7)]" />
-              </motion.div>
+          {/* Vintage Lamp Shade */}
+          <path
+            d="M 85 145 C 85 145, 88 165, 60 185 L 140 185 C 112 165, 115 145, 115 145 Z"
+            fill="url(#shadeGrad)"
+            stroke="#4A465B"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+          />
 
-              {/* Center brand badge overlay */}
-              <motion.div
-                animate={{ 
-                  scale: [0, 1, 1, 0], 
-                  opacity: [0, 1, 1, 0], 
-                  rotate: [-15, 0, 0, 15] 
-                }}
-                transition={{
-                  times: [0, 0.3, 0.7, 1],
-                  duration: 0.95,
-                  ease: 'easeInOut'
-                }}
-                className="absolute z-[10000] w-20 h-20 rounded-3xl bg-[#110A20] border-2 border-[#0066FF] shadow-[0_0_30px_rgba(0,102,255,0.6)] flex flex-col items-center justify-center"
-              >
-                <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#2EF2FF]">Tute</span>
-                <span className="text-[7px] font-black text-white/50 tracking-widest mt-0.5 animate-pulse">L O A D</span>
-              </motion.div>
-            </div>
-          )}
+          {/* Pull Cord String */}
+          <motion.line
+            x1="120"
+            y1="180"
+            animate={{
+              y2: isToDark
+                ? [230, 230, 250, 230, 230] // pull down at t = 280ms - 350ms
+                : [230, 230, 250, 230, 230]
+            }}
+            x2="120"
+            transition={{
+              times: [0, 0.28, 0.35, 0.45, 1],
+              duration: 0.95,
+              ease: 'easeInOut'
+            }}
+            stroke="#8E8A9E"
+            strokeWidth="1.5"
+          />
 
-        </div>
-      )}
-    </AnimatePresence>
+          {/* Pull Knob */}
+          <motion.circle
+            cx="120"
+            animate={{
+              cy: isToDark
+                ? [230, 230, 250, 230, 230]
+                : [230, 230, 250, 230, 230]
+            }}
+            transition={{
+              times: [0, 0.28, 0.35, 0.45, 1],
+              duration: 0.95,
+              ease: 'easeInOut'
+            }}
+            r="4"
+            fill="#FF4B72"
+          />
+
+          {/* ─── LAMP GLOW AREA ─── */}
+          {/* Transition to Dark: Starts ON, turns OFF at 380ms */}
+          <motion.circle
+            cx="100"
+            cy="210"
+            r="80"
+            fill="url(#bulbGlow)"
+            animate={{
+              opacity: isToDark
+                ? [0.9, 0.9, 0.9, 0, 0] // turns off at t = 380ms
+                : [0, 0, 0, 0.9, 0.9]  // turns on at t = 380ms
+            }}
+            transition={{
+              times: [0, 0.25, 0.36, 0.4, 1],
+              duration: 0.95,
+              ease: 'easeOut'
+            }}
+          />
+
+          {/* Warm Light Beam Cone */}
+          <motion.polygon
+            points="70,185 130,185 170,350 30,350"
+            fill="url(#bulbGlow)"
+            animate={{
+              opacity: isToDark
+                ? [0.35, 0.35, 0.35, 0, 0]
+                : [0, 0, 0, 0.35, 0.35]
+            }}
+            transition={{
+              times: [0, 0.25, 0.36, 0.4, 1],
+              duration: 0.95,
+              ease: 'easeOut'
+            }}
+          />
+
+          {/* Edison Bulb Filament Glow */}
+          <motion.circle
+            cx="100"
+            cy="195"
+            r="12"
+            animate={{
+              fill: isToDark
+                ? ['#FFF3A1', '#FFF3A1', '#FFF3A1', '#4B5563', '#4B5563']
+                : ['#4B5563', '#4B5563', '#4B5563', '#FFF3A1', '#FFF3A1']
+            }}
+            transition={{
+              times: [0, 0.25, 0.36, 0.4, 1],
+              duration: 0.95
+            }}
+            stroke="#4A465B"
+            strokeWidth="1.5"
+          />
+        </svg>
+      </motion.div>
+    </div>
   );
 }
