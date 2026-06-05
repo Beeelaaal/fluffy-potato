@@ -39,6 +39,19 @@
   --text-muted: #9CA3AF;
 }
 
+/* Enable smooth transitions globally when switching themes */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 0.6s ease-in-out, 
+              color 0.6s ease-in-out, 
+              border-color 0.6s ease-in-out, 
+              box-shadow 0.6s ease-in-out, 
+              fill 0.6s ease-in-out, 
+              stroke 0.6s ease-in-out !important;
+}
+
 /* Bulletproof Dark theme overrides using case-insensitive attribute selectors */
 .dark [class*="text-[#0b071e]" i] { color: var(--text-primary) !important; }
 .dark [class*="text-[#0b071e]/95" i] { color: rgba(243, 244, 246, 0.95) !important; }

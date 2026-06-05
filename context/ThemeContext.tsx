@@ -33,10 +33,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const toggleTheme = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    
+    // Add transitioning class to enable smooth CSS transitions globally
+    document.documentElement.classList.add('theme-transitioning');
+    
     const next = theme === 'light' ? 'dark' : 'light';
     setTargetTheme(next);
 
-    // Swap document class at peak shutter occlusion (450ms)
+    // Swap document class at peak light shift (500ms)
     setTimeout(() => {
       setTheme(next);
       if (next === 'dark') {
@@ -46,13 +50,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         document.documentElement.classList.remove('dark');
         localStorage.setItem('tute-theme', 'light');
       }
-    }, 450);
+    }, 500);
 
-    // Complete transition and slide shutters open
+    // Complete transition and slide the lamp back up (1200ms)
     setTimeout(() => {
       setIsTransitioning(false);
       setTargetTheme(null);
-    }, 950);
+      // Remove transitioning class to avoid interference with normal hovers
+      document.documentElement.classList.remove('theme-transitioning');
+    }, 1200);
   };
 
   return (
