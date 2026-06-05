@@ -14,18 +14,25 @@ export default function ThemeShutter() {
           {/* ─── ANIMATION A: TRANSITION TO DARK (LIGHTS OFF) ─── */}
           {targetTheme === 'dark' && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35 }}
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{
+                times: [0, 0.25, 0.75, 1],
+                duration: 0.95,
+                ease: 'easeInOut'
+              }}
               className="absolute inset-0 bg-[#0A0514] pointer-events-auto flex flex-col items-center justify-center"
             >
               {/* Outer Switch Plate */}
               <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ type: 'spring', damping: 20 }}
+                animate={{ 
+                  scale: [0.8, 1, 1, 0.8], 
+                  opacity: [0, 1, 1, 0] 
+                }}
+                transition={{
+                  times: [0, 0.25, 0.75, 1],
+                  duration: 0.95,
+                  ease: 'easeInOut'
+                }}
                 className="w-24 h-40 rounded-3xl bg-[#1A0F30] border-2 border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.05)] flex items-center justify-center relative p-3"
               >
                 {/* Switch Groove */}
@@ -58,17 +65,30 @@ export default function ThemeShutter() {
 
               {/* Clicking ripple wave */}
               <motion.div
-                initial={{ scale: 0.2, opacity: 0 }}
-                animate={{ scale: 3, opacity: [0, 1, 0] }}
-                transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
+                animate={{ 
+                  scale: [0.2, 3], 
+                  opacity: [0, 1, 0] 
+                }}
+                transition={{
+                  times: [0, 0.1, 1],
+                  delay: 0.25,
+                  duration: 0.5,
+                  ease: 'easeOut'
+                }}
                 className="absolute w-80 h-80 rounded-full border border-[#2EF2FF] pointer-events-none"
               />
 
               {/* Click label text */}
               <motion.span
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: [0, 1, 1, 0], y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                animate={{ 
+                  opacity: [0, 1, 1, 0], 
+                  y: [10, 0, 0, -10] 
+                }}
+                transition={{
+                  times: [0, 0.2, 0.8, 1],
+                  delay: 0.25,
+                  duration: 0.5
+                }}
                 className="text-[9px] font-black text-[#2EF2FF] tracking-[0.3em] uppercase mt-6"
               >
                 * CLICK *
@@ -81,11 +101,10 @@ export default function ThemeShutter() {
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               {/* Top shutter panel */}
               <motion.div
-                initial={{ y: '-100%' }}
-                animate={{ y: '0%' }}
-                exit={{ y: '-100%' }}
+                animate={{ y: ['-100%', '0%', '0%', '-100%'] }}
                 transition={{
-                  duration: 0.45,
+                  times: [0, 0.45, 0.55, 1],
+                  duration: 0.95,
                   ease: [0.76, 0, 0.24, 1]
                 }}
                 className="w-full h-1/2 bg-[#0A0514] border-b border-[#0066FF]/30 relative pointer-events-auto"
@@ -96,11 +115,10 @@ export default function ThemeShutter() {
 
               {/* Bottom shutter panel */}
               <motion.div
-                initial={{ y: '100%' }}
-                animate={{ y: '0%' }}
-                exit={{ y: '100%' }}
+                animate={{ y: ['100%', '0%', '0%', '100%'] }}
                 transition={{
-                  duration: 0.45,
+                  times: [0, 0.45, 0.55, 1],
+                  duration: 0.95,
                   ease: [0.76, 0, 0.24, 1]
                 }}
                 className="w-full h-1/2 bg-[#0A0514] border-t border-[#0066FF]/30 relative pointer-events-auto"
@@ -111,14 +129,15 @@ export default function ThemeShutter() {
 
               {/* Center brand badge overlay */}
               <motion.div
-                initial={{ scale: 0, opacity: 0, rotate: -15 }}
-                animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                exit={{ scale: 0, opacity: 0, rotate: 15 }}
+                animate={{ 
+                  scale: [0, 1, 1, 0], 
+                  opacity: [0, 1, 1, 0], 
+                  rotate: [-15, 0, 0, 15] 
+                }}
                 transition={{
-                  type: 'spring',
-                  stiffness: 300,
-                  damping: 20,
-                  delay: 0.25
+                  times: [0, 0.3, 0.7, 1],
+                  duration: 0.95,
+                  ease: 'easeInOut'
                 }}
                 className="absolute z-[10000] w-20 h-20 rounded-3xl bg-[#110A20] border-2 border-[#0066FF] shadow-[0_0_30px_rgba(0,102,255,0.6)] flex flex-col items-center justify-center"
               >
