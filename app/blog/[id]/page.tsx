@@ -150,6 +150,83 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
     );
   }
 
+  const parseTextWithLinks = (text: string) => {
+    const regex = /\[(cta:)?([^\]]+)\]\(([^)]+)\)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      const matchIndex = match.index;
+      if (matchIndex > lastIndex) {
+        parts.push(text.substring(lastIndex, matchIndex));
+      }
+
+      const isCta = !!match[1];
+      const label = match[2];
+      const url = match[3];
+      const isExternal = url.startsWith('http') || url.startsWith('//');
+
+      if (isCta) {
+        if (isExternal) {
+          parts.push(
+            <a
+              key={matchIndex}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center px-5 py-2.5 my-2 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-orange-500 to-pink-500 hover:from-pink-500 hover:to-orange-500 rounded-xl shadow-md hover:scale-[1.02] transition-all duration-300"
+            >
+              {label}
+            </a>
+          );
+        } else {
+          parts.push(
+            <Link
+              key={matchIndex}
+              href={url}
+              className="inline-flex items-center justify-center px-5 py-2.5 my-2 text-xs font-black uppercase tracking-wider text-white bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-cyan-500 hover:to-blue-600 rounded-xl shadow-md hover:scale-[1.02] transition-all duration-300"
+            >
+              {label}
+            </Link>
+          );
+        }
+      } else {
+        if (isExternal) {
+          parts.push(
+            <a
+              key={matchIndex}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#0066FF] hover:underline font-bold"
+            >
+              {label}
+            </a>
+          );
+        } else {
+          parts.push(
+            <Link
+              key={matchIndex}
+              href={url}
+              className="text-[#0066FF] hover:underline font-bold"
+            >
+              {label}
+            </Link>
+          );
+        }
+      }
+
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   const renderContent = (content: string) => {
     return content.split('\n\n').map((block, idx) => {
       const trimmed = block.trim();
@@ -165,12 +242,12 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
       if (trimmed.startsWith('- ')) {
         const items = trimmed.split('\n').map((item, i) => (
           <li key={i} className="list-disc ml-5 mb-1.5 font-semibold text-[#0B071E]/80 text-sm">
-            {item.replace('- ', '')}
+            {parseTextWithLinks(item.replace('- ', ''))}
           </li>
         ));
         return <ul key={idx} className="my-3 space-y-1">{items}</ul>;
       }
-      return <p key={idx} className="text-[#0B071E]/80 text-base leading-relaxed mb-4 font-semibold">{trimmed}</p>;
+      return <p key={idx} className="text-[#0B071E]/80 text-base leading-relaxed mb-4 font-semibold">{parseTextWithLinks(trimmed)}</p>;
     });
   };
 
