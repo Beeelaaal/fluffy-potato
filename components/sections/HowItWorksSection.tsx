@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { GraduationCap, BookOpen, Users, Coins, ArrowRight, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 const scenarios = [
   {
@@ -14,6 +15,7 @@ const scenarios = [
     description: 'Stuck preparing for a midterm? Query the Vault for study guides, past exams, and notes uploaded by students who aced the exact same course.',
     flowText: 'Search ➜ Pay a tiny fee ➜ Download instantly.',
     nodes: ['you', 'vault'],
+    path: '/resources',
   },
   {
     id: 'tutor-hire',
@@ -24,6 +26,7 @@ const scenarios = [
     description: 'Stuck on a complex programming lab or math proof? Post a help request. Tutors bid their rates, you pick the best match, and get live help.',
     flowText: 'Post Request ➜ Receive Bids ➜ Hire & Learn.',
     nodes: ['you', 'marketplace'],
+    path: '/marketplace',
   },
   {
     id: 'vault-sell',
@@ -34,6 +37,7 @@ const scenarios = [
     description: 'Have pristine lecture notes or lab files? Upload them to the Vault. Set your own price and earn passive income every time peers download them.',
     flowText: 'Upload Notes ➜ Peers Download ➜ Cash Out Earnings.',
     nodes: ['you', 'vault', 'wallet'],
+    path: '/resources?sell=true',
   },
   {
     id: 'tutor-earn',
@@ -44,6 +48,7 @@ const scenarios = [
     description: 'Aced your sophomore physics or intro to coding? Become a peer tutor. Browse marketplace requests, place a bid, and teach online.',
     flowText: 'Place Bid ➜ Teach 1-on-1 ➜ Receive Payments.',
     nodes: ['marketplace', 'you', 'wallet'],
+    path: '/marketplace?action=become-tutor',
   },
 ];
 
@@ -56,11 +61,11 @@ export default function HowItWorksSection() {
 
   return (
     <section className="py-28 relative overflow-hidden bg-[#FDFBF7] dark:bg-[#070310] transition-colors duration-500" id="how-it-works">
-      {/* Custom Keyframe Animations for Panning Grid & Flowing Packets */}
+      {/* Custom Keyframe Animations for 3D Panning Grid & Flowing Packets */}
       <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes grid-pan {
+        @keyframes grid-scroll-3d {
           0% { background-position: 0 0; }
-          100% { background-position: 40px 40px; }
+          100% { background-position: 0 40px; }
         }
         @keyframes packet-flow-horizontal {
           0% { transform: translateX(-10%); opacity: 0; }
@@ -74,32 +79,35 @@ export default function HowItWorksSection() {
           90% { opacity: 0.8; }
           100% { transform: translateY(-10%); opacity: 0; }
         }
+        .perspective-container {
+          perspective: 400px;
+          perspective-origin: 50% 30%;
+        }
+        .perspective-grid {
+          transform: rotateX(60deg) translateY(-25%) translateZ(0);
+        }
       `}} />
 
-      {/* Background Animated Grid & Ambient Glows */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        {/* Panning Grid pattern (Electric Blue/Cyan vibe) */}
+      {/* Background Animated 3D Grid & Ambient Glows */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 perspective-container">
+        {/* 3D Panning Grid pattern (Electric Blue/Cyan vibe) */}
         <div 
-          className="absolute inset-0 opacity-[0.04] dark:opacity-[0.08]"
+          className="absolute inset-0 opacity-[0.06] dark:opacity-[0.12] perspective-grid origin-top"
           style={{
-            backgroundImage: `linear-gradient(to right, #0066FF 1px, transparent 1px), linear-gradient(to bottom, #0066FF 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(to right, #0066FF 1.5px, transparent 1.5px), linear-gradient(to bottom, #0066FF 1.5px, transparent 1.5px)`,
             backgroundSize: '40px 40px',
-            animation: 'grid-pan 24s linear infinite',
+            height: '150%',
+            width: '100%',
+            top: '0',
+            animation: 'grid-scroll-3d 10s linear infinite',
           }}
-        />
-
-        {/* Ambient mesh glows */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#0066FF]/5 dark:bg-[#0066FF]/3 blur-[120px] rounded-full" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#FF5C7A]/5 dark:bg-[#FF5C7A]/3 blur-[120px] rounded-full" />
-        
-        {/* Floating animated data packets running along grid tracks */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(10)].map((_, i) => {
+        >
+          {/* Floating animated data packets running along grid tracks in 3D perspective */}
+          {[...Array(8)].map((_, i) => {
             const isHorizontal = i % 2 === 0;
-            const trackPosition = ((i * 11) % 90) + 5; // distributed track positions (e.g. 5%, 16%, 27%, ...)
-            const duration = 10 + (i % 6); // staggered speed: 10s to 15s
-            const delay = -(i * 2.5); // staggered delays
-            // Alternate colors from theme
+            const trackPosition = ((i * 12) % 90) + 5; // distributed track positions
+            const duration = 7 + (i % 5); // speed
+            const delay = -(i * 2); // delay
             const colors = ['#2EF2FF', '#FF7A18', '#0066FF', '#FF5C7A', '#D8FF3E'];
             const color = colors[i % colors.length];
 
@@ -112,7 +120,7 @@ export default function HowItWorksSection() {
                   left: isHorizontal ? '0' : `${trackPosition}%`,
                   width: isHorizontal ? '100%' : '1px',
                   height: isHorizontal ? '1px' : '100%',
-                  background: `linear-gradient(${isHorizontal ? 'to right' : 'to bottom'}, transparent, ${color}15, transparent)`,
+                  background: `linear-gradient(${isHorizontal ? 'to right' : 'to bottom'}, transparent, ${color}20, transparent)`,
                 }}
               >
                 <div
@@ -121,9 +129,9 @@ export default function HowItWorksSection() {
                     width: '6px',
                     height: '6px',
                     backgroundColor: color,
-                    boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
-                    top: isHorizontal ? '-2.5px' : 'auto',
-                    left: isHorizontal ? 'auto' : '-2.5px',
+                    boxShadow: `0 0 10px ${color}, 0 0 20px ${color}`,
+                    top: isHorizontal ? '-3px' : 'auto',
+                    left: isHorizontal ? 'auto' : '-3px',
                     animation: `${isHorizontal ? 'packet-flow-horizontal' : 'packet-flow-vertical'} ${duration}s linear infinite`,
                     animationDelay: `${delay}s`,
                   }}
@@ -132,6 +140,10 @@ export default function HowItWorksSection() {
             );
           })}
         </div>
+
+        {/* Ambient mesh glows */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#0066FF]/5 dark:bg-[#0066FF]/3 blur-[120px] rounded-full" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#FF5C7A]/5 dark:bg-[#FF5C7A]/3 blur-[120px] rounded-full" />
       </div>
 
       <div className="section-container relative z-10" ref={ref}>
@@ -159,19 +171,18 @@ export default function HowItWorksSection() {
               const Icon = scenario.icon;
               const isActive = scenario.id === activeScenario;
               return (
-                <motion.button
-                  key={scenario.id}
-                  onClick={() => setActiveScenario(scenario.id)}
-                  className={`w-full text-left p-5 rounded-2xl border-2 transition-all relative flex flex-col sm:flex-row gap-4 items-start ${
-                    isActive
-                      ? 'bg-white dark:bg-dark-800 border-dark dark:border-white/20 shadow-[6px_6px_0px_#0B071E] dark:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] scale-[1.01]'
-                      : 'bg-white/40 dark:bg-dark-800/20 border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 hover:bg-white/70 dark:hover:bg-dark-800/40'
-                  }`}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  type="button"
-                >
+                <Link href={scenario.path} key={scenario.id} className="block w-full">
+                  <motion.div
+                    onMouseEnter={() => setActiveScenario(scenario.id)}
+                    className={`w-full text-left p-5 rounded-2xl border-2 transition-all relative flex flex-col sm:flex-row gap-4 items-start cursor-pointer ${
+                      isActive
+                        ? 'bg-white dark:bg-dark-800 border-dark dark:border-white/20 shadow-[6px_6px_0px_#0B071E] dark:shadow-[6px_6px_0px_rgba(255,255,255,0.15)] scale-[1.01]'
+                        : 'bg-white/40 dark:bg-dark-800/20 border-black/5 dark:border-white/5 hover:border-black/10 dark:hover:border-white/10 hover:bg-white/70 dark:hover:bg-dark-800/40'
+                    }`}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                  >
                   {/* Icon */}
                   <div
                     className="p-3 rounded-xl border border-black/5 dark:border-white/5 flex items-center justify-center shrink-0"
@@ -210,8 +221,9 @@ export default function HowItWorksSection() {
                       </motion.div>
                     )}
                   </div>
-                </motion.button>
-              );
+                </motion.div>
+              </Link>
+            );
             })}
           </div>
 

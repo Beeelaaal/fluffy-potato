@@ -1,16 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   Plus, Search, Clock, DollarSign, Users, Tag,
-  MessageSquare, ChevronRight, Wifi, MapPin, MonitorSmartphone, Filter, X
+  MessageSquare, ChevronRight, Wifi, MapPin, MonitorSmartphone, Filter, X, Award, CheckCircle
 } from 'lucide-react';
 import { marketplaceRequests } from '@/data/marketplace';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc } from 'firebase/firestore';
 import { useAuth } from '@/context/AuthContext';
+import { useSearchParams } from 'next/navigation';
 
 const sessionIcons = { online: Wifi, 'in-person': MapPin, both: MonitorSmartphone };
 const statusColors = {
@@ -19,7 +20,7 @@ const statusColors = {
   closed: { bg: 'bg-funky-coral/10', text: 'text-funky-coral', border: 'border-funky-coral/20' },
 };
 
-export default function MarketplacePage() {
+function MarketplaceContent() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'open' | 'in-progress'>('all');
   const [showPostModal, setShowPostModal] = useState(false);
@@ -27,7 +28,58 @@ export default function MarketplacePage() {
     title: '', description: '', subject: '', budget: '', deadline: '', sessionType: 'online', duration: '',
   });
 
-  const { user, profile } = useAuth();
+  const { user, profile, refetchProfile } = useAuth();
+
+  const searchParams = useSearchParams();
+  const actionParam = searchParams ? searchParams.get('action') : null;
+  const [showTutorModal, setShowTutorModal] = useState(actionParam === 'become-tutor');
+
+  const [tutorForm, setTutorForm] = useState({
+    subjects: '',
+    hourlyRate: '',
+    bio: '',
+    university: profile?.university || '',
+  });
+  const [tutorSubmitting, setTutorSubmitting] = useState(false);
+  const [tutorError, setTutorError] = useState<string | null>(null);
+  const [tutorSuccess, setTutorSuccess] = useState(false);
+
+  // Sync university if profile loads/changes
+  useEffect(() => {
+    if (profile?.university) {
+      setTutorForm(prev => ({ ...prev, university: profile.university }));
+    }
+  }, [profile]);
+
+  const handleApplyTutor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      alert("Please sign in to submit a tutor application!");
+      return;
+    }
+    setTutorSubmitting(true);
+    setTutorError(null);
+    try {
+      await updateDoc(doc(db, 'users', user.uid), {
+        role: 'tutor',
+        hourlyRate: Number(tutorForm.hourlyRate) || 2000,
+        bio: tutorForm.bio.trim(),
+        preferences: tutorForm.subjects.trim(),
+        university: tutorForm.university.trim(),
+      });
+      await refetchProfile();
+      setTutorSuccess(true);
+      setTimeout(() => {
+        setShowTutorModal(false);
+        setTutorSuccess(false);
+      }, 3000);
+    } catch (err: any) {
+      console.error("Error applying as tutor:", err);
+      setTutorError(err?.message || "Failed to submit tutor application. Please try again.");
+    } finally {
+      setTutorSubmitting(false);
+    }
+  };
   const [dbRequests, setDbRequests] = useState<any[]>([]);
   const [dbLoading, setDbLoading] = useState(true);
   const [postLoading, setPostLoading] = useState(false);
@@ -372,6 +424,148 @@ export default function MarketplacePage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Become a Peer Tutor Modal */}
+      <AnimatePresence>
+        {showTutorModal && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative w-full max-w-lg glass-card p-8 bg-white/95 dark:bg-[#110A20]/95 shadow-2xl rounded-3xl border border-[#0B071E]/10 dark:border-white/10 overflow-y-auto max-h-[90vh]"
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+            >
+              <button
+                onClick={() => setShowTutorModal(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-[#0B071E]/40 dark:text-white/40 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+              >
+                <X size={16} />
+              </button>
+
+              <div className="w-16 h-16 bg-[#0066FF]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#0066FF]/20">
+                <Award size={28} className="text-[#0066FF] animate-bounce" />
+              </div>
+
+              <h2 className="font-display font-black text-3xl mb-1 text-[#0B071E] dark:text-white">
+                Apply as a Peer Tutor
+              </h2>
+              <p className="text-white/60 dark:text-white/40 text-xs mb-6 font-bold uppercase tracking-wider">
+                Upgrade your profile from Student to Tutor
+              </p>
+
+              {tutorSuccess ? (
+                <div className="text-center py-8 space-y-4">
+                  <div className="w-12 h-12 bg-funky-lime/10 text-funky-lime rounded-full flex items-center justify-center mx-auto border border-funky-lime/20">
+                    <CheckCircle size={24} />
+                  </div>
+                  <h3 className="font-display font-black text-2xl text-funky-lime">Application Approved!</h3>
+                  <p className="text-dark/70 dark:text-white/70 text-sm font-semibold">
+                    Congratulations! Your profile has been upgraded to a verified Peer Tutor. You can now bid on marketplace requests.
+                  </p>
+                </div>
+              ) : !user ? (
+                <div className="text-center py-6">
+                  <p className="text-dark/70 dark:text-white/70 text-sm mb-6 font-semibold">
+                    Please sign in first to submit a tutor application.
+                  </p>
+                  <Link href="/login?redirect=/marketplace?action=become-tutor" className="btn-primary py-3 px-6 font-bold text-sm block text-center">
+                    Sign In Now
+                  </Link>
+                </div>
+              ) : profile?.role === 'tutor' ? (
+                <div className="text-center py-6 space-y-4">
+                  <p className="text-[#0B071E]/70 dark:text-white/70 text-sm font-semibold">
+                    You are already registered and verified as a Peer Tutor! Start placing bids on active requests below.
+                  </p>
+                  <button onClick={() => setShowTutorModal(false)} className="btn-primary py-3 px-6 font-bold text-sm w-full">
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleApplyTutor} className="space-y-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[#0B071E]/60 dark:text-white/50 mb-2 block uppercase tracking-wider">University</label>
+                    <input 
+                      type="text" 
+                      value={tutorForm.university} 
+                      onChange={e => setTutorForm(p => ({ ...p, university: e.target.value }))}
+                      placeholder="e.g. NUST, FAST, LUMS" 
+                      required
+                      className="input-field py-2.5" 
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#0B071E]/60 dark:text-white/50 mb-2 block uppercase tracking-wider">Subject Expertise / Preferences</label>
+                    <input 
+                      type="text" 
+                      value={tutorForm.subjects} 
+                      onChange={e => setTutorForm(p => ({ ...p, subjects: e.target.value }))}
+                      placeholder="e.g. Calculus, DSA, Database Systems" 
+                      required
+                      className="input-field py-2.5" 
+                    />
+                    <span className="text-[10px] text-white/40 mt-1 block">Separate multiple subjects with commas</span>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#0B071E]/60 dark:text-white/50 mb-2 block uppercase tracking-wider">Expected Hourly Rate (PKR / hr)</label>
+                    <input 
+                      type="number" 
+                      value={tutorForm.hourlyRate} 
+                      onChange={e => setTutorForm(p => ({ ...p, hourlyRate: e.target.value }))}
+                      placeholder="e.g. 2500" 
+                      required
+                      className="input-field py-2.5" 
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#0B071E]/60 dark:text-white/50 mb-2 block uppercase tracking-wider">Teaching Bio / Experience</label>
+                    <textarea 
+                      value={tutorForm.bio} 
+                      onChange={e => setTutorForm(p => ({ ...p, bio: e.target.value }))}
+                      placeholder="Introduce yourself. Highlight your expertise, academic grades, and teaching methodology..." 
+                      required
+                      rows={4}
+                      className="input-field py-2.5 resize-none" 
+                    />
+                  </div>
+
+                  {tutorError && (
+                    <p className="text-red-500 text-xs font-semibold">{tutorError}</p>
+                  )}
+
+                  <div className="flex gap-3 pt-4">
+                    <button type="button" onClick={() => setShowTutorModal(false)} className="btn-ghost flex-1 py-3 text-sm font-bold">Cancel</button>
+                    <button 
+                      type="submit" 
+                      disabled={tutorSubmitting}
+                      className="btn-primary flex-1 py-3 text-sm font-bold disabled:opacity-60"
+                    >
+                      {tutorSubmitting ? 'Submitting...' : 'Apply Now'}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+export default function MarketplacePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen pt-28 flex items-center justify-center bg-transparent">
+        <div className="w-12 h-12 border-4 border-funky-blue/20 border-t-funky-blue rounded-full animate-spin" />
+      </div>
+    }>
+      <MarketplaceContent />
+    </Suspense>
   );
 }

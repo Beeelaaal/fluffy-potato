@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Download, Eye, Star, Filter, FileText, BookOpen,
-  Clock, ClipboardList, Presentation, X, ChevronDown, ExternalLink
+  Clock, ClipboardList, Presentation, X, ChevronDown, ExternalLink, Coins
 } from 'lucide-react';
 import { degrees, courses, Resource } from '@/data/resources';
 import { universities } from '@/data/universities';
@@ -12,6 +12,7 @@ import { collection, getDocs, doc, updateDoc, increment } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const typeIcons: Record<string, typeof FileText> = {
   notes: BookOpen,
@@ -33,11 +34,15 @@ const typeColors: Record<string, string> = {
 
 const resourceTypes = ['all', 'notes', 'past-paper', 'assignment', 'timetable', 'slide'];
 
-export default function ResourcesPage() {
+function ResourcesContent() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const { profile } = useAuth();
   const isAdmin = profile?.role === 'admin';
+
+  const searchParams = useSearchParams();
+  const showSellParam = searchParams ? searchParams.get('sell') === 'true' : false;
+  const [showSellModal, setShowSellModal] = useState(showSellParam);
 
   const [selectedUniversity, setSelectedUniversity] = useState('');
   const [selectedDegree, setSelectedDegree] = useState('');
@@ -397,7 +402,77 @@ export default function ResourcesPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Monetize Study Materials Modal */}
+        <AnimatePresence>
+          {showSellModal && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative w-full max-w-md glass-card p-8 bg-white/95 dark:bg-[#110A20]/95 shadow-2xl rounded-3xl border border-[#0B071E]/10 dark:border-white/10"
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+              >
+                <button
+                  onClick={() => setShowSellModal(false)}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg text-[#0B071E]/40 dark:text-white/40 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                >
+                  <X size={16} />
+                </button>
+
+                <div className="w-16 h-16 bg-[#0066FF]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#0066FF]/20">
+                  <Coins size={28} className="text-[#0066FF] animate-pulse" />
+                </div>
+
+                <h2 className="font-display font-black text-2xl mb-1 text-[#0B071E] dark:text-white">
+                  Monetize Study Materials
+                </h2>
+                <div className="mb-4">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-funky-orange/10 text-funky-orange border border-funky-orange/20 inline-block">
+                    Coming Soon!
+                  </span>
+                </div>
+
+                <p className="text-dark/70 dark:text-white/70 text-sm leading-relaxed mb-6 font-semibold">
+                  Earn passive income by sharing your lecture notes, past exams, and study guides with your peers. Set your own prices and watch the cash flow directly into your digital wallet.
+                </p>
+
+                <div className="flex flex-col gap-3">
+                  <button
+                    onClick={() => setShowSellModal(false)}
+                    className="btn-primary py-3 text-sm font-bold w-full"
+                  >
+                    Awesome, I&apos;m ready!
+                  </button>
+                  <Link
+                    href="/marketplace"
+                    className="btn-ghost py-3 text-sm font-bold w-full text-center"
+                  >
+                    Go to Tutor Marketplace
+                  </Link>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
+  );
+}
+
+export default function ResourcesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen pt-28 flex items-center justify-center bg-transparent">
+        <div className="w-12 h-12 border-4 border-[#0066FF]/20 border-t-[#0066FF] rounded-full animate-spin" />
+      </div>
+    }>
+      <ResourcesContent />
+    </Suspense>
   );
 }
