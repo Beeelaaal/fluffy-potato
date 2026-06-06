@@ -55,11 +55,86 @@ export default function HowItWorksSection() {
   const current = scenarios.find((s) => s.id === activeScenario) || scenarios[0];
 
   return (
-    <section className="py-28 relative overflow-hidden" id="how-it-works">
-      {/* Decorative background mesh */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-funky-blue/5 blur-[120px] pointer-events-none" />
+    <section className="py-28 relative overflow-hidden bg-[#FDFBF7] dark:bg-[#070310] transition-colors duration-500" id="how-it-works">
+      {/* Custom Keyframe Animations for Panning Grid & Flowing Packets */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes grid-pan {
+          0% { background-position: 0 0; }
+          100% { background-position: 40px 40px; }
+        }
+        @keyframes packet-flow-horizontal {
+          0% { transform: translateX(-10%); opacity: 0; }
+          10% { opacity: 0.8; }
+          90% { opacity: 0.8; }
+          100% { transform: translateX(110%); opacity: 0; }
+        }
+        @keyframes packet-flow-vertical {
+          0% { transform: translateY(110%); opacity: 0; }
+          10% { opacity: 0.8; }
+          90% { opacity: 0.8; }
+          100% { transform: translateY(-10%); opacity: 0; }
+        }
+      `}} />
 
-      <div className="section-container" ref={ref}>
+      {/* Background Animated Grid & Ambient Glows */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {/* Panning Grid pattern (Electric Blue/Cyan vibe) */}
+        <div 
+          className="absolute inset-0 opacity-[0.04] dark:opacity-[0.08]"
+          style={{
+            backgroundImage: `linear-gradient(to right, #0066FF 1px, transparent 1px), linear-gradient(to bottom, #0066FF 1px, transparent 1px)`,
+            backgroundSize: '40px 40px',
+            animation: 'grid-pan 24s linear infinite',
+          }}
+        />
+
+        {/* Ambient mesh glows */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#0066FF]/5 dark:bg-[#0066FF]/3 blur-[120px] rounded-full" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#FF5C7A]/5 dark:bg-[#FF5C7A]/3 blur-[120px] rounded-full" />
+        
+        {/* Floating animated data packets running along grid tracks */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(10)].map((_, i) => {
+            const isHorizontal = i % 2 === 0;
+            const trackPosition = ((i * 11) % 90) + 5; // distributed track positions (e.g. 5%, 16%, 27%, ...)
+            const duration = 10 + (i % 6); // staggered speed: 10s to 15s
+            const delay = -(i * 2.5); // staggered delays
+            // Alternate colors from theme
+            const colors = ['#2EF2FF', '#FF7A18', '#0066FF', '#FF5C7A', '#D8FF3E'];
+            const color = colors[i % colors.length];
+
+            return (
+              <div
+                key={i}
+                className="absolute pointer-events-none"
+                style={{
+                  top: isHorizontal ? `${trackPosition}%` : '0',
+                  left: isHorizontal ? '0' : `${trackPosition}%`,
+                  width: isHorizontal ? '100%' : '1px',
+                  height: isHorizontal ? '1px' : '100%',
+                  background: `linear-gradient(${isHorizontal ? 'to right' : 'to bottom'}, transparent, ${color}15, transparent)`,
+                }}
+              >
+                <div
+                  className="absolute rounded-full"
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    backgroundColor: color,
+                    boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`,
+                    top: isHorizontal ? '-2.5px' : 'auto',
+                    left: isHorizontal ? 'auto' : '-2.5px',
+                    animation: `${isHorizontal ? 'packet-flow-horizontal' : 'packet-flow-vertical'} ${duration}s linear infinite`,
+                    animationDelay: `${delay}s`,
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="section-container relative z-10" ref={ref}>
         {/* Header */}
         <motion.div
           className="text-center mb-16"
@@ -67,12 +142,12 @@ export default function HowItWorksSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
         >
-          <div className="section-badge mb-5 mx-auto w-fit">Ecosystem Flow</div>
+          <div className="section-badge mb-5 mx-auto w-fit">TANA BANA</div>
           <h2 className="font-display font-bold text-4xl sm:text-5xl tracking-tight mb-5">
-            How value flows through <span className="gradient-text">Tute</span>
+            How value loops through <span className="gradient-text">Tute</span>
           </h2>
           <p className="text-dark/60 dark:text-white/60 text-lg max-w-xl mx-auto font-semibold">
-            Interactive Node Web: Click a scenario to witness how students, tutors, and learning resources connect.
+            Interactive Node Web: tap a scenario to trace the cashflow and map the vibes.
           </p>
         </motion.div>
 

@@ -126,12 +126,44 @@ export default function FeaturesSection() {
         .pause-orbit {
           animation-play-state: paused !important;
         }
+        @keyframes float-particle {
+          0% { transform: translateY(0) translateX(0); opacity: 0; }
+          10% { opacity: 0.5; }
+          90% { opacity: 0.5; }
+          100% { transform: translateY(-100px) translateX(15px); opacity: 0; }
+        }
       `}} />
 
       {/* Cosmic background glows */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-[#0066FF]/5 dark:bg-[#0066FF]/3 blur-[130px] rounded-full" />
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#FF7A18]/4 dark:bg-[#FF7A18]/2 blur-[110px] rounded-full" />
+        
+        {/* Floating space particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(25)].map((_, i) => {
+            const size = (i % 3) + 1.5; // 1.5px to 3.5px
+            const duration = 12 + (i % 8); // 12s to 19s
+            const delay = -(i % 12);
+            const left = (i * 7) % 100;
+            const top = (i * 13) % 100;
+            return (
+              <div
+                key={i}
+                className="absolute rounded-full bg-funky-cyan/20 dark:bg-white/25 pointer-events-none"
+                style={{
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  left: `${left}%`,
+                  top: `${top}%`,
+                  opacity: (i % 4) === 0 ? 0.25 : 0.5,
+                  animation: `float-particle ${duration}s linear infinite`,
+                  animationDelay: `${delay}s`,
+                }}
+              />
+            );
+          })}
+        </div>
       </div>
 
       <div className="section-container relative z-10">
