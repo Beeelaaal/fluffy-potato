@@ -521,7 +521,7 @@ export default function FeaturesSection() {
                         </div>
                         <div className="text-[9px] text-[#0B071E]/45 dark:text-white/40 mt-3 flex items-center justify-between font-bold pt-2 border-t border-dark/5 dark:border-white/5">
                           <span>Avg Merit: {uniDetails.NUST.merit}</span>
-                          <span className="flex items-center gap-0.5 text-yellow-600 dark:text-[#FFB800]">Explore portal <ArrowRight size={9} /></span>
+                          <span className="flex items-center gap-0.5 text-yellow-600 dark:text-[#FFB800]">Read Insider Guide <ArrowRight size={9} /></span>
                         </div>
                       </motion.div>
                     )}
@@ -575,7 +575,7 @@ export default function FeaturesSection() {
                         </div>
                         <div className="text-[9px] text-[#0B071E]/45 dark:text-white/40 mt-3 flex items-center justify-between font-bold pt-2 border-t border-dark/5 dark:border-white/5">
                           <span>Avg Merit: {uniDetails.FAST.merit}</span>
-                          <span className="flex items-center gap-0.5 text-funky-blue dark:text-[#2EF2FF]">Explore portal <ArrowRight size={9} /></span>
+                          <span className="flex items-center gap-0.5 text-funky-blue dark:text-[#2EF2FF]">Read Insider Guide <ArrowRight size={9} /></span>
                         </div>
                       </motion.div>
                     )}
@@ -629,7 +629,7 @@ export default function FeaturesSection() {
                         </div>
                         <div className="text-[9px] text-[#0B071E]/45 dark:text-white/40 mt-3 flex items-center justify-between font-bold pt-2 border-t border-dark/5 dark:border-white/5">
                           <span>Avg Merit: {uniDetails.LUMS.merit}</span>
-                          <span className="flex items-center gap-0.5 text-green-700 dark:text-[#D8FF3E]">Explore portal <ArrowRight size={9} /></span>
+                          <span className="flex items-center gap-0.5 text-green-700 dark:text-[#D8FF3E]">Read Insider Guide <ArrowRight size={9} /></span>
                         </div>
                       </motion.div>
                     )}
@@ -683,7 +683,7 @@ export default function FeaturesSection() {
                         </div>
                         <div className="text-[9px] text-[#0B071E]/45 dark:text-white/40 mt-3 flex items-center justify-between font-bold pt-2 border-t border-dark/5 dark:border-white/5">
                           <span>Avg Merit: {uniDetails.IBA.merit}</span>
-                          <span className="flex items-center gap-0.5 text-funky-orange dark:text-[#FF7A18]">Explore portal <ArrowRight size={9} /></span>
+                          <span className="flex items-center gap-0.5 text-funky-orange dark:text-[#FF7A18]">Read Insider Guide <ArrowRight size={9} /></span>
                         </div>
                       </motion.div>
                     )}
@@ -737,7 +737,7 @@ export default function FeaturesSection() {
                         </div>
                         <div className="text-[9px] text-[#0B071E]/45 dark:text-white/40 mt-3 flex items-center justify-between font-bold pt-2 border-t border-dark/5 dark:border-white/5">
                           <span>Avg Merit: {uniDetails.AKU.merit}</span>
-                          <span className="flex items-center gap-0.5 text-funky-coral dark:text-[#FF5C7A]">Explore portal <ArrowRight size={9} /></span>
+                          <span className="flex items-center gap-0.5 text-funky-coral dark:text-[#FF5C7A]">Read Insider Guide <ArrowRight size={9} /></span>
                         </div>
                       </motion.div>
                     )}
@@ -768,7 +768,7 @@ export default function FeaturesSection() {
             <span>Interactive Constellation Navigation</span>
           </div>
           <p className="text-xs text-[#0B071E]/60 dark:text-white/60 font-semibold leading-relaxed">
-            Hover over elements to trace active connection beams. Click the <span className="text-funky-blue dark:text-funky-cyan font-bold">Inner Folders</span> to open solved resource papers, or click the <span className="text-funky-orange dark:text-[#FF7A18] font-bold">University Shields</span> to navigate to admissions guides.
+            Hover over elements to trace active connection beams. Click the <span className="text-funky-blue dark:text-funky-cyan font-bold">Inner Folders</span> to open solved resource papers, or click the <span className="text-funky-orange dark:text-[#FF7A18] font-bold">University Shields</span> to navigate to YOUR INSIDER guides.
           </p>
         </div>
 

@@ -14,7 +14,7 @@ export default function WriteBlogPage() {
   const router = useRouter();
 
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('Academics');
+  const [category, setCategory] = useState('Admission Guides');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [readTime, setReadTime] = useState('5 min read');
@@ -63,12 +63,12 @@ export default function WriteBlogPage() {
       authorAvatar: profile?.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.uid}&backgroundColor=0f0f1a`,
       createdAt: new Date().toISOString(),
       date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      color: category === 'Admissions' ? '#06b6d4' : category === 'Academics' ? '#0052CC' : '#ec4899',
+      color: category === 'Admission Guides' ? '#0066FF' : category === 'Deadlines' ? '#FF5C7A' : category === 'Scholarships' ? '#FF7A18' : category === 'Do\'s & Don\'ts' ? '#2EF2FF' : '#D8FF3E',
     };
 
     try {
       await setDoc(doc(db, 'blogs', slug), blogDoc);
-      alert('Blog published successfully! 🚀');
+      alert('Insider guide published successfully! 🚀');
       router.push('/blog');
     } catch (err: any) {
       console.error('Error publishing blog:', err);
@@ -85,7 +85,7 @@ export default function WriteBlogPage() {
 
       <div className="section-container max-w-3xl relative z-10">
         <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
-          <ArrowLeft size={15} /> Back to Blog
+          <ArrowLeft size={15} /> Back to YOUR INSIDER
         </Link>
 
         <motion.div
@@ -99,9 +99,9 @@ export default function WriteBlogPage() {
             </div>
             <div>
               <h1 className="font-display font-black text-2xl sm:text-3xl tracking-tight text-[#0B071E]">
-                Write a Blog Post
+                Write an Insider Guide
               </h1>
-              <p className="text-[#0B071E]/60 text-xs font-bold uppercase tracking-wider">Help other students study better</p>
+              <p className="text-[#0B071E]/60 text-xs font-bold uppercase tracking-wider">Share admission guides, deadlines, scholarships, or exam session info</p>
             </div>
           </div>
 
@@ -126,9 +126,11 @@ export default function WriteBlogPage() {
                   onChange={e => setCategory(e.target.value)}
                   className="input-field py-3.5 cursor-pointer"
                 >
-                  <option value="Academics">Academics</option>
-                  <option value="Admissions">Admissions</option>
-                  <option value="Student Life">Student Life</option>
+                  <option value="Admission Guides">Admission Guides</option>
+                  <option value="Deadlines">Deadlines</option>
+                  <option value="Scholarships">Scholarships</option>
+                  <option value="Do's & Don'ts">Do&apos;s &amp; Don&apos;ts</option>
+                  <option value="Exam Sessions">Exam Sessions</option>
                 </select>
               </div>
               <div>

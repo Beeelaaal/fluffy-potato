@@ -143,8 +143,11 @@ export default function UniversitiesPage() {
             <h1 className="font-display font-black text-5xl tracking-tight mb-4 text-[#0B071E]">
               Explore <span className="gradient-text">Pakistani Universities</span>
             </h1>
-            <p className="text-[#0B071E]/80 text-base sm:text-lg max-w-xl mx-auto font-semibold">
+            <p className="text-[#0B071E]/80 text-base sm:text-lg max-w-xl mx-auto font-semibold mb-3">
               Detailed university profiles — admissions, programs, and how to apply.
+            </p>
+            <p className="text-xs font-bold text-funky-orange dark:text-funky-orange/90">
+              💡 Looking for admission guides, deadlines, and scholarships? Read <Link href="/blog" className="underline hover:text-[#0066FF] transition-colors">YOUR INSIDER</Link>
             </p>
           </motion.div>
         </div>
@@ -290,14 +293,17 @@ export default function UniversitiesPage() {
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between mt-auto pt-2 border-t border-black/5">
+                    <div className="flex items-center justify-between mt-auto pt-2 border-t border-black/5 flex-wrap gap-2">
                       {uni.websiteUrl ? (
-                        <a href={uni.websiteUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs text-funky-cyan hover:text-funky-cyan/80 transition-colors font-bold">
-                          <Globe size={11} /> Visit Website
+                        <a href={uni.websiteUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs text-[#0B071E]/60 hover:text-funky-cyan transition-colors font-bold">
+                          <Globe size={11} /> Website
                         </a>
                       ) : <span />}
+                      <Link href={`/blog?university=${uni.shortName}`} className="flex items-center gap-1.5 text-xs text-funky-orange hover:text-funky-orange/80 transition-colors font-bold">
+                        <BookOpen size={11} className="animate-pulse" /> Insider
+                      </Link>
                       <Link href={`/universities/${uni.id}`} className="flex items-center gap-1 text-xs text-[#0B071E]/60 hover:text-[#0066FF] transition-colors font-bold">
-                        View Details <ChevronRight size={12} />
+                        Details <ChevronRight size={12} />
                       </Link>
                     </div>
                   </div>

@@ -14,6 +14,7 @@ const NAV = [
   { href: '/universities', label: 'Universities', icon: GraduationCap },
   { href: '/resources',    label: 'Resources',    icon: BookOpen },
   { href: '/marketplace',  label: 'Marketplace',  icon: Users },
+  { href: '/blog',         label: 'YOUR INSIDER', icon: BookOpen },
 ];
 
 export default function Navbar() {

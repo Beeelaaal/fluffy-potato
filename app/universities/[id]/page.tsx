@@ -355,6 +355,21 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               </a>
             </motion.div>
 
+            {/* YOUR INSIDER CTA */}
+            <motion.div
+              className="p-6 rounded-2xl text-center bg-gradient-to-br from-funky-orange/15 to-[#FF4B72]/5 border border-funky-orange/20 shadow-sm"
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 }}
+            >
+              <div className="w-10 h-10 rounded-full bg-funky-orange/10 border border-funky-orange/20 flex items-center justify-center mx-auto mb-3">
+                <BookOpen size={16} className="text-funky-orange animate-pulse" />
+              </div>
+              <h3 className="font-display font-black text-sm mb-2 text-[#0B071E] dark:text-white">YOUR INSIDER Guide</h3>
+              <p className="text-[#0B071E]/60 dark:text-white/60 text-xs mb-4 font-semibold">Admission guides, deadlines, scholarships, do&apos;s & don&apos;ts for {uni.shortName}</p>
+              <Link href={`/blog?university=${uni.shortName}`} className="btn-primary w-full text-sm py-2.5 font-bold" style={{ background: 'linear-gradient(135deg, #FF7A18, #FF4B72)', border: 'none' }}>
+                Read Insider Guide
+              </Link>
+            </motion.div>
+
             {/* Find Tutor CTA */}
             <motion.div
               className="p-6 rounded-2xl text-center bg-gradient-to-br from-[#0066FF]/10 to-teal-500/5 border border-[#0066FF]/20"

@@ -3,34 +3,54 @@ import { ArrowLeft, User, Calendar, Clock } from 'lucide-react';
 
 const STATIC_POSTS = [
   {
-    slug: 'how-to-ace-your-university-entry-tests',
-    title: 'How to Ace Your University Entry Tests (NET, FAST, & LCAT)',
-    excerpt: 'Cracking admission entry tests requires strategy. Here are the top tips from NUST & FAST alumni on how to manage your time and score 140+.',
+    slug: 'nust-admission-guide-net-prep-eligibility',
+    title: 'The Ultimate NUST Admission Guide: NET Prep & Eligibility',
+    excerpt: 'Detailed walkthrough on acing the NUST Entry Test, aggregate calculations, and admission requirements.',
     authorName: 'Ali Murtaza',
-    date: 'May 18, 2026',
+    date: 'May 28, 2026',
     readTime: '6 min read',
-    category: 'Admissions',
-    color: '#06b6d4',
+    category: 'Admission Guides',
+    color: '#0066FF',
   },
   {
-    slug: 'the-ultimate-guide-to-surviving-data-structures-algorithms',
-    title: 'The Ultimate Guide to Surviving Data Structures & Algorithms',
-    excerpt: 'DSA is notoriously tough for CS juniors. We break down the key topics like graphs, trees, and dynamic programming with top resource links.',
+    slug: 'fast-nu-surviving-guide-dos-donts-freshmen',
+    title: "FAST-NU Surviving Guide: Do's and Don'ts for Freshmen",
+    excerpt: 'How to survive the strict academic environment, maintain a high GPA, and navigate university life at FAST.',
     authorName: 'Zainab Fatima',
-    date: 'May 12, 2026',
+    date: 'May 24, 2026',
     readTime: '8 min read',
-    category: 'Academics',
-    color: '#0052CC',
+    category: "Do's & Don'ts",
+    color: '#2EF2FF',
   },
   {
-    slug: '5-side-hustles-for-pakistani-university-students-in-2026',
-    title: '5 Side Hustles for Pakistani University Students in 2026',
-    excerpt: 'Balancing studies and earning pocket money is possible. Learn how to tutor on Tute, write code, or design graphics to fund your semester expenses.',
+    slug: 'higher-education-scholarships-pakistan-hec-need-based',
+    title: 'Higher Education Scholarships in Pakistan: HEC & Need-Based Guides',
+    excerpt: 'Learn how to apply for fully funded HEC, USAID, and need-based scholarships at top universities.',
     authorName: 'Hamza Khan',
-    date: 'May 05, 2026',
+    date: 'May 19, 2026',
     readTime: '5 min read',
-    category: 'Student Life',
-    color: '#ec4899',
+    category: 'Scholarships',
+    color: '#FF7A18',
+  },
+  {
+    slug: 'university-application-deadlines-cheat-sheet-fall-2026',
+    title: 'University Application Deadlines Cheat Sheet (Fall 2026)',
+    excerpt: 'Track key registration timelines, entry test dates, and deadline details for LUMS, FAST, NUST, IBA, and AKU.',
+    authorName: 'Dr. Bilal Ahmed',
+    date: 'Jun 02, 2026',
+    readTime: '4 min read',
+    category: 'Deadlines',
+    color: '#FF5C7A',
+  },
+  {
+    slug: 'mastering-exam-prep-midterms-finals',
+    title: 'Mastering Exam Prep: How to Ace University Midterms & Finals',
+    excerpt: 'Proven study methods, note-taking strategies, and past paper prep tips for exam sessions.',
+    authorName: 'Ayesha Raza',
+    date: 'Jun 05, 2026',
+    readTime: '7 min read',
+    category: 'Exam Sessions',
+    color: '#D8FF3E',
   },
 ];
 
@@ -64,44 +84,116 @@ async function getBlogPost(id: string) {
   // 2. Fallback to static mock posts
   const staticPost = STATIC_POSTS.find(p => p.slug === id);
   if (staticPost) {
-    const mockContent = staticPost.slug === 'how-to-ace-your-university-entry-tests'
-      ? `## Introduction
-Entry tests are a gateway to top engineering and computing universities in Pakistan. Cracking them is not just about intelligence, but about consistent, strategic effort. Here are the top guidelines from NUST & FAST alumni on how to manage your time and score 140+ in your entry tests.
+    let mockContent = '';
+    if (staticPost.slug === 'nust-admission-guide-net-prep-eligibility') {
+      mockContent = `## Introduction
+The NUST Entry Test (NET) is one of the most competitive entrance exams in Pakistan, determining admissions for thousands of applicants in engineering, computing, and business degrees. Preparing for it requires a solid strategy, conceptual clarity, and rigorous time management.
 
-## 1. Concept Clarity Over Rote Learning
-Entry tests like NET (NUST Entry Test) assess your concept depths. Don't memorize steps; understand the 'Why' behind equations. Memorize standard math identities and physics formulas, but practice their applications thoroughly.
+## Understanding the Test Pattern
+NET is conducted in two formats: Computer-based at the Islamabad campus, and Paper-based in Karachi and Quetta.
+- **For Engineering/CS**: Mathematics (40%), Physics (30%), Chemistry or Computer Science (15%), English (10%), and Intelligence (5%).
+- **For Business/Social Sciences**: Quantitative (40%), Verbal (40%), and Intelligence (20%).
+There is no negative marking, so you must attempt all 200 questions.
 
-## 2. Speed and Time Management
-You get 200 questions to solve in 3 hours. That is less than a minute per question.
-- Do NOT get stuck on a single difficult math query.
-- Solve English, Intelligence, and Chemistry sections first (they take less than 30 seconds per question).
-- Allocate the saved time to Math and Physics calculations.
+## Prep Strategy & Recommended Material
+1. **Textbooks First**: NUST maps its test syllabus directly to FSc / Federal Board textbooks. Thoroughly study your board mathematics and physics textbooks.
+2. **Key Concepts in Physics**: Focus heavily on Electromagnetism, Waves, and Mechanics.
+3. **Speed Mathematics**: Memorize shortcuts for... formulas and equations. Do not waste time on long proofs.
+4. **Solve English & Intelligence First**: Since English and Intelligence questions are straightforward, solve them in the first 15 minutes to secure a time buffer for lengthy calculations.
 
-## 3. Practice Past Papers
-Reviewing past papers is single-handedly the most important aspect of prep. It helps you get accustomed to the exact paper pattern and recurring concepts.`
-      : staticPost.slug === 'the-ultimate-guide-to-surviving-data-structures-algorithms'
-      ? `## Introduction
-Data Structures & Algorithms (DSA) is notoriously tough for CS juniors. It is the core theoretical baseline of software development, which makes it crucial for academic grades and top-tier interviews. Let's break down the key topics and surviving guidelines.
+## Aggregate Calculator & Targets
+NUST admission aggregate is calculated as:
+- **NUST Entry Test (NET)**: 75%
+- **FSc/A-Levels/Equivalent**: 15%
+- **Matric/O-Levels/Equivalent**: 10%
+Aim for a NET score of 135+ for Computing fields (Software Engineering, CS) and 125+ for core engineering fields.`;
+    } else if (staticPost.slug === 'fast-nu-surviving-guide-dos-donts-freshmen') {
+      mockContent = `## Introduction
+FAST National University is widely renowned for its rigorous computing curriculum and high employability. However, its strict academic atmosphere and rapid pace can be overwhelming for freshmen. Here is a definitive guide on how to survive and maintain a strong GPA.
 
-## Master the Core Topics
-Struggling with graphs, trees, and recursion? Take things slowly.
-- **Arrays & Linked Lists**: The linear foundations. Know the insertion and deletion time complexities.
-- **Trees & Graphs**: Master Binary Search Trees (BST), Breadth-First Search (BFS), and Depth-First Search (DFS).
-- **Dynamic Programming (DP)**: Solve the knapsack problem, Fibonacci series, and coin change.
+## The Grade Struggle: Relative vs Absolute
+FAST utilizes relative grading in most core CS/SE courses, while some general courses use absolute grading.
+- Maintaining a CGPA above 3.0 is highly desirable for job placements and internships.
+- Continuous assessments (quizzes, assignments, and lab tasks) make up a significant portion of your grade. Never take them lightly.
 
-## Practice Coding
-Do not just read algorithms. Write the code manually in C++, Java, or Python. Implement the data structures from scratch to understand pointers, memory layouts, and stack states.`
-      : `## Introduction
-Balancing university studies and earning pocket money is completely possible. In 2026, Pakistani students have access to various digital tools and freelance marketplaces to support themselves. Here are 5 side hustles that are easy to start.
+## Crucial Do's
+- **Start Coding Assignments Early**: FAST CS assignments are notoriously long. Starting the night before is a recipe for a 0 or negative marks.
+- **Maintain 80% Attendance**: FAST strictly enforces the 80% attendance rule. If you fall below 80% even by a decimal, you get an automatic F grade. No excuses are accepted.
+- **Consult Lab Engineers**: Lab engineers are your best resource for debugging code and clarifying compiler errors.
 
-## 1. Academic Peer Tutoring
-Tute.pk lets you monetize your course excellence. If you scored A+ in a course, teach juniors at your own or other universities. You can easily charge between PKR 1,000 to PKR 3,000 per hour.
+## Crucial Don'ts
+- **Never Plagiarize Code**: FAST uses MOSS (Measure Of Software Similarity) to detect copied code. If caught copying code from a classmate, GitHub, or ChatGPT, you will receive negative marks (e.g., -10) and face disciplinary committees.
+- **Don't Skip Classes**: Skipping classes puts you behind quickly because concepts build directly upon the previous lectures.`;
+    } else if (staticPost.slug === 'higher-education-scholarships-pakistan-hec-need-based') {
+      mockContent = `## Introduction
+Higher education in Pakistan can be expensive, but financial constraints shouldn't prevent you from studying at top-tier institutions. There are numerous fully funded scholarships, need-based aids, and interest-free student loans available.
 
-## 2. Freelance Content Writing & Blogging
-Many startups need search-engine-friendly blog articles. If you have good command of English or tech niches, you can earn competitive rates.
+## Top Scholarship Programs
+1. **HEC Need-Based Scholarships**: Higher Education Commission offers fully funded tuition fees and a monthly stipend for students coming from low-income families.
+2. **Ehsaas Undergraduate Scholarship**: Covers tuition fees and provides an annual stipend. Highly beneficial for public sector university students.
+3. **USAID Need-Based Scholarships**: Targeted at financially underprivileged students studying in participating Pakistani universities.
+4. **PEEF Scholarships**: Punjab Education Endowment Fund provides financial assistance to students with high merit from across Pakistan.
 
-## 3. Graphic Design & Presentation Creation
-University professors love clean presentations, and businesses need social media posters. Mastering Figma or Canva can yield decent side income.`;
+## University-Specific Financial Aid
+- **LUMS Financial Aid**: LUMS meets 100% of demonstrated financial need. Offers scholarships and interest-free loans.
+- **IBA National Talent Hunt Program (NTHP)**: A fully funded program targeting high-achieving students from underprivileged districts.
+- **FAST Financial Assistance**: FAST provides interest-free study loans to students based on merit and financial need, repayable after graduation.
+
+## Application Tips & Document Checklist
+Ensure you have the following documents ready:
+- Salary slips or income certificate of the earning parent/guardian.
+- Utility bills (electricity, gas, water) of the last 6 months.
+- Rent agreement (if applicable).
+- Academic transcripts and certificates.
+Demonstrate complete honesty in your financial declaration forms.`;
+    } else if (staticPost.slug === 'university-application-deadlines-cheat-sheet-fall-2026') {
+      mockContent = `## Introduction
+Staying organized and tracking deadlines is half the battle in the university admission process. Missed deadlines mean waiting a whole year for the next cycle. Here is a curated timeline cheat sheet for Fall 2026 admissions at Pakistan's top-tier universities.
+
+## Application Deadlines (Fall 2026)
+
+### LUMS (Lahore University of Management Sciences)
+- **Application Deadline**: First week of February 2026.
+- **SAT / LCAT Test Dates**: Must be taken by March 2026.
+- **Financial Aid Deadline**: Mid-February 2026.
+
+### NUST (National University of Sciences & Technology)
+NUST conducts NET in four series:
+- **NET Series 1**: December 2025.
+- **NET Series 2**: February - March 2026.
+- **NET Series 3**: May 2026.
+- **NET Series 4**: June - July 2026.
+- **Final Application Deadline**: Early July 2026.
+
+### FAST-NU (National University of Computer & Emerging Sciences)
+- **Registration Opens**: First week of June 2026.
+- **Registration Closes**: First week of July 2026.
+- **Admission Entry Tests**: Mid-July 2026.
+
+### IBA Karachi (Institute of Business Administration)
+- **Round 1 Deadline**: March 2026 (Test in mid-March).
+- **Round 2 Deadline**: June 2026 (Test in late June).
+
+### AKU (Aga Khan University)
+- **Registration Deadline**: Early May 2026.
+- **Entry Test Date**: Mid-June 2026.`;
+    } else if (staticPost.slug === 'mastering-exam-prep-midterms-finals') {
+      mockContent = `## Introduction
+Midterm and final exam sessions are high-stress periods for university students. Cramming the night before rarely works and leads to burnout. To secure top grades, you must employ scientifically proven study techniques and maintain a structured routine.
+
+## Effective Study Techniques
+1. **The Feynman Technique**: Explain a complex concept to a five-year-old in simple words. If you struggle, review the textbooks until you fill the gap.
+2. **Pomodoro (50/10 Split)**: Work for 50 minutes with full focus, then take a 10-minute break. This prevents cognitive exhaustion.
+3. **Active Recall**: Test yourself with self-made flashcards or past questions instead of just re-reading slides.
+
+## The 11th Hour Exam Rescue Checklist
+If exams are starting next week and you are behind, follow these emergency protocols:
+- **Prioritize Past Papers**: Professors often reuse exam patterns, structures, and occasionally specific questions. Practice past papers from the last 3-5 years.
+- **Leverage Course Outline**: Focus on high-weightage chapters. Do not try to learn everything; aim to master the topics that carry the most marks.
+- **Hire a Peer Tutor**: If you are completely stuck on a concept (like compiler construction or dynamic programming), use a peer-to-peer tutoring service to clear it in one session.
+- **Get Quality Sleep**: 6 hours of sleep before an exam is crucial. A sleep-deprived brain cannot recall complex equations or debug code under exam stress.`;
+    }
+
     return {
       ...staticPost,
       content: mockContent,
@@ -115,15 +207,15 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   const post = await getBlogPost(params.id);
   if (!post) {
     return {
-      title: 'Blog Post Not Found | Tute',
-      description: 'The requested blog post was not found on Tute.',
+      title: 'Insider Guide Not Found | YOUR INSIDER',
+      description: 'The requested insider guide was not found on Tute.',
     };
   }
 
   return {
-    title: `${post.title} | Tute Blog`,
+    title: `${post.title} | YOUR INSIDER`,
     description: post.excerpt,
-    keywords: [post.category, 'Tute', 'Tutoring', 'Pakistan', 'University', 'Education'],
+    keywords: [post.category, 'Tute', 'Tutoring', 'Pakistan', 'University', 'Education', 'Admission', 'Scholarship', 'Deadline'],
     authors: [{ name: post.authorName }],
     openGraph: {
       title: post.title,
@@ -141,10 +233,10 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
   if (!post) {
     return (
       <div className="min-h-screen pt-32 pb-24 text-center">
-        <h1 className="font-display font-black text-3xl mb-4 text-[#0B071E]">Blog Post Not Found</h1>
+        <h1 className="font-display font-black text-3xl mb-4 text-[#0B071E]">Insider Guide Not Found</h1>
         <p className="text-[#0B071E]/60 mb-6 font-semibold">The article you are looking for does not exist or has been deleted.</p>
         <Link href="/blog" className="btn-primary inline-flex">
-          <ArrowLeft size={16} /> Back to Blog
+          <ArrowLeft size={16} /> Back to YOUR INSIDER
         </Link>
       </div>
     );
@@ -258,7 +350,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
 
       <div className="section-container max-w-3xl relative z-10">
         <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
-          <ArrowLeft size={15} /> Back to Blog
+          <ArrowLeft size={15} /> Back to YOUR INSIDER
         </Link>
 
         <article className="glass-card p-8 sm:p-12 bg-white/95 shadow-xl">
