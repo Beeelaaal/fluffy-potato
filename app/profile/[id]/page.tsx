@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, BookOpen, Users, Award, MapPin, Clock, CheckCircle, MessageSquare, Edit3, DollarSign, X } from 'lucide-react';
+import { Star, BookOpen, Users, Award, MapPin, Clock, CheckCircle, MessageSquare, Edit3, DollarSign, X, Download, FileText } from 'lucide-react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { UserProfile, useAuth } from '@/context/AuthContext';
@@ -193,6 +193,8 @@ export default function ProfilePage({ params }: { params: { id: string } }) {
                   { icon: Clock, label: 'Preferred Budget', value: profile.budgetPreference ? `PKR ${profile.budgetPreference}` : 'Not specified', color: 'text-neon-lime', bg: 'bg-neon-lime/10' },
                 ]),
                 { icon: BookOpen, label: 'Resources Shared', value: String(profile.resourcesSharedCount || 0), color: 'text-funky-blue', bg: 'bg-funky-blue/10' },
+                { icon: Download, label: 'Resources Downloaded', value: String(profile.downloadedResourcesCount || 0), color: 'text-pink-500', bg: 'bg-pink-500/10' },
+                { icon: FileText, label: 'Blogs Read', value: String(profile.readBlogsCount || 0), color: 'text-orange-500', bg: 'bg-orange-500/10' },
               ].map(({ icon: Icon, label, value, color, bg }) => (
                 <div key={label} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0 last:pb-0 group">
                   <span className="flex items-center gap-4 text-white/60 text-sm font-bold">

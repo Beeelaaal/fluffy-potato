@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BookOpen, Building, Database, ExternalLink, GraduationCap, Plus, RefreshCw, Shield, Trash2, TrendingUp, Users, X, Edit2, CheckCircle, Clock, AlertCircle, Mail, Briefcase, MessageSquare, FileText, LogOut } from 'lucide-react';
+import { BookOpen, Building, Database, ExternalLink, GraduationCap, Plus, RefreshCw, Shield, Trash2, TrendingUp, Users, X, Edit2, CheckCircle, Clock, AlertCircle, Mail, Briefcase, MessageSquare, FileText, LogOut, Download } from 'lucide-react';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { seedDatabase } from '@/lib/seed';
@@ -14,6 +14,8 @@ import { Resource } from '@/data/resources';
 import { degrees, categorizedDegrees } from '@/data/resources';
 import { logoutUser } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
+import { mapCategory, getCategoryColor } from '@/lib/blog';
+
 
 type Tab = 'overview' | 'users' | 'resources' | 'universities' | 'contacts' | 'careers' | 'chats_bids' | 'blogs';
 
@@ -199,7 +201,34 @@ export default function AdminPage() {
     catch(e: any){ setErr(e.message || 'Delete failed.'); }
   }
 
+  const [migratingBlogs, setMigratingBlogs] = useState(false);
+
+  async function handleMigrateBlogCategories() {
+    if (!confirm(`This will update the categories of all ${blogs.length} blogs in Firestore to align with the new standard categories. Proceed?`)) return;
+    setMigratingBlogs(true); setOk(null); setErr(null);
+    try {
+      let count = 0;
+      for (const b of blogs) {
+        const targetCat = mapCategory(b.category, b.title, b.id);
+        if (b.category !== targetCat) {
+          await updateDoc(doc(db, 'blogs', b.id), {
+            category: targetCat,
+            color: getCategoryColor(targetCat)
+          });
+          count++;
+        }
+      }
+      setOk(`Database migration successful! Updated categories for ${count} blog posts.`);
+      await load();
+    } catch (e: any) {
+      setErr(e.message || 'Migration failed.');
+    } finally {
+      setMigratingBlogs(false);
+    }
+  }
+
   if(loading) return (
+
     <div className="flex min-h-screen items-center justify-center pt-28">
       <div className="h-12 w-12 animate-spin rounded-full border-4 border-funky-cyan/20 border-t-funky-cyan glow-cyan" />
     </div>
@@ -235,6 +264,7 @@ export default function AdminPage() {
   const stats = [
     { label:'Users', val:users.length, icon:<Users size={22}/>, color:'text-[#06b6d4]', border:'border-[#06b6d4]/20 bg-[#06b6d4]/5' },
     { label:'Resources', val:resources.length, icon:<BookOpen size={22}/>, color:'text-[#10b981]', border:'border-[#10b981]/20 bg-[#10b981]/5' },
+    { label:'Downloads', val:resources.reduce((sum, r) => sum + (r.downloads || 0), 0), icon:<Download size={22}/>, color:'text-[#ef4444]', border:'border-[#ef4444]/20 bg-[#ef4444]/5' },
     { label:'Universities', val:universities.length, icon:<Building size={22}/>, color:'text-[#f59e0b]', border:'border-[#f59e0b]/20 bg-[#f59e0b]/5' },
     { label:'Requests', val:requests.length, icon:<GraduationCap size={22}/>, color:'text-[#0066FF]', border:'border-[#0066FF]/20 bg-[#0066FF]/5' },
     { label:'Contacts', val:contacts.length, icon:<Mail size={22}/>, color:'text-[#FF5C7A]', border:'border-[#FF5C7A]/20 bg-[#FF5C7A]/5' },
@@ -855,11 +885,20 @@ export default function AdminPage() {
         {/* ── BLOGS ── */}
         {tab==='blogs' && (
           <motion.div initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} className="space-y-5">
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={handleMigrateBlogCategories}
+                disabled={migratingBlogs}
+                className="btn-ghost border-[#14b8a6]/30 text-[#14b8a6] hover:bg-[#14b8a6]/10 px-5 py-2.5 text-sm flex items-center gap-1.5 rounded-2xl"
+              >
+                <RefreshCw size={14} className={migratingBlogs ? 'animate-spin' : ''} />
+                {migratingBlogs ? 'Migrating...' : 'Sync Database Categories'}
+              </button>
               <Link href="/blog/write" className="btn-primary px-5 py-2.5 text-sm">
                 <Plus size={15}/> Write Blog Post
               </Link>
             </div>
+
             
             <div className="glass-card overflow-hidden">
               <div className="overflow-x-auto">

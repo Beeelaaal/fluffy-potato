@@ -22,6 +22,7 @@ interface UniDoc {
   deadline?: string;
   admissionCriteria?: string;
   degrees?: string[];
+  campuses?: any[];
 }
 
 function getEntryTestTypes(uni: UniDoc) {
@@ -80,7 +81,17 @@ export default function UniversitiesPage() {
     load();
   }, []);
 
-  const cities = ['All Cities', ...Array.from(new Set(universities.map(u => u.city).filter(Boolean)))];
+  // Collect all unique cities where the university has a presence (either main city or campus cities)
+  const uniqueCities = new Set<string>();
+  universities.forEach(u => {
+    if (u.city) uniqueCities.add(u.city);
+    if (u.campuses && Array.isArray(u.campuses)) {
+      u.campuses.forEach(c => {
+        if (c.city) uniqueCities.add(c.city);
+      });
+    }
+  });
+  const cities = ['All Cities', ...Array.from(uniqueCities).sort()];
   const types = ['All Types', 'public', 'private'];
 
   const filtered = universities.filter(u => {
@@ -89,7 +100,11 @@ export default function UniversitiesPage() {
       u.name?.toLowerCase().includes(q) || 
       u.shortName?.toLowerCase().includes(q) ||
       u.degrees?.some(d => d.toLowerCase().includes(q));
-    const matchCity = city === 'All Cities' || u.city === city;
+    
+    // Match city if it is main city OR one of its campus cities
+    const matchCity = city === 'All Cities' || 
+      u.city === city || 
+      (u.campuses && Array.isArray(u.campuses) && u.campuses.some(c => c.city === city));
     const matchType = type === 'All Types' || u.type === type;
     const matchDegree = selectedDegree === 'All Degrees' || u.degrees?.includes(selectedDegree);
     
@@ -272,7 +287,18 @@ export default function UniversitiesPage() {
                     )}
 
                     <div className="flex flex-wrap items-center gap-3 text-xs text-[#0B071E]/60 mb-4 mt-auto font-bold">
-                      {uni.city && <span className="flex items-center gap-1"><MapPin size={11} /> {uni.city}</span>}
+                      {(() => {
+                        const uniqueCampusCities = Array.from(new Set([
+                          uni.city,
+                          ...(uni.campuses || []).map((c: any) => c.city)
+                        ].filter(Boolean)));
+                        const displayCities = uniqueCampusCities.join(', ');
+                        return displayCities ? (
+                          <span className="flex items-center gap-1 max-w-[200px] line-clamp-1" title={displayCities}>
+                            <MapPin size={11} className="flex-shrink-0" /> {displayCities}
+                          </span>
+                        ) : null;
+                      })()}
                       {uni.programs ? <span className="flex items-center gap-1"><BookOpen size={11} /> {uni.programs} programs</span> : null}
                       {uni.deadline && <span className="flex items-center gap-1"><Calendar size={11} /> {uni.deadline}</span>}
                     </div>

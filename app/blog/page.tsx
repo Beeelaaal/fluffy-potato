@@ -8,6 +8,8 @@ import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { useSearchParams } from 'next/navigation';
+import { mapCategory, getCategoryColor, getBlogCoverImage } from '@/lib/blog';
+import TiltCard from '@/components/layout/TiltCard';
 
 const STATIC_POSTS = [
   {
@@ -89,10 +91,16 @@ function BlogContent() {
   useEffect(() => {
     const q = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const items = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const items = snapshot.docs.map(doc => {
+        const data = doc.data();
+        const mappedCat = mapCategory(data.category, data.title, doc.id);
+        return {
+          id: doc.id,
+          ...data,
+          category: mappedCat,
+          slug: data.slug || doc.id,
+        };
+      });
       setBlogs(items);
       setLoading(false);
     }, (err) => {
@@ -105,7 +113,10 @@ function BlogContent() {
 
   const allBlogs = [
     ...blogs,
-    ...STATIC_POSTS.filter(s => !blogs.some(b => b.slug === s.slug))
+    ...STATIC_POSTS.map(s => {
+      const mappedCat = mapCategory(s.category, s.title, s.slug);
+      return { ...s, category: mappedCat };
+    }).filter(s => !blogs.some(b => b.slug === s.slug))
   ];
 
   // Filter blogs based on category, university parameter, and local search term
@@ -129,16 +140,47 @@ function BlogContent() {
 
   return (
     <div className="min-h-screen pt-32 pb-24 relative overflow-hidden bg-[#FDFBF7] dark:bg-[#070310] transition-colors duration-500">
-      {/* Dynamic Background Mesh Glows */}
-      <div className="absolute top-0 right-1/4 w-[600px] h-[400px] bg-funky-blue/5 dark:bg-funky-blue/[0.04] blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 w-[500px] h-[400px] bg-funky-cyan/5 dark:bg-funky-cyan/[0.03] blur-[150px] rounded-full pointer-events-none" />
+      {/* Enhanced Dynamic Background Mesh Glows */}
+      <div className="absolute top-0 right-1/10 w-[800px] h-[500px] bg-funky-blue/10 dark:bg-funky-blue/[0.08] blur-[180px] rounded-full pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
+      <div className="absolute bottom-10 left-1/4 w-[750px] h-[550px] bg-funky-cyan/8 dark:bg-funky-cyan/[0.06] blur-[180px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[550px] h-[450px] bg-[#FF5C7A]/8 dark:bg-[#FF5C7A]/[0.05] blur-[160px] rounded-full pointer-events-none" />
+
+      {/* Decorative 3D-like floating elements */}
+      <motion.div
+        animate={{
+          y: [0, -25, 0],
+          rotate: [0, 360],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-1/4 left-10 w-16 h-16 bg-gradient-to-tr from-funky-blue to-funky-cyan opacity-25 blur-[1px] rounded-2xl pointer-events-none hidden md:block"
+        style={{ transform: 'translateZ(100px)' }}
+      />
+      <motion.div
+        animate={{
+          y: [0, 30, 0],
+          rotate: [360, 0],
+        }}
+        transition={{
+          duration: 16,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute bottom-1/4 right-10 w-24 h-24 bg-gradient-to-tr from-funky-orange to-funky-coral opacity-20 blur-[1px] rounded-full pointer-events-none hidden md:block"
+        style={{ transform: 'translateZ(150px)' }}
+      />
 
       {/* Grid Pattern overlay matching Hero */}
       <div
-        className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04] pointer-events-none"
+        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
         style={{
           backgroundImage: 'linear-gradient(rgba(0, 102, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 255, 0.08) 1px, transparent 1px)',
           backgroundSize: '64px 64px',
+          maskImage: 'radial-gradient(ellipse at center, black, transparent)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent)',
         }}
       />
 
@@ -209,33 +251,25 @@ function BlogContent() {
 
         {/* Category Pills Selectors */}
         <motion.div
-          className="flex flex-wrap gap-2.5 mb-12 border-b border-dark/5 dark:border-white/5 pb-8 select-none"
+          className="flex flex-wrap gap-3 mb-12 border-b border-dark/5 dark:border-white/5 pb-8 select-none"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
           {categories.map(cat => {
             const isSelected = selectedCategory === cat;
-            const colors: Record<string, string> = {
-              all: '#0066FF',
-              'Admission Guides': '#0066FF',
-              'Deadlines': '#FF5C7A',
-              'Scholarships': '#FF7A18',
-              'Do\'s & Don\'ts': '#2EF2FF',
-              'Exam Sessions': '#D8FF3E',
-            };
-            const color = colors[cat] || '#0066FF';
+            const color = getCategoryColor(cat === 'all' ? 'Admission Guides' : cat);
             return (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border ${
+                className={`px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-wider transition-all border-2 ${
                   isSelected
-                    ? 'bg-dark border-dark text-white dark:bg-white/10 dark:border-white/20'
-                    : 'bg-white/50 dark:bg-transparent border-dark/5 dark:border-white/5 text-dark/60 dark:text-white/60 hover:bg-dark/5 dark:hover:bg-white/5 shadow-sm'
+                    ? 'bg-[#0B071E] text-white dark:bg-white/10 dark:text-white'
+                    : 'bg-white/60 dark:bg-transparent border-dark/10 dark:border-white/10 text-dark/60 dark:text-white/60 hover:bg-[#0066FF]/5 dark:hover:bg-funky-cyan/5 hover:text-[#0066FF] dark:hover:text-funky-cyan hover:border-[#0066FF]/20 dark:hover:border-funky-cyan/20 shadow-sm'
                 }`}
                 style={{
-                  boxShadow: isSelected ? `3px 3px 0px ${color}` : 'none',
+                  boxShadow: isSelected ? `4px 4px 0px ${color}` : 'none',
                   borderColor: isSelected ? color : undefined,
                 }}
               >
@@ -252,9 +286,9 @@ function BlogContent() {
             <div className="font-mono text-xs font-black uppercase tracking-widest text-[#0B071E]/55 dark:text-white/45">Loading Intel Pipeline...</div>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-20 glass-card p-10 max-w-lg mx-auto bg-white/40 dark:bg-[#110A20]/40 border border-dark/10 dark:border-white/10 rounded-3xl">
+          <div className="text-center py-20 glass-card p-10 max-w-lg mx-auto bg-white/40 dark:bg-[#110A20]/40 border border-dark/10 dark:border-white/10 rounded-3xl animate-pulse">
             <div className="w-16 h-16 rounded-2xl bg-funky-coral/10 border border-funky-coral/20 flex items-center justify-center mx-auto mb-6 shadow-sm">
-              <BookOpen size={28} className="text-funky-coral animate-pulse" />
+              <BookOpen size={28} className="text-funky-coral" />
             </div>
             <h2 className="font-display text-2xl font-black mb-2 text-[#0B071E] dark:text-white">No Intel Matches</h2>
             <p className="text-[#0B071E]/60 dark:text-white/60 text-sm mb-6 font-semibold leading-relaxed">
@@ -272,127 +306,165 @@ function BlogContent() {
             
             {/* Spotlight Banner: Render Featured Article at the top */}
             {featuredPost && (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-6 md:p-8 rounded-3xl bg-white/40 dark:bg-[#110A20]/40 border border-dark/10 dark:border-white/10 relative overflow-hidden mb-12 shadow-md hover:border-funky-cyan/40 dark:hover:border-funky-cyan/40 transition-all duration-300 group select-none"
-              >
-                {/* Glowing decoration circles inside spotlight card */}
-                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-to-br from-funky-cyan/5 to-funky-blue/5 dark:from-funky-cyan/10 dark:to-funky-blue/10 blur-[60px] rounded-full pointer-events-none -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-500" />
-                
-                <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                  <div className="flex-1 space-y-4 max-w-2xl">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span
-                        className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border"
-                        style={{
-                          background: `${featuredPost.color || '#0066FF'}10`,
-                          borderColor: `${featuredPost.color || '#0066FF'}20`,
-                          color: featuredPost.color || '#0066FF',
-                        }}
-                      >
-                        {featuredPost.category}
-                      </span>
-                      {featuredPost.university && (
-                        <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 text-[#0B071E] dark:text-white">
-                          #{featuredPost.university}
-                        </span>
-                      )}
-                      <span className="text-[10px] font-mono font-black text-funky-orange uppercase tracking-wider animate-pulse flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-funky-orange" /> Featured Spotlight
-                      </span>
-                    </div>
-
-                    <Link href={`/blog/${featuredPost.slug}`}>
-                      <h2 className="font-display font-black text-3xl md:text-4xl text-[#0B071E] dark:text-white leading-[1.15] hover:text-[#0066FF] dark:hover:text-funky-cyan transition-colors cursor-pointer pt-2">
-                        {featuredPost.title}
-                      </h2>
-                    </Link>
-
-                    <p className="text-[#0B071E]/75 dark:text-white/70 text-sm md:text-base font-semibold leading-relaxed max-w-xl pr-4">
-                      {featuredPost.excerpt}
-                    </p>
-
-                    {/* Metadata Footer */}
-                    <div className="pt-6 flex flex-wrap items-center gap-5 text-xs text-[#0B071E]/60 dark:text-white/50 font-bold">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-funky-blue to-funky-cyan flex items-center justify-center text-white font-extrabold text-[9px] shadow-sm select-none">
-                          {featuredPost.authorName.charAt(0)}
+              <div className="mb-12">
+                <Link href={`/blog/${featuredPost.slug}`} className="block group">
+                  <TiltCard
+                    maxTilt={3}
+                    hoverShadowColor={getCategoryColor(featuredPost.category)}
+                    className="glass-card p-6 md:p-8 rounded-3xl bg-white/50 dark:bg-[#110A20]/40 border border-dark/10 dark:border-white/10 relative overflow-hidden shadow-md group-hover:border-funky-cyan/30 transition-all duration-300 select-none"
+                  >
+                    {/* Glowing decoration circles inside spotlight card */}
+                    <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-gradient-to-br from-funky-cyan/5 to-funky-blue/5 dark:from-funky-cyan/10 dark:to-funky-blue/10 blur-[60px] rounded-full pointer-events-none -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-500" />
+                    
+                    <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                      <div className="lg:col-span-7 space-y-4 text-left">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border"
+                            style={{
+                              background: `${getCategoryColor(featuredPost.category)}12`,
+                              borderColor: `${getCategoryColor(featuredPost.category)}25`,
+                              color: getCategoryColor(featuredPost.category),
+                            }}
+                          >
+                            {featuredPost.category}
+                          </span>
+                          {featuredPost.university && (
+                            <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 text-[#0B071E] dark:text-white">
+                              #{featuredPost.university}
+                            </span>
+                          )}
+                          <span className="text-[10px] font-mono font-black text-funky-orange uppercase tracking-wider animate-pulse flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-funky-orange" /> Featured Spotlight
+                          </span>
                         </div>
-                        <span>{featuredPost.authorName}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5"><Clock size={13} className="text-funky-blue dark:text-funky-cyan" /> {featuredPost.readTime}</div>
-                      <div className="flex items-center gap-1.5"><Eye size={13} className="text-funky-orange" /> {featuredPost.views || '1.2k'} reads</div>
-                    </div>
-                  </div>
 
-                  {/* Spotlight CTA */}
-                  <div className="shrink-0">
-                    <Link
-                      href={`/blog/${featuredPost.slug}`}
-                      className="inline-flex items-center justify-center gap-2.5 px-8 py-5.5 rounded-2xl bg-dark text-white border border-dark dark:bg-white/10 dark:border-white/20 dark:text-white hover:bg-funky-blue dark:hover:bg-funky-cyan hover:border-transparent transition-all shadow-md group/btn font-display font-black text-sm text-center uppercase tracking-wider"
-                    >
-                      <span>Read Full Guide</span>
-                      <ArrowRight size={16} strokeWidth={3} className="group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
+                        <h2 className="font-display font-black text-3xl md:text-4xl text-[#0B071E] dark:text-white leading-[1.15] group-hover:text-[#0066FF] dark:group-hover:text-funky-cyan transition-colors pt-2">
+                          {featuredPost.title}
+                        </h2>
+
+                        <p className="text-[#0B071E]/75 dark:text-white/70 text-sm md:text-base font-semibold leading-relaxed max-w-xl pr-4">
+                          {featuredPost.excerpt}
+                        </p>
+
+                        {/* Metadata Footer */}
+                        <div className="pt-6 flex flex-wrap items-center gap-5 text-xs text-[#0B071E]/60 dark:text-white/50 font-bold">
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-funky-blue to-funky-cyan flex items-center justify-center text-white font-extrabold text-[9px] shadow-sm select-none">
+                              {featuredPost.authorName.charAt(0)}
+                            </div>
+                            <span>{featuredPost.authorName}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5"><Clock size={13} className="text-funky-blue dark:text-funky-cyan" /> {featuredPost.readTime}</div>
+                          <div className="flex items-center gap-1.5"><Eye size={13} className="text-funky-orange" /> {featuredPost.views || '1.2k'} reads</div>
+                        </div>
+
+                        {/* Spotlight CTA */}
+                        <div className="pt-4">
+                          <div
+                            className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-dark text-white border border-dark dark:bg-white/10 dark:border-white/20 dark:text-white group-hover:bg-[#0066FF] dark:group-hover:bg-[#2EF2FF] dark:group-hover:text-black hover:border-transparent transition-all shadow-md font-display font-black text-xs uppercase tracking-wider"
+                          >
+                            <span>Read Full Guide</span>
+                            <ArrowRight size={14} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right side: Dynamic Cover Image */}
+                      <div className="lg:col-span-5 relative w-full h-[220px] sm:h-[285px] overflow-hidden rounded-2xl border border-dark/10 dark:border-white/10 shadow-md">
+                        <img
+                          src={getBlogCoverImage(featuredPost.category, featuredPost.title, featuredPost.slug)}
+                          alt={featuredPost.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                    </div>
+                  </TiltCard>
+                </Link>
+              </div>
             )}
 
             {/* Remaining Guides Grid Layout */}
             {remainingPosts.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-                {remainingPosts.map((post, i) => (
-                  <motion.article
-                    key={post.id || post.slug}
-                    className="glass-card p-6 bg-white/70 dark:bg-[#110A20]/80 border border-dark/5 dark:border-white/5 rounded-3xl flex flex-col justify-between hover:border-funky-cyan/40 dark:hover:border-funky-cyan/40 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5 shadow-sm group"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    <div className="space-y-4">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span
-                          className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border"
-                          style={{
-                            background: `${post.color || '#0066FF'}10`,
-                            borderColor: `${post.color || '#0066FF'}20`,
-                            color: post.color || '#0066FF',
-                          }}
-                        >
-                          {post.category}
-                        </span>
-                        {post.university && (
-                          <span className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 text-dark/80 dark:text-white/80">
-                            #{post.university}
-                          </span>
-                        )}
-                      </div>
+              <motion.div
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
+              >
+                <AnimatePresence mode="popLayout">
+                  {remainingPosts.map((post, i) => {
+                    const cardColor = getCategoryColor(post.category);
+                    return (
+                      <motion.div
+                        key={post.id || post.slug}
+                        layout
+                        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                        transition={{ duration: 0.35, ease: "easeOut" }}
+                        className="block h-full"
+                      >
+                        <Link href={`/blog/${post.slug}`} className="block h-full group">
+                          <TiltCard
+                            maxTilt={8}
+                            hoverShadowColor={cardColor}
+                            className="glass-card bg-white/70 dark:bg-[#110A20]/80 border border-dark/10 dark:border-white/10 rounded-3xl flex flex-col justify-between h-full transition-all duration-300 relative group-hover:border-funky-cyan/30 overflow-hidden"
+                          >
+                            {/* Card Image Header */}
+                            <div className="relative w-full h-[170px] overflow-hidden border-b border-dark/5 dark:border-white/5">
+                              <img
+                                src={getBlogCoverImage(post.category, post.title, post.slug)}
+                                alt={post.title}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#110A20]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </div>
 
-                      <Link href={`/blog/${post.slug}`}>
-                        <h2 className="font-display font-black text-lg text-[#0B071E] dark:text-white leading-snug hover:text-[#0066FF] dark:hover:text-funky-cyan transition-colors cursor-pointer">
-                          {post.title}
-                        </h2>
-                      </Link>
+                            <div className="p-6 flex-1 flex flex-col justify-between space-y-4 text-left">
+                              <div className="space-y-3">
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  <span
+                                    className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border"
+                                    style={{
+                                      background: `${cardColor}12`,
+                                      borderColor: `${cardColor}25`,
+                                      color: cardColor,
+                                    }}
+                                  >
+                                    {post.category}
+                                  </span>
+                                  {post.university && (
+                                    <span className="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 text-dark/80 dark:text-white/80">
+                                      #{post.university}
+                                    </span>
+                                  )}
+                                </div>
 
-                      <p className="text-[#0B071E]/75 dark:text-white/70 text-xs font-semibold leading-relaxed line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                    </div>
+                                <h2 className="font-display font-black text-lg text-[#0B071E] dark:text-white leading-snug group-hover:text-[#0066FF] dark:group-hover:text-funky-cyan transition-colors line-clamp-2">
+                                  {post.title}
+                                </h2>
 
-                    <div className="pt-5 mt-5 border-t border-dark/5 dark:border-white/5 flex items-center justify-between text-[11px] text-[#0B071E]/55 dark:text-white/45 font-bold">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-funky-blue to-funky-cyan flex items-center justify-center text-white font-extrabold text-[8.5px] shadow-sm select-none">
-                          {post.authorName.charAt(0)}
-                        </div>
-                        <span>{post.authorName}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5"><Clock size={12} className="text-funky-blue dark:text-funky-cyan" /> {post.readTime}</div>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
+                                <p className="text-[#0B071E]/75 dark:text-white/70 text-xs font-semibold leading-relaxed line-clamp-2">
+                                  {post.excerpt}
+                                </p>
+                              </div>
+
+                              <div className="pt-4 border-t border-dark/5 dark:border-white/5 flex items-center justify-between text-[11px] text-[#0B071E]/55 dark:text-white/45 font-bold">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-funky-blue to-funky-cyan flex items-center justify-center text-white font-extrabold text-[8.5px] shadow-sm select-none">
+                                    {post.authorName.charAt(0)}
+                                  </div>
+                                  <span className="group-hover:text-[#0B071E] dark:group-hover:text-white transition-colors">{post.authorName}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5"><Clock size={12} className="text-funky-blue dark:text-funky-cyan" /> {post.readTime}</div>
+                              </div>
+                            </div>
+                          </TiltCard>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </motion.div>
             )}
 
           </div>

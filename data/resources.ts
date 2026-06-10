@@ -19,6 +19,7 @@ export interface Resource {
   tags: string[];
   description: string;
   fileUrl?: string;
+  ratingsCount?: number;
 }
 
 export const resources: Resource[] = [

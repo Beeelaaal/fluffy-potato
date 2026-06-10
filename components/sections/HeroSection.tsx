@@ -5,7 +5,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { 
   ArrowRight, GraduationCap, Zap, BookOpen,
-  Sparkles, Download, CheckCircle, Star, Search, Building2, Users, FileText, Clock, ShieldAlert, X
+  Sparkles, Download, CheckCircle, Star, Search, Building2, Users, FileText, Clock, ShieldAlert, X, Globe
 } from 'lucide-react';
 import { stats } from '@/data/testimonials';
 import { useState, useEffect } from 'react';
@@ -1122,9 +1122,54 @@ export default function HeroSection() {
   );
 }
 
+function WebFavicon({ url }: { url: string }) {
+  const [imgErr, setImgErr] = useState(false);
+  let domain = '';
+  try {
+    domain = new URL(url).hostname;
+  } catch (e) {}
+
+  if (imgErr || !domain) {
+    return <Globe size={14} className="text-funky-blue dark:text-[#2EF2FF]" />;
+  }
+
+  return (
+    <img
+      src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
+      alt={domain}
+      className="w-4 h-4 object-contain rounded"
+      onError={() => setImgErr(true)}
+    />
+  );
+}
+
+function WebSearchSkeleton() {
+  return (
+    <div className="space-y-2.5 animate-pulse">
+      {[1, 2, 3].map((n) => (
+        <div key={n} className="p-3 rounded-2xl border border-dark/5 dark:border-white/5 bg-dark/4 dark:bg-white/5 space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-lg bg-dark/10 dark:bg-white/10 shrink-0" />
+            <div className="flex-1 space-y-1.5 min-w-0">
+              <div className="h-3 bg-dark/15 dark:bg-white/15 rounded w-2/3" />
+              <div className="h-2 bg-dark/10 dark:bg-white/10 rounded w-1/3" />
+            </div>
+          </div>
+          <div className="space-y-1 pl-10">
+            <div className="h-2 bg-dark/10 dark:bg-white/10 rounded w-full" />
+            <div className="h-2 bg-dark/10 dark:bg-white/10 rounded w-5/6" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function GlobalSearchModal({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'resources' | 'unis' | 'tutors' | 'guides'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'resources' | 'unis' | 'tutors' | 'guides' | 'web'>('all');
+  const [webResults, setWebResults] = useState<Array<{ title: string; url: string; snippet: string }>>([]);
+  const [isLoadingWeb, setIsLoadingWeb] = useState(false);
 
   // Autofocus input and manage backdrop scroll lock
   useEffect(() => {
@@ -1149,6 +1194,35 @@ function GlobalSearchModal({ onClose }: { onClose: () => void }) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
+  // Debounced API search fetch for web results
+  useEffect(() => {
+    if (!query.trim()) {
+      setWebResults([]);
+      setIsLoadingWeb(false);
+      return;
+    }
+
+    setIsLoadingWeb(true);
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        if (response.ok) {
+          const data = await response.json();
+          setWebResults(data.results || []);
+        } else {
+          setWebResults([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch web search results:', error);
+        setWebResults([]);
+      } finally {
+        setIsLoadingWeb(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [query]);
 
   const getFilteredResults = () => {
     if (!query.trim()) return [];
@@ -1258,6 +1332,7 @@ function GlobalSearchModal({ onClose }: { onClose: () => void }) {
     if (activeTab === 'unis') return results.filter((r) => r.type === 'university');
     if (activeTab === 'tutors') return results.filter((r) => r.type === 'tutor');
     if (activeTab === 'guides') return results.filter((r) => r.type === 'guide');
+    if (activeTab === 'web') return []; // Handled separately in UI
 
     return results;
   };
@@ -1290,7 +1365,7 @@ function GlobalSearchModal({ onClose }: { onClose: () => void }) {
           <input
             id="global-search-input"
             type="text"
-            placeholder="Search resources, tutors, universities, insider guides..."
+            placeholder="Search resources, tutors, universities, web..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-transparent pl-9 pr-8 text-base font-bold text-[#0B071E] dark:text-white border-0 focus:ring-0 placeholder-dark/30 dark:placeholder-white/30 outline-none"
@@ -1319,6 +1394,7 @@ function GlobalSearchModal({ onClose }: { onClose: () => void }) {
             { id: 'unis', label: 'Universities' },
             { id: 'tutors', label: 'Tutors' },
             { id: 'guides', label: 'Insider Guides' },
+            { id: 'web', label: 'Web Search' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -1342,58 +1418,174 @@ function GlobalSearchModal({ onClose }: { onClose: () => void }) {
               <p className="text-sm font-bold">Type to search the entire campus synapse...</p>
               <p className="text-xs mt-1">Try searching for &apos;NUST&apos;, &apos;Calculus&apos;, &apos;FAST&apos;, or &apos;DSA&apos;</p>
             </div>
-          ) : results.length === 0 ? (
+          ) : activeTab === 'web' ? (
+            // Web Search Tab
+            isLoadingWeb ? (
+              <WebSearchSkeleton />
+            ) : webResults.length === 0 ? (
+              <div className="py-12 text-center text-[#0B071E]/50 dark:text-white/50">
+                <p className="text-sm font-black">No web matches found for &quot;{query}&quot;</p>
+                <p className="text-xs mt-1">Check spelling or try another search query</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {webResults.map((res, idx) => (
+                  <a
+                    key={`web-tab-${idx}-${res.url}`}
+                    href={res.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col p-3.5 rounded-2xl bg-dark/4 hover:bg-dark/8 dark:bg-white/5 dark:hover:bg-white/10 border border-dark/5 dark:border-white/5 transition-all group/item shadow-sm hover:shadow-md"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-funky-blue/20 bg-funky-blue/10 dark:border-funky-cyan/20 dark:bg-funky-cyan/10">
+                          <WebFavicon url={res.url} />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-black text-[#0B071E] dark:text-white truncate group-hover/item:text-[#0066FF] dark:group-hover/item:text-[#2EF2FF] transition-colors">
+                            {res.title}
+                          </div>
+                          <div className="text-[10px] text-funky-blue dark:text-funky-cyan font-semibold truncate font-mono">
+                            {(() => {
+                              try {
+                                return new URL(res.url).hostname;
+                              } catch (e) {
+                                return res.url;
+                              }
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                      <ArrowRight size={14} className="text-dark/20 dark:text-white/20 group-hover/item:text-dark dark:group-hover/item:text-white transition-all transform group-hover/item:translate-x-0.5 shrink-0" />
+                    </div>
+                    {res.snippet && (
+                      <div className="mt-2 text-xs text-[#0B071E]/60 dark:text-white/50 leading-relaxed font-semibold pl-11">
+                        {res.snippet}
+                      </div>
+                    )}
+                  </a>
+                ))}
+              </div>
+            )
+          ) : results.length === 0 && (activeTab !== 'all' || (webResults.length === 0 && !isLoadingWeb)) ? (
+            // No matches found local and no web matches
             <div className="py-12 text-center text-[#0B071E]/50 dark:text-white/50">
               <p className="text-sm font-black">No matches found for &quot;{query}&quot;</p>
               <p className="text-xs mt-1">Check spelling or try a different search query</p>
             </div>
           ) : (
-            <div className="space-y-2">
-              {results.map((res) => {
-                let badgeColor = 'bg-funky-blue/10 text-funky-blue border-funky-blue/20';
-                let icon = <FileText size={16} />;
-                if (res.type === 'university') {
-                  badgeColor = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
-                  icon = <GraduationCap size={16} />;
-                } else if (res.type === 'tutor') {
-                  badgeColor = 'bg-funky-orange/10 text-funky-orange border-funky-orange/20';
-                  icon = <Users size={16} />;
-                } else if (res.type === 'guide') {
-                  badgeColor = 'bg-[#FF5C7A]/10 text-[#FF5C7A] border-[#FF5C7A]/20';
-                  icon = <BookOpen size={16} />;
-                }
+            // Combined results list
+            <div className="space-y-4">
+              {results.length > 0 && (
+                <div className="space-y-2">
+                  {results.map((res) => {
+                    let badgeColor = 'bg-funky-blue/10 text-funky-blue border-funky-blue/20';
+                    let icon = <FileText size={16} />;
+                    if (res.type === 'university') {
+                      badgeColor = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+                      icon = <GraduationCap size={16} />;
+                    } else if (res.type === 'tutor') {
+                      badgeColor = 'bg-funky-orange/10 text-funky-orange border-funky-orange/20';
+                      icon = <Users size={16} />;
+                    } else if (res.type === 'guide') {
+                      badgeColor = 'bg-[#FF5C7A]/10 text-[#FF5C7A] border-[#FF5C7A]/20';
+                      icon = <BookOpen size={16} />;
+                    }
 
-                return (
-                  <Link
-                    key={`${res.type}-${res.id}`}
-                    href={res.url}
-                    onClick={onClose}
-                    className="flex items-center justify-between p-3 rounded-2xl bg-dark/4 hover:bg-dark/8 dark:bg-white/5 dark:hover:bg-white/10 border border-dark/5 dark:border-white/5 transition-all group/item"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${badgeColor}`}>
-                        {icon}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm font-black text-[#0B071E] dark:text-white truncate group-hover/item:text-[#0066FF] dark:group-hover/item:text-[#2EF2FF] transition-colors">
-                          {res.title}
+                    return (
+                      <Link
+                        key={`${res.type}-${res.id}`}
+                        href={res.url}
+                        onClick={onClose}
+                        className="flex items-center justify-between p-3 rounded-2xl bg-dark/4 hover:bg-dark/8 dark:bg-white/5 dark:hover:bg-white/10 border border-dark/5 dark:border-white/5 transition-all group/item"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${badgeColor}`}>
+                            {icon}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-sm font-black text-[#0B071E] dark:text-white truncate group-hover/item:text-[#0066FF] dark:group-hover/item:text-[#2EF2FF] transition-colors">
+                              {res.title}
+                            </div>
+                            <div className="text-xs text-[#0B071E]/50 dark:text-white/40 font-semibold truncate">
+                              {res.subtitle}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-[#0B071E]/50 dark:text-white/40 font-semibold truncate">
-                          {res.subtitle}
+                        <div className="flex items-center gap-2 shrink-0">
+                          {res.meta && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-dark/5 dark:bg-white/5 text-dark/60 dark:text-white/60 uppercase">
+                              {res.meta}
+                            </span>
+                          )}
+                          <ArrowRight size={14} className="text-dark/20 dark:text-white/20 group-hover/item:text-dark dark:group-hover/item:text-white transition-all transform group-hover/item:translate-x-0.5" />
                         </div>
-                      </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Web results appended to "All Results" tab */}
+              {activeTab === 'all' && (
+                <div className="space-y-2 pt-2.5 border-t border-dark/5 dark:border-white/5">
+                  <div className="flex items-center gap-2 px-1 py-1">
+                    <Globe size={11} className="text-funky-blue dark:text-[#2EF2FF] animate-pulse" />
+                    <span className="text-[9.5px] font-black tracking-wider uppercase text-funky-blue dark:text-[#2EF2FF] font-mono">
+                      Web Search Synapse
+                    </span>
+                  </div>
+
+                  {isLoadingWeb ? (
+                    <WebSearchSkeleton />
+                  ) : webResults.length === 0 ? (
+                    <div className="p-3 text-center text-[10px] text-[#0B071E]/40 dark:text-white/40 font-mono">
+                      No web results found
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {res.meta && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-dark/5 dark:bg-white/5 text-dark/60 dark:text-white/60 uppercase">
-                          {res.meta}
-                        </span>
-                      )}
-                      <ArrowRight size={14} className="text-dark/20 dark:text-white/20 group-hover/item:text-dark dark:group-hover/item:text-white transition-all transform group-hover/item:translate-x-0.5" />
+                  ) : (
+                    <div className="space-y-2">
+                      {webResults.slice(0, 4).map((res, idx) => (
+                        <a
+                          key={`web-all-${idx}-${res.url}`}
+                          href={res.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-col p-3 rounded-2xl bg-dark/4 hover:bg-dark/8 dark:bg-white/5 dark:hover:bg-white/10 border border-dark/5 dark:border-white/5 transition-all group/item shadow-sm"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-funky-blue/20 bg-funky-blue/10 dark:border-funky-cyan/20 dark:bg-funky-cyan/10">
+                                <WebFavicon url={res.url} />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="text-xs font-black text-[#0B071E] dark:text-white truncate group-hover/item:text-[#0066FF] dark:group-hover/item:text-[#2EF2FF] transition-colors">
+                                  {res.title}
+                                </div>
+                                <div className="text-[9px] text-funky-blue dark:text-funky-cyan font-bold truncate font-mono">
+                                  {(() => {
+                                    try {
+                                      return new URL(res.url).hostname;
+                                    } catch (e) {
+                                      return res.url;
+                                    }
+                                  })()}
+                                </div>
+                              </div>
+                            </div>
+                            <ArrowRight size={12} className="text-dark/20 dark:text-white/20 group-hover/item:text-dark dark:group-hover/item:text-white transition-all transform group-hover/item:translate-x-0.5 shrink-0" />
+                          </div>
+                          {res.snippet && (
+                            <div className="mt-1 text-[11px] text-[#0B071E]/60 dark:text-white/50 leading-relaxed font-semibold pl-10">
+                              {res.snippet}
+                            </div>
+                          )}
+                        </a>
+                      ))}
                     </div>
-                  </Link>
-                );
-              })}
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

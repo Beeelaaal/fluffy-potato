@@ -96,7 +96,9 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               email: data.email || `admissions@${(data.shortName || 'univ').toLowerCase()}.edu.pk`,
               address: data.address || `${data.city}, Pakistan`
             },
-            degrees: data.degrees || (staticUni as any)?.degrees || []
+            degrees: data.degrees || (staticUni as any)?.degrees || [],
+            campuses: data.campuses || staticUni?.campuses || [],
+            reviews: data.reviews || staticUni?.reviews || []
           });
         } else {
           // If not in Firestore, check if we have it in static data
@@ -104,7 +106,9 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
           if (staticUni) {
             setUni({
               ...staticUni,
-              degrees: (staticUni as any).degrees || []
+              degrees: (staticUni as any).degrees || [],
+              campuses: staticUni.campuses || [],
+              reviews: staticUni.reviews || []
             });
           } else {
             setUni(null);
@@ -114,7 +118,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
         console.error('Error fetching university details:', err);
         const decodedId = decodeURIComponent(params.id);
         const staticUni = staticUniversities.find(u => u.id.toLowerCase() === decodedId.toLowerCase() || u.shortName.toLowerCase() === decodedId.toLowerCase());
-        setUni(staticUni ? { ...staticUni, degrees: (staticUni as any).degrees || [] } : null);
+        setUni(staticUni ? { ...staticUni, degrees: (staticUni as any).degrees || [], campuses: staticUni.campuses || [], reviews: staticUni.reviews || [] } : null);
       } finally {
         setLoading(false);
       }
@@ -305,6 +309,109 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                 ))}
               </div>
             </motion.div>
+
+            {/* Campuses & Locations */}
+            {uni.campuses && uni.campuses.length > 0 && (
+              <motion.div
+                className="glass-card p-7"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
+              >
+                <h2 className="font-display font-black text-xl mb-5 flex items-center gap-2 text-[#0B071E]">
+                  <Building2 size={18} className="text-[#0066FF]" /> Campuses & Locations
+                </h2>
+                <div className="space-y-4">
+                  {uni.campuses.map((campus: any) => {
+                    const isPNEC = campus.name.toLowerCase().includes('pnec');
+                    return (
+                      <div key={campus.name} className={`p-5 rounded-2xl border transition-all duration-300 ${
+                        isPNEC 
+                          ? 'bg-gradient-to-br from-blue-500/10 to-teal-500/5 border-blue-200 shadow-sm' 
+                          : 'bg-white/60 border-black/5'
+                      }`}>
+                        <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+                          <div>
+                            <h3 className="font-extrabold text-base text-[#0B071E] flex flex-wrap items-center gap-2">
+                              {campus.name}
+                              {isPNEC && (
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500 text-white font-black animate-pulse">
+                                  ⚓ NUST Constituent Naval College
+                                </span>
+                              )}
+                            </h3>
+                            <p className="text-xs text-[#0B071E]/60 font-semibold mt-1 flex items-center gap-1">
+                              <MapPin size={12} className="text-funky-cyan flex-shrink-0" /> {campus.address}
+                            </p>
+                          </div>
+                          {campus.city && (
+                            <span className="tag-pill text-xs font-bold bg-[#0066FF]/10 text-[#0066FF] border border-[#0066FF]/20">
+                              {campus.city}
+                            </span>
+                          )}
+                        </div>
+                        
+                        {campus.degrees && campus.degrees.length > 0 && (
+                          <div className="mt-3 border-t border-black/5 pt-3">
+                            <h4 className="text-[11px] font-black text-[#0B071E]/50 uppercase tracking-wider mb-2">Offered Degrees:</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {campus.degrees.map((deg: string) => (
+                                <span key={deg} className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                                  deg.toLowerCase().includes('naval') || deg.toLowerCase().includes('maritime')
+                                    ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/25'
+                                    : 'bg-black/[0.03] border border-black/5 text-[#0B071E]/75'
+                                }`}>
+                                  {deg}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Student Reviews & Feedback */}
+            {uni.reviews && uni.reviews.length > 0 && (
+              <motion.div
+                className="glass-card p-7"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+              >
+                <h2 className="font-display font-black text-xl mb-5 flex items-center gap-2 text-[#0B071E]">
+                  <Users size={18} className="text-[#0066FF]" /> Student & Alumni Reviews
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {uni.reviews.map((rev: any, index: number) => (
+                    <div key={index} className="p-5 rounded-2xl bg-white/60 border border-black/5 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-black text-[#0066FF] bg-[#0066FF]/10 px-2 py-1 rounded-lg">
+                            {rev.source || 'Online Review'}
+                          </span>
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <span key={i} className={`text-sm ${i < Math.floor(rev.rating) ? 'text-amber-400' : 'text-neutral-300'}`}>
+                                ★
+                              </span>
+                            ))}
+                            <span className="text-xs font-black text-[#0B071E]/70 ml-1">{(rev.rating || 5).toFixed(1)}</span>
+                          </div>
+                        </div>
+                        <p className="text-xs font-semibold italic text-[#0B071E]/85 leading-relaxed">
+                          "{rev.text}"
+                        </p>
+                      </div>
+                      {rev.author && (
+                        <div className="text-[11px] font-black text-[#0B071E]/50 mt-4 text-right">
+                          — {rev.author}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </div>
 
           {/* Sidebar */}

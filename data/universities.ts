@@ -21,6 +21,8 @@ export interface University {
   requirements: string[];
   howToApply: string[];
   contacts: { phone: string; email: string; address: string };
+  campuses?: Campus[];
+  reviews?: Review[];
 }
 
 export interface Program {
@@ -30,6 +32,22 @@ export interface Program {
   seats: number;
   fee: number;
   merit: number;
+}
+
+export interface Campus {
+  name: string;
+  city: string;
+  address: string;
+  phone?: string;
+  email?: string;
+  degrees?: string[];
+}
+
+export interface Review {
+  author?: string;
+  rating: number;
+  text: string;
+  source?: string;
 }
 
 export const universities: University[] = [
@@ -42,11 +60,11 @@ export const universities: University[] = [
     type: 'public',
     ranking: 1,
     established: 1991,
-    students: 12000,
-    programs: 120,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=NUST&backgroundColor=1a1a35&textColor=5b63f5',
-    image: 'https://picsum.photos/seed/nust/800/450',
-    description: 'NUST is Pakistan\'s premier engineering and technology university, ranked among the top 400 universities globally. It offers world-class education in engineering, sciences, management, and arts.',
+    students: 15000,
+    programs: 150,
+    logo: 'https://upload.wikimedia.org/wikipedia/en/5/5a/NUST_MainOffice.png',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Nust_h12.jpg',
+    description: 'NUST is Pakistan\'s premier public engineering and technology university, ranked among the top 400 universities globally. It offers world-class education in engineering, computing, management, and biological sciences across multiple specialized campuses.',
     website: 'https://nust.edu.pk',
     fee: { min: 150000, max: 350000 },
     tags: ['Engineering', 'Technology', 'Sciences', 'Management'],
@@ -58,18 +76,17 @@ export const universities: University[] = [
       { name: 'Mechanical Engineering', degree: 'BS', duration: '4 years', seats: 80, fee: 300000, merit: 85 },
       { name: 'Civil Engineering', degree: 'BS', duration: '4 years', seats: 80, fee: 280000, merit: 83 },
       { name: 'Software Engineering', degree: 'BS', duration: '4 years', seats: 100, fee: 280000, merit: 87 },
-      { name: 'Business Administration', degree: 'MBA', duration: '2 years', seats: 60, fee: 350000, merit: 75 },
+      { name: 'Naval Architecture (Karachi PNEC)', degree: 'BE', duration: '4 years', seats: 50, fee: 250000, merit: 80 },
     ],
     requirements: [
       'Intermediate (FSc/ICS/A-Levels) with minimum 60% marks',
       'NUST Entry Test (NET) — minimum 60 percentile',
       'Valid CNIC/B-Form',
       'Domicile Certificate',
-      '4 recent passport size photographs',
     ],
     howToApply: [
       'Register on NUST admission portal (admissions.nust.edu.pk)',
-      'Fill online application form with personal and academic details',
+      'Fill online application form and choose test centers/campuses',
       'Pay application fee of PKR 3,500 online',
       'Appear for NUST Entry Test (NET)',
       'Submit original documents at admission office after merit list',
@@ -79,6 +96,68 @@ export const universities: University[] = [
       email: 'admissions@nust.edu.pk',
       address: 'H-12, Islamabad, Pakistan',
     },
+    campuses: [
+      {
+        name: 'Islamabad Campus (H-12)',
+        city: 'Islamabad',
+        address: 'Sector H-12, Islamabad, Federal Capital',
+        phone: '+92-51-9085-1000',
+        email: 'admissions@nust.edu.pk',
+        degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BE Electrical Engineering', 'BE Mechanical Engineering', 'BE Civil Engineering', 'BE Chemical Engineering', 'BBA', 'BS Mathematics', 'B.Arch (Architecture)'],
+      },
+      {
+        name: 'Karachi Campus (PNEC)',
+        city: 'Karachi',
+        address: 'Pakistan Navy Engineering College (PNEC), Habib Ibrahim Rehmatullah Road, Karsaz, Karachi',
+        phone: '+92-21-48503070',
+        email: 'admissions.pnec@nust.edu.pk',
+        degrees: ['BS Computer Science', 'BE Mechanical Engineering', 'BE Electrical Engineering', 'BE Naval Architecture', 'BS Maritime Sciences'],
+      },
+      {
+        name: 'Rawalpindi Campus (College of EME)',
+        city: 'Rawalpindi',
+        address: 'College of Electrical & Mechanical Engineering, Peshawar Road, Rawalpindi',
+        phone: '+92-51-5444-4079',
+        email: 'admissions.eme@nust.edu.pk',
+        degrees: ['BE Mechatronics Engineering', 'BE Mechanical Engineering', 'BE Electrical Engineering', 'BS Computer Science'],
+      },
+      {
+        name: 'Rawalpindi Campus (MCS)',
+        city: 'Rawalpindi',
+        address: 'Military College of Signals, Humayun Road, Lalkurti, Rawalpindi',
+        phone: '+92-51-9272097',
+        email: 'admissions.mcs@nust.edu.pk',
+        degrees: ['BS Software Engineering', 'BE Information Security Engineering'],
+      },
+      {
+        name: 'Risalpur Campus (CAE)',
+        city: 'Risalpur',
+        address: 'College of Aeronautical Engineering, Risalpur, Khyber Pakhtunkhwa',
+        phone: '+92-937-873241',
+        email: 'admissions.cae@nust.edu.pk',
+        degrees: ['BE Aerospace Engineering', 'BE Avionics Engineering'],
+      }
+    ],
+    reviews: [
+      {
+        author: 'Ayesha M. (EE Alumna, Class of 2023)',
+        rating: 5,
+        text: 'NUST H-12 has the most beautiful and complete campus life in Pakistan. The academic environment is competitive but highly rewarding. The research labs are top-notch and the student culture with various societies is super vibrant.',
+        source: 'Google Reviews',
+      },
+      {
+        author: 'Usman S. (PNEC Karachi Graduate)',
+        rating: 4.5,
+        text: 'PNEC (Karachi) provides a highly disciplined and structured environment since it\'s run under the Pakistan Navy. The Naval Architecture program is unique and has excellent links to naval dockyards and marine industries.',
+        source: 'Student Survey',
+      },
+      {
+        author: 'Bilal A. (Computer Science Student)',
+        rating: 4,
+        text: 'Academics can be exhausting with the strict absolute grading system in some departments. However, the peer group is brilliant and the internship opportunities at the NSTP tech park on campus are fantastic.',
+        source: 'Reddit Community',
+      }
+    ]
   },
   {
     id: 'lums',
@@ -91,9 +170,9 @@ export const universities: University[] = [
     established: 1985,
     students: 5000,
     programs: 45,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=LUMS&backgroundColor=1a1a35&textColor=7c3aed',
-    image: 'https://picsum.photos/seed/lums/800/450',
-    description: 'LUMS is one of Pakistan\'s most prestigious private universities, offering exceptional programs in business, law, humanities, social sciences, and computer science.',
+    logo: 'https://upload.wikimedia.org/wikipedia/en/4/47/Lums_logo.jpg',
+    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop',
+    description: 'LUMS is one of Pakistan\'s most prestigious private universities, offering exceptional programs in business, law, humanities, social sciences, and computer science. It is renowned for its liberal arts education and corporate links.',
     website: 'https://lums.edu.pk',
     fee: { min: 600000, max: 1200000 },
     tags: ['Business', 'Law', 'Computer Science', 'Humanities'],
@@ -104,28 +183,38 @@ export const universities: University[] = [
       { name: 'Business Administration', degree: 'BBA', duration: '4 years', seats: 120, fee: 1000000, merit: 88 },
       { name: 'Law (LLB/BSc)', degree: 'BSc', duration: '4 years', seats: 60, fee: 800000, merit: 87 },
       { name: 'Economics', degree: 'BSc', duration: '4 years', seats: 80, fee: 850000, merit: 86 },
-      { name: 'Accounting & Finance', degree: 'BSc', duration: '4 years', seats: 80, fee: 900000, merit: 85 },
     ],
     requirements: [
       'HSSC/A-Levels with high GPA',
       'SAT or LUMS Self Assessment Test (LSAT)',
       'Strong extracurricular record',
       'Personal statement',
-      'Letters of recommendation',
     ],
     howToApply: [
       'Visit lums.edu.pk and create an applicant profile',
       'Submit online application with all required documents',
       'Pay application fee of PKR 5,000',
       'Appear for LSAT or submit SAT scores',
-      'Attend interview if shortlisted',
-      'Submit financial aid documents if required',
     ],
     contacts: {
       phone: '+92-42-3560-8000',
       email: 'admissions@lums.edu.pk',
       address: 'DHA, Lahore Cantt., Lahore 54792',
     },
+    reviews: [
+      {
+        author: 'Sarah D. (BBA Alumna, Class of 2024)',
+        rating: 5,
+        text: 'LUMS changed my entire perspective on education. The campus is a safe haven and encourages free speech and critical thinking. It\'s expensive, but the networking and career opportunities are outstanding.',
+        source: 'Google Reviews',
+      },
+      {
+        author: 'Farhan M. (Economics Major)',
+        rating: 4.5,
+        text: 'The library is world-class, open 24/7 during exams. The academic pressure is high, but the campus life and sports facilities are second to none in Pakistan.',
+        source: 'EduOpinions',
+      }
+    ]
   },
   {
     id: 'pu',
@@ -138,11 +227,11 @@ export const universities: University[] = [
     established: 1882,
     students: 35000,
     programs: 200,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=PU&backgroundColor=1a1a35&textColor=06b6d4',
-    image: 'https://picsum.photos/seed/punjab/800/450',
+    logo: 'https://upload.wikimedia.org/wikipedia/en/e/e4/University_of_the_Punjab_logo.png',
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop',
     description: 'University of the Punjab is the oldest university in Pakistan, offering a vast range of programs across sciences, arts, commerce, law, and professional disciplines.',
     website: 'https://pu.edu.pk',
-    fee: { min: 30000, max: 120000 },
+    fee: { min: 3000, max: 120000 },
     tags: ['Sciences', 'Arts', 'Commerce', 'Law', 'Medicine'],
     admissionOpen: false,
     deadline: '2025-07-30',
@@ -150,28 +239,59 @@ export const universities: University[] = [
       { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 200, fee: 80000, merit: 78 },
       { name: 'Commerce', degree: 'BCom', duration: '2 years', seats: 300, fee: 40000, merit: 65 },
       { name: 'Law', degree: 'LLB', duration: '5 years', seats: 120, fee: 70000, merit: 75 },
-      { name: 'Mathematics', degree: 'BS', duration: '4 years', seats: 150, fee: 60000, merit: 72 },
-      { name: 'Pharmacy', degree: 'Pharm.D', duration: '5 years', seats: 100, fee: 120000, merit: 82 },
     ],
     requirements: [
       'Intermediate from a recognized board',
       'PU Entry Test',
       'CNIC/B-Form',
-      'Character Certificate',
-      'Migration Certificate (if from other province)',
     ],
     howToApply: [
       'Apply through PU online portal (admissions.pu.edu.pk)',
       'Fill admission form and pay fee via bank challan',
-      'Appear for University Entry Test (UET)',
+      'Appear for University Entry Test',
       'Check merit lists on official website',
-      'Report to department for document verification',
     ],
     contacts: {
       phone: '+92-42-99231246',
       email: 'info@pu.edu.pk',
       address: 'Quaid-e-Azam Campus, Lahore',
     },
+    campuses: [
+      {
+        name: 'Quaid-e-Azam Campus (New Campus)',
+        city: 'Lahore',
+        address: 'Bosan Road/Canal Road, Lahore',
+        phone: '+92-42-99231246',
+      },
+      {
+        name: 'Allama Iqbal Campus (Old Campus)',
+        city: 'Lahore',
+        address: 'The Mall Road, Lahore',
+        phone: '+92-42-99211612',
+      },
+      {
+        name: 'Gujranwala Campus',
+        city: 'Gujranwala',
+        address: 'Near Gift University, Gujranwala',
+        phone: '+92-55-9201222',
+        degrees: ['BS Computer Science', 'BS Information Technology', 'BBA', 'BCom'],
+      },
+      {
+        name: 'Jhelum Campus',
+        city: 'Jhelum',
+        address: 'Near Jhelum Bridge, Jhelum',
+        phone: '+92-544-444444',
+        degrees: ['BS Computer Science', 'BBA', 'BCom', 'LLB'],
+      }
+    ],
+    reviews: [
+      {
+        author: 'Mohammad R. (Alumnus)',
+        rating: 4,
+        text: 'The oldest university in Pakistan has a historical vibe. Old Campus is beautiful. Fees are extremely nominal, making it accessible to everyone. Academics are good but administrative speed can be improved.',
+        source: 'Google Reviews',
+      }
+    ]
   },
   {
     id: 'aku',
@@ -184,8 +304,8 @@ export const universities: University[] = [
     established: 1983,
     students: 3500,
     programs: 30,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=AKU&backgroundColor=1a1a35&textColor=ec4899',
-    image: 'https://picsum.photos/seed/aku/800/450',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/5/55/AKU%27s_Seal.jpg',
+    image: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200&auto=format&fit=crop',
     description: 'AKU is a world-class institution known for excellence in medicine, nursing, education, and development policy. It maintains a strong focus on research and community health.',
     website: 'https://aku.edu',
     fee: { min: 400000, max: 900000 },
@@ -195,69 +315,137 @@ export const universities: University[] = [
     programs_list: [
       { name: 'Medicine & Surgery', degree: 'MBBS', duration: '5 years', seats: 100, fee: 900000, merit: 92 },
       { name: 'Nursing', degree: 'BScN', duration: '4 years', seats: 80, fee: 400000, merit: 80 },
-      { name: 'Education', degree: 'BEd', duration: '4 years', seats: 60, fee: 500000, merit: 75 },
     ],
     requirements: [
       'Pre-Medical FSc with minimum 75%',
       'AKU Medical College Admission Test (MCAT)',
       'IELTS 6.5 or equivalent',
-      'Personal statement (500 words)',
     ],
     howToApply: [
       'Download application from aku.edu',
       'Submit completed application with all documents',
       'Pay application processing fee',
-      'Sit for AKU entry test',
-      'Attend personal interview',
+      'Sit for AKU entry test and interview',
     ],
     contacts: {
       phone: '+92-21-3486-1900',
       email: 'admissions@aku.edu',
       address: 'Stadium Road, Karachi 74800',
     },
+    reviews: [
+      {
+        author: 'Dr. Faisal (MBBS Graduate)',
+        rating: 5,
+        text: 'Best medical college in the country by a mile. The hospital facilities are internationally accredited and the hands-on clinical experience is outstanding. Extremely competitive but worth it.',
+        source: 'Doctor Network',
+      }
+    ]
   },
   {
     id: 'fast',
-    name: 'FAST National University',
+    name: 'FAST National University of Computer and Emerging Sciences',
     shortName: 'FAST-NUCES',
-    city: 'Karachi',
-    province: 'Sindh',
+    city: 'Islamabad',
+    province: 'Federal',
     type: 'private',
     ranking: 5,
-    established: 1985,
+    established: 2000,
     students: 18000,
     programs: 50,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=FAST&backgroundColor=1a1a35&textColor=5b63f5',
-    image: 'https://picsum.photos/seed/fast/800/450',
-    description: 'FAST-NUCES specializes in computing, electrical, civil, and management sciences. Known for producing top CS graduates who lead Pakistan\'s tech industry.',
+    logo: 'https://upload.wikimedia.org/wikipedia/en/e/e1/FAST_NUCES_logo.png',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/NUCES_Lahore.jpg',
+    description: 'FAST-NUCES specializes in computing, artificial intelligence, software engineering, and business. Famous for its rigorous coding standards, it produces Pakistan\'s top tech graduates who lead the national and international tech sector.',
     website: 'https://nu.edu.pk',
     fee: { min: 180000, max: 400000 },
-    tags: ['Computer Science', 'Engineering', 'Business'],
+    tags: ['Computer Science', 'Engineering', 'Business', 'AI'],
     admissionOpen: true,
     deadline: '2025-07-15',
     programs_list: [
       { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 300, fee: 320000, merit: 83 },
       { name: 'Data Science', degree: 'BS', duration: '4 years', seats: 120, fee: 320000, merit: 82 },
       { name: 'Artificial Intelligence', degree: 'BS', duration: '4 years', seats: 100, fee: 340000, merit: 84 },
-      { name: 'Electrical Engineering', degree: 'BS', duration: '4 years', seats: 200, fee: 360000, merit: 81 },
+      { name: 'Software Engineering', degree: 'BS', duration: '4 years', seats: 200, fee: 320000, merit: 81 },
+      { name: 'Civil Engineering (Lahore Only)', degree: 'BS', duration: '4 years', seats: 80, fee: 320000, merit: 75 },
     ],
     requirements: [
       'FSc Pre-Engineering or ICS with 60%+',
       'FAST Entry Test (NU-FAST) score',
-      'MDCAT/NET scores accepted',
+      'MDCAT/NET scores also accepted',
     ],
     howToApply: [
       'Register at numsis.nu.edu.pk',
-      'Fill and submit online form',
-      'Pay application fee',
-      'Appear in FAST Entry Test',
+      'Fill and submit online form specifying campuses and cities',
+      'Pay application fee online or via bank',
+      'Appear in FAST Entry Test at nearest center',
       'Check merit lists online',
     ],
     contacts: {
-      phone: '+92-21-3243-4975',
+      phone: '+92-51-2855-072',
       email: 'admission@nu.edu.pk',
-      address: 'Main Shahrah-e-Faisal, Karachi',
+      address: 'A.K. Brohi Road, H-11/4, Islamabad',
     },
+    campuses: [
+      {
+        name: 'Islamabad Campus (Main Campus)',
+        city: 'Islamabad',
+        address: 'A.K. Brohi Road, H-11/4, Islamabad',
+        phone: '+92-51-111-128-128',
+        email: 'admissions.isb@nu.edu.pk',
+        degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BS Cyber Security', 'BS Financial Technology (FinTech)', 'BBA', 'BS Accounting & Finance', 'BS Business Analytics']
+      },
+      {
+        name: 'Lahore Campus',
+        city: 'Lahore',
+        address: 'Block-B, Faisal Town, Lahore',
+        phone: '+92-42-111-128-128',
+        email: 'admissions.lhr@nu.edu.pk',
+        degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BS Civil Engineering', 'BS Electrical Engineering', 'BBA', 'BS Accounting & Finance']
+      },
+      {
+        name: 'Karachi Campus',
+        city: 'Karachi',
+        address: 'Shah Latif Town (Main Campus) / Clifton (City Campus), Karachi',
+        phone: '+92-21-111-128-128',
+        email: 'admissions.khi@nu.edu.pk',
+        degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BS Cyber Security', 'BS Electrical Engineering', 'BBA', 'BS Accounting & Finance']
+      },
+      {
+        name: 'Peshawar Campus',
+        city: 'Peshawar',
+        address: '1-A, Sector B-3, Phase V, Hayatabad, Peshawar',
+        phone: '+92-91-111-128-128',
+        email: 'admissions.pwr@nu.edu.pk',
+        degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Electrical Engineering', 'BBA', 'BS Accounting & Finance']
+      },
+      {
+        name: 'Chiniot-Faisalabad Campus',
+        city: 'Faisalabad',
+        address: 'Loonaywala, Faisalabad-Sargodha Road, Chiniot-Faisalabad',
+        phone: '+92-41-111-128-128',
+        email: 'admissions.cfd@nu.edu.pk',
+        degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BS Electrical Engineering', 'BBA']
+      }
+    ],
+    reviews: [
+      {
+        author: 'Zainab R. (CS Alumna, Class of 2024)',
+        rating: 5,
+        text: 'FAST is a coding bootcamp disguised as a university. The curriculum is extremely up-to-date and practical. If you survive the intense workload and programming projects, you\'ll find job hunting incredibly easy since employers actively headhunt Fastians.',
+        source: 'Google Reviews',
+      },
+      {
+        author: 'Ali K. (Software Engineering Student)',
+        rating: 4,
+        text: 'Academic pressure is very high. Quizzes and assignments are endless, and maintaining a GPA above 3.0 is a struggle. But the problem-solving and programming skills you build here are unmatched in Pakistan.',
+        source: 'Reddit Community',
+      },
+      {
+        author: 'Hamza T. (Data Science Alumnus)',
+        rating: 4.5,
+        text: 'Grading is very strict, which can make it hard to get admission in foreign graduate programs. However, for local job placements, it is hands down the best. You learn resilience and raw coding power.',
+        source: 'EduOpinions',
+      }
+    ]
   },
   {
     id: 'itu',
@@ -271,7 +459,7 @@ export const universities: University[] = [
     students: 2500,
     programs: 20,
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=ITU&backgroundColor=1a1a35&textColor=06b6d4',
-    image: 'https://picsum.photos/seed/itu/800/450',
+    image: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=1200&auto=format&fit=crop',
     description: 'ITU Punjab is a focused technology and innovation university offering cutting-edge programs in CS, AI, Data Science, and Entrepreneurship.',
     website: 'https://itu.edu.pk',
     fee: { min: 120000, max: 250000 },
@@ -299,11 +487,19 @@ export const universities: University[] = [
       email: 'admissions@itu.edu.pk',
       address: '346-B, Old Muslim Town, Lahore',
     },
+    reviews: [
+      {
+        author: 'Usman K. (CS Graduate)',
+        rating: 4,
+        text: 'Very modern curriculum and research labs. Since it is relatively small, you get good attention from professors who mostly have international PhDs. Good startup incubator.',
+        source: 'Google Reviews',
+      }
+    ]
   },
   {
     id: 'uet',
-    name: 'University of Engineering & Technology',
-    shortName: 'UET Lahore',
+    name: 'University of Engineering and Technology Lahore',
+    shortName: 'UET',
     city: 'Lahore',
     province: 'Punjab',
     type: 'public',
@@ -311,9 +507,9 @@ export const universities: University[] = [
     established: 1921,
     students: 14000,
     programs: 60,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=UET&backgroundColor=1a1a35&textColor=f59e0b',
-    image: 'https://picsum.photos/seed/uet/800/450',
-    description: 'UET Lahore is Pakistan\'s oldest engineering university offering world class engineering education in multiple disciplines.',
+    logo: 'https://upload.wikimedia.org/wikipedia/en/4/4d/UET_Lahore_logo.png',
+    image: 'https://images.unsplash.com/photo-1606761568289-4014d5573422?q=80&w=1200&auto=format&fit=crop',
+    description: 'UET Lahore is Pakistan\'s oldest engineering university, offering top-class education in multiple disciplines of engineering, architecture, and technology.',
     website: 'https://uet.edu.pk',
     fee: { min: 80000, max: 200000 },
     tags: ['Engineering', 'Architecture', 'Technology'],
@@ -323,7 +519,6 @@ export const universities: University[] = [
       { name: 'Civil Engineering', degree: 'BS', duration: '4 years', seats: 200, fee: 160000, merit: 84 },
       { name: 'Electrical Engineering', degree: 'BS', duration: '4 years', seats: 200, fee: 170000, merit: 83 },
       { name: 'Computer Engineering', degree: 'BS', duration: '4 years', seats: 120, fee: 160000, merit: 85 },
-      { name: 'Chemical Engineering', degree: 'BS', duration: '4 years', seats: 100, fee: 160000, merit: 80 },
     ],
     requirements: [
       'FSc Pre-Engineering with 60%+',
@@ -341,6 +536,20 @@ export const universities: University[] = [
       email: 'info@uet.edu.pk',
       address: 'Grand Trunk Road, Lahore',
     },
+    campuses: [
+      { name: 'UET Lahore (Main)', city: 'Lahore', address: 'G.T. Road, Lahore', phone: '+92-42-99029202' },
+      { name: 'Kala Shah Kaku Campus (KSK)', city: 'Sheikhupura', address: 'KSK, Punjab', phone: '+92-42-35515685' },
+      { name: 'Faisalabad Campus (UET-FSD)', city: 'Faisalabad', address: 'Faisalabad, Punjab', phone: '+92-41-2433501' },
+      { name: 'Narowal Campus', city: 'Narowal', address: 'Narowal, Punjab', phone: '+92-54-2500511' }
+    ],
+    reviews: [
+      {
+        author: 'Saad M. (Mechanical Graduate)',
+        rating: 4.2,
+        text: 'The absolute pioneer of engineering in Punjab. The alumni network is present in every industry. Main campus has classic brick architecture. Very competitive entry via ECAT.',
+        source: 'Alumni Network',
+      }
+    ]
   },
   {
     id: 'comsats',
@@ -353,8 +562,8 @@ export const universities: University[] = [
     established: 1998,
     students: 28000,
     programs: 100,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=COMSATS&backgroundColor=1a1a35&textColor=ec4899',
-    image: 'https://picsum.photos/seed/comsats/800/450',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/1/10/COMSATS_new_logo.jpg',
+    image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=1200&auto=format&fit=crop',
     description: 'COMSATS is a federal university with multiple campuses across Pakistan offering programs in technology, sciences, and management.',
     website: 'https://comsats.edu.pk',
     fee: { min: 100000, max: 250000 },
@@ -369,7 +578,7 @@ export const universities: University[] = [
     requirements: ['FSc/ICS 50%+', 'COMSATS Entry Test', 'CNIC and Domicile'],
     howToApply: [
       'Apply online via admission.comsats.edu.pk',
-      'Select preferred campus',
+      'Select preferred campus and program',
       'Pay entry test fee',
       'Appear for test at selected campus',
     ],
@@ -378,42 +587,13 @@ export const universities: University[] = [
       email: 'info@comsats.edu.pk',
       address: 'Park Road, Islamabad',
     },
-  },
-  {
-    id: 'iu',
-    name: 'Indus University',
-    shortName: 'IU',
-    city: 'Karachi',
-    province: 'Sindh',
-    type: 'private',
-    ranking: 9,
-    established: 1999,
-    students: 8000,
-    programs: 40,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=IU&backgroundColor=1a1a35&textColor=7c3aed',
-    image: 'https://picsum.photos/seed/indus/800/450',
-    description: 'Indus University Karachi offers practical, industry-oriented programs in engineering, computing, and business.',
-    website: 'https://indus.edu.pk',
-    fee: { min: 150000, max: 300000 },
-    tags: ['Engineering', 'Business', 'Computing'],
-    admissionOpen: true,
-    deadline: '2025-09-15',
-    programs_list: [
-      { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 100, fee: 240000, merit: 70 },
-      { name: 'Textile Engineering', degree: 'BS', duration: '4 years', seats: 80, fee: 250000, merit: 68 },
-    ],
-    requirements: ['Intermediate with 45%+', 'Indus Admission Test'],
-    howToApply: [
-      'Visit indus.edu.pk and fill application form',
-      'Pay admission fee',
-      'Appear for admission test',
-      'Collect printed form and submit to campus',
-    ],
-    contacts: {
-      phone: '+92-21-3661-0009',
-      email: 'admissions@indus.edu.pk',
-      address: 'ST-2D, Block-17, Gulshan-e-Iqbal, Karachi',
-    },
+    campuses: [
+      { name: 'Islamabad Campus (Main)', city: 'Islamabad', address: 'Park Road, Chak Shahzad, Islamabad', phone: '+92-51-9247000' },
+      { name: 'Lahore Campus', city: 'Lahore', address: 'Defence Road, Off Raiwind Road, Lahore', phone: '+92-42-111-001-007' },
+      { name: 'Abbottabad Campus', city: 'Abbottabad', address: 'University Road, Tobe Camp, Abbottabad', phone: '+92-992-383591' },
+      { name: 'Wah Campus', city: 'Wah Cantt', address: 'G.T. Road, Wah Cantt', phone: '+92-51-4534200' },
+      { name: 'Sahiwal Campus', city: 'Sahiwal', address: 'COMSATS Road, Sahiwal', phone: '+92-40-4305001' }
+    ]
   },
   {
     id: 'szabist',
@@ -427,8 +607,8 @@ export const universities: University[] = [
     students: 10000,
     programs: 55,
     logo: 'https://api.dicebear.com/7.x/initials/svg?seed=SZABIST&backgroundColor=1a1a35&textColor=5b63f5',
-    image: 'https://picsum.photos/seed/szabist/800/450',
-    description: 'SZABIST offers quality programs in computing, management, media sciences, and social sciences with a focus on industry relevance.',
+    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1200&auto=format&fit=crop',
+    description: 'SZABIST offers quality programs in computing, management, media sciences, and social sciences with a focus on industry relevance and corporate placement.',
     website: 'https://szabist.edu.pk',
     fee: { min: 200000, max: 420000 },
     tags: ['Computing', 'Management', 'Media Sciences'],
@@ -442,7 +622,7 @@ export const universities: University[] = [
     requirements: ['FSc/A-Levels with 50%+', 'SZABIST Entry Test or SAT'],
     howToApply: [
       'Apply online at admissions.szabist.edu.pk',
-      'Upload required documents',
+      'Upload required documents and select campus',
       'Appear for SZABIST Entry Test',
       'Attend merit-based interview',
     ],
@@ -451,78 +631,119 @@ export const universities: University[] = [
       email: 'info@szabist.edu.pk',
       address: '90 & 100, Clifton, Karachi 75600',
     },
+    campuses: [
+      { name: 'Karachi Campus (Main)', city: 'Karachi', address: 'Clifton, Karachi', phone: '+92-21-111-922-478' },
+      { name: 'Islamabad Campus', city: 'Islamabad', address: 'Street 9, H-8/4, Islamabad', phone: '+92-51-4863363' },
+      { name: 'Hyderabad Campus', city: 'Hyderabad', address: 'Ground & 1st Floor, State Life Building, Hyderabad', phone: '+92-22-2782442' },
+      { name: 'Larkana Campus', city: 'Larkana', address: 'Sachity Block, Larkana', phone: '+92-74-4752890' }
+    ]
   },
   {
-    id: 'kiu',
-    name: 'Karakoram International University',
-    shortName: 'KIU',
-    city: 'Gilgit',
-    province: 'Gilgit-Baltistan',
+    id: 'iba',
+    name: 'Institute of Business Administration',
+    shortName: 'IBA',
+    city: 'Karachi',
+    province: 'Sindh',
     type: 'public',
-    ranking: 11,
-    established: 2002,
+    ranking: 9,
+    established: 1955,
     students: 5000,
     programs: 30,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=KIU&backgroundColor=1a1a35&textColor=06b6d4',
-    image: 'https://picsum.photos/seed/kiu/800/450',
-    description: 'KIU serves the mountainous regions of GB, AJK and KP, offering affordable higher education and specialized programs in snow sciences and tourism.',
-    website: 'https://kiu.edu.pk',
-    fee: { min: 20000, max: 80000 },
-    tags: ['Sciences', 'Tourism', 'Social Sciences'],
-    admissionOpen: false,
-    deadline: '2025-10-01',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/IBA_LOGO.png',
+    image: 'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=1200&auto=format&fit=crop',
+    description: 'IBA Karachi is Pakistan\'s premier business school. Highly recognized for its BBA, MBA, and Computer Science programs, it boasts corporate linkages and an outstanding campus infrastructure.',
+    website: 'https://iba.edu.pk',
+    fee: { min: 250000, max: 600000 },
+    tags: ['Business', 'Computer Science', 'Economics'],
+    admissionOpen: true,
+    deadline: '2025-07-31',
     programs_list: [
-      { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 80, fee: 60000, merit: 65 },
-      { name: 'Tourism & Hospitality', degree: 'BS', duration: '4 years', seats: 60, fee: 50000, merit: 60 },
+      { name: 'Business Administration', degree: 'BBA', duration: '4 years', seats: 200, fee: 450000, merit: 85 },
+      { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 80, fee: 400000, merit: 87 },
+      { name: 'Accounting & Finance', degree: 'BS', duration: '4 years', seats: 80, fee: 420000, merit: 84 },
     ],
-    requirements: ['FSc/FA with 45%+', 'KIU Entry Test', 'Domicile of GB/AJK/KP'],
+    requirements: [
+      'A-Levels/FSc/ICS with strong academics',
+      'IBA Aptitude Test',
+      'Interview for shortlisted candidates',
+    ],
     howToApply: [
-      'Obtain prospectus from KIU campus',
-      'Fill application form and pay fee',
-      'Appear for entry test',
-      'Merit list display at main campus',
+      'Apply via iba.edu.pk admissions portal',
+      'Pay application fee of PKR 4,000',
+      'Appear for IBA Aptitude Test',
+      'Attend interview if shortlisted',
     ],
     contacts: {
-      phone: '+92-5811-60595',
-      email: 'info@kiu.edu.pk',
-      address: 'Jutial, Gilgit, Gilgit-Baltistan',
+      phone: '+92-21-3810-4700',
+      email: 'admissions@iba.edu.pk',
+      address: 'University Road, Karachi 75270',
     },
+    campuses: [
+      { name: 'Main Campus', city: 'Karachi', address: 'University Road, Karachi', phone: '+92-21-38104700' },
+      { name: 'City Campus', city: 'Karachi', address: 'Kiyani Shaheed Road, Garden, Karachi', phone: '+92-21-38104701' }
+    ],
+    reviews: [
+      {
+        author: 'Mustafa H. (BBA Student)',
+        rating: 5,
+        text: 'IBA is the premier business school in the country. The campus at University Road is stunning with modern architecture and green lawns. The placement cell is incredibly active and connects you directly with top multinational companies.',
+        source: 'Google Reviews',
+      },
+      {
+        author: 'Rida K. (Computer Science Alumna)',
+        rating: 4.5,
+        text: 'Although IBA is famous for business, its CS department is rapidly catching up with excellent faculty and modern labs. The corporate linkage is a massive advantage for all graduates.',
+        source: 'Student Portal',
+      }
+    ]
   },
   {
-    id: 'au',
-    name: 'Arid Agriculture University',
-    shortName: 'UAAR',
-    city: 'Rawalpindi',
-    province: 'Punjab',
-    type: 'public',
-    ranking: 12,
-    established: 1994,
-    students: 18000,
-    programs: 80,
-    logo: 'https://api.dicebear.com/7.x/initials/svg?seed=UAAR&backgroundColor=1a1a35&textColor=f59e0b',
-    image: 'https://picsum.photos/seed/arid/800/450',
-    description: 'UAAR specializes in agriculture, food sciences, veterinary sciences, and environmental studies in the arid and semi-arid regions of Pakistan.',
-    website: 'https://uaar.edu.pk',
-    fee: { min: 40000, max: 150000 },
-    tags: ['Agriculture', 'Veterinary', 'Food Sciences'],
+    id: 'giki',
+    name: 'Ghulam Ishaq Khan Institute of Engineering Sciences and Technology',
+    shortName: 'GIKI',
+    city: 'Topi',
+    province: 'Khyber Pakhtunkhwa',
+    type: 'private',
+    ranking: 11,
+    established: 1993,
+    students: 3000,
+    programs: 20,
+    logo: 'https://upload.wikimedia.org/wikipedia/en/1/15/GIKI_Logo.png',
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop',
+    description: 'GIK Institute is one of Pakistan\'s most selective residential engineering universities, located in a beautiful campus in Topi, KP. It is renowned for its engineering rigor and high graduate employability.',
+    website: 'https://giki.edu.pk',
+    fee: { min: 350000, max: 550000 },
+    tags: ['Engineering', 'Sciences', 'Technology', 'Residential'],
     admissionOpen: true,
-    deadline: '2025-09-30',
+    deadline: '2025-08-10',
     programs_list: [
-      { name: 'Agriculture', degree: 'BS', duration: '4 years', seats: 200, fee: 80000, merit: 68 },
-      { name: 'Food Technology', degree: 'BS', duration: '4 years', seats: 100, fee: 90000, merit: 70 },
-      { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 120, fee: 100000, merit: 70 },
+      { name: 'Computer Science', degree: 'BS', duration: '4 years', seats: 80, fee: 500000, merit: 88 },
+      { name: 'Electrical Engineering', degree: 'BS', duration: '4 years', seats: 80, fee: 500000, merit: 86 },
+      { name: 'Mechanical Engineering', degree: 'BS', duration: '4 years', seats: 60, fee: 500000, merit: 85 },
     ],
-    requirements: ['FSc with relevant subjects 45%+', 'UAAR Entry Test'],
+    requirements: [
+      'FSc Pre-Engineering / A-Levels with 70%+',
+      'GIKI Admission Test',
+      'CNIC/B-Form',
+    ],
     howToApply: [
-      'Apply via uaar.edu.pk portal',
-      'Pay challan at designated bank',
-      'Sit the entry test',
-      'Report on merit announcement',
+      'Apply via giki.edu.pk admissions',
+      'Pay application fee of PKR 5,000',
+      'Appear for GIKI Admission Test',
+      'Enroll and join residential campus',
     ],
     contacts: {
-      phone: '+92-51-9290752',
-      email: 'info@uaar.edu.pk',
-      address: 'Murree Road, Rawalpindi',
+      phone: '+92-938-271-858',
+      email: 'admissions@giki.edu.pk',
+      address: 'Topi, District Swabi, KP 23640',
     },
-  },
+    reviews: [
+      {
+        author: 'Ali S. (Alumnus)',
+        rating: 4.8,
+        text: 'Incredible residential campus. Living away from cities teaches you independence. GIKI network is huge and highly supportive. Strong student societies make the campus life extremely lively.',
+        source: 'Google Reviews',
+      }
+    ]
+  }
 ];

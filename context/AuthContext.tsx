@@ -23,6 +23,8 @@ export interface UserProfile {
   hourlyRate?: number;
   budgetPreference?: string;
   resourcesSharedCount?: number;
+  downloadedResourcesCount?: number;
+  readBlogsCount?: number;
 }
 
 interface AuthContextType {

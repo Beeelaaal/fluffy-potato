@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { ArrowLeft, User, Calendar, Clock } from 'lucide-react';
+import { ArrowLeft, User, Calendar, Clock, Eye } from 'lucide-react';
+import { mapCategory, getCategoryColor, getBlogCoverImage } from '@/lib/blog';
+import BlogReadTracker from '@/components/BlogReadTracker';
 
 const STATIC_POSTS = [
   {
@@ -64,17 +66,23 @@ async function getBlogPost(id: string) {
     if (res.ok) {
       const data = await res.json();
       const fields = data.fields;
+      const title = fields.title?.stringValue || 'Untitled';
+      const dbCategory = fields.category?.stringValue || 'General';
+      const mappedCategory = mapCategory(dbCategory, title, id);
+      
       return {
         slug: id,
-        title: fields.title?.stringValue || 'Untitled',
+        title,
         content: fields.content?.stringValue || '',
         excerpt: fields.excerpt?.stringValue || '',
         authorName: fields.authorName?.stringValue || 'Anonymous Author',
-        category: fields.category?.stringValue || 'General',
+        category: mappedCategory,
         date: fields.date?.stringValue || '',
         readTime: fields.readTime?.stringValue || '5 min read',
-        color: fields.color?.stringValue || '#0066FF',
+        color: getCategoryColor(mappedCategory),
         createdAt: fields.createdAt?.stringValue || '',
+        views: fields.views?.stringValue || fields.views?.integerValue || '1.2k',
+        coverImage: getBlogCoverImage(mappedCategory, title, id),
       };
     }
   } catch (err) {
@@ -84,10 +92,13 @@ async function getBlogPost(id: string) {
   // 2. Fallback to static mock posts
   const staticPost = STATIC_POSTS.find(p => p.slug === id);
   if (staticPost) {
+    const mappedCategory = mapCategory(staticPost.category, staticPost.title, staticPost.slug);
     let mockContent = '';
     if (staticPost.slug === 'nust-admission-guide-net-prep-eligibility') {
       mockContent = `## Introduction
 The NUST Entry Test (NET) is one of the most competitive entrance exams in Pakistan, determining admissions for thousands of applicants in engineering, computing, and business degrees. Preparing for it requires a solid strategy, conceptual clarity, and rigorous time management.
+
+![NUST Islamabad Campus - Preparing for NET](https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=600&auto=format&fit=crop)
 
 ## Understanding the Test Pattern
 NET is conducted in two formats: Computer-based at the Islamabad campus, and Paper-based in Karachi and Quetta.
@@ -98,7 +109,7 @@ There is no negative marking, so you must attempt all 200 questions.
 ## Prep Strategy & Recommended Material
 1. **Textbooks First**: NUST maps its test syllabus directly to FSc / Federal Board textbooks. Thoroughly study your board mathematics and physics textbooks.
 2. **Key Concepts in Physics**: Focus heavily on Electromagnetism, Waves, and Mechanics.
-3. **Speed Mathematics**: Memorize shortcuts for... formulas and equations. Do not waste time on long proofs.
+3. **Speed Mathematics**: Memorize shortcuts for formulas and equations. Do not waste time on long proofs.
 4. **Solve English & Intelligence First**: Since English and Intelligence questions are straightforward, solve them in the first 15 minutes to secure a time buffer for lengthy calculations.
 
 ## Aggregate Calculator & Targets
@@ -110,6 +121,8 @@ Aim for a NET score of 135+ for Computing fields (Software Engineering, CS) and 
     } else if (staticPost.slug === 'fast-nu-surviving-guide-dos-donts-freshmen') {
       mockContent = `## Introduction
 FAST National University is widely renowned for its rigorous computing curriculum and high employability. However, its strict academic atmosphere and rapid pace can be overwhelming for freshmen. Here is a definitive guide on how to survive and maintain a strong GPA.
+
+![FAST-NU Coding Labs & Classrooms](https://images.unsplash.com/photo-1484417894907-623942c8ea29?q=80&w=600&auto=format&fit=crop)
 
 ## The Grade Struggle: Relative vs Absolute
 FAST utilizes relative grading in most core CS/SE courses, while some general courses use absolute grading.
@@ -127,6 +140,8 @@ FAST utilizes relative grading in most core CS/SE courses, while some general co
     } else if (staticPost.slug === 'higher-education-scholarships-pakistan-hec-need-based') {
       mockContent = `## Introduction
 Higher education in Pakistan can be expensive, but financial constraints shouldn't prevent you from studying at top-tier institutions. There are numerous fully funded scholarships, need-based aids, and interest-free student loans available.
+
+![Financial Aid and HEC Scholarships](https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=600&auto=format&fit=crop)
 
 ## Top Scholarship Programs
 1. **HEC Need-Based Scholarships**: Higher Education Commission offers fully funded tuition fees and a monthly stipend for students coming from low-income families.
@@ -149,6 +164,8 @@ Demonstrate complete honesty in your financial declaration forms.`;
     } else if (staticPost.slug === 'university-application-deadlines-cheat-sheet-fall-2026') {
       mockContent = `## Introduction
 Staying organized and tracking deadlines is half the battle in the university admission process. Missed deadlines mean waiting a whole year for the next cycle. Here is a curated timeline cheat sheet for Fall 2026 admissions at Pakistan's top-tier universities.
+
+![Deadlines Calendar Sheet](https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=600&auto=format&fit=crop)
 
 ## Application Deadlines (Fall 2026)
 
@@ -181,6 +198,8 @@ NUST conducts NET in four series:
       mockContent = `## Introduction
 Midterm and final exam sessions are high-stress periods for university students. Cramming the night before rarely works and leads to burnout. To secure top grades, you must employ scientifically proven study techniques and maintain a structured routine.
 
+![Exam Study Sessions and Techniques](https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop)
+
 ## Effective Study Techniques
 1. **The Feynman Technique**: Explain a complex concept to a five-year-old in simple words. If you struggle, review the textbooks until you fill the gap.
 2. **Pomodoro (50/10 Split)**: Work for 50 minutes with full focus, then take a 10-minute break. This prevents cognitive exhaustion.
@@ -190,13 +209,17 @@ Midterm and final exam sessions are high-stress periods for university students.
 If exams are starting next week and you are behind, follow these emergency protocols:
 - **Prioritize Past Papers**: Professors often reuse exam patterns, structures, and occasionally specific questions. Practice past papers from the last 3-5 years.
 - **Leverage Course Outline**: Focus on high-weightage chapters. Do not try to learn everything; aim to master the topics that carry the most marks.
-- **Hire a Peer Tutor**: If you are completely stuck on a concept (like compiler construction or dynamic programming), use a peer-to-peer tutoring service to clear it in one session.
+- **Hire a Peer Tutor**: If you are completely stuck on a concept (like compiler construction or dynamic programming), use a [peer-to-peer tutoring service](/marketplace) to clear it in one session.
 - **Get Quality Sleep**: 6 hours of sleep before an exam is crucial. A sleep-deprived brain cannot recall complex equations or debug code under exam stress.`;
     }
 
     return {
       ...staticPost,
+      category: mappedCategory,
+      color: getCategoryColor(mappedCategory),
       content: mockContent,
+      views: '2.5k',
+      coverImage: getBlogCoverImage(mappedCategory, staticPost.title, staticPost.slug),
     };
   }
 
@@ -232,9 +255,9 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
 
   if (!post) {
     return (
-      <div className="min-h-screen pt-32 pb-24 text-center">
-        <h1 className="font-display font-black text-3xl mb-4 text-[#0B071E]">Insider Guide Not Found</h1>
-        <p className="text-[#0B071E]/60 mb-6 font-semibold">The article you are looking for does not exist or has been deleted.</p>
+      <div className="min-h-screen pt-32 pb-24 text-center bg-[#FDFBF7] dark:bg-[#070310] transition-colors duration-500 flex flex-col items-center justify-center">
+        <h1 className="font-display font-black text-3xl mb-4 text-[#0B071E] dark:text-white">Insider Guide Not Found</h1>
+        <p className="text-[#0B071E]/60 dark:text-white/60 mb-6 font-semibold">The article you are looking for does not exist or has been deleted.</p>
         <Link href="/blog" className="btn-primary inline-flex">
           <ArrowLeft size={16} /> Back to YOUR INSIDER
         </Link>
@@ -291,7 +314,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#0066FF] hover:underline font-bold"
+              className="text-[#0066FF] dark:text-funky-cyan hover:underline font-bold"
             >
               {label}
             </a>
@@ -301,7 +324,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
             <Link
               key={matchIndex}
               href={url}
-              className="text-[#0066FF] hover:underline font-bold"
+              className="text-[#0066FF] dark:text-funky-cyan hover:underline font-bold"
             >
               {label}
             </Link>
@@ -320,76 +343,128 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
   };
 
   const renderContent = (content: string) => {
-    return content.split('\n\n').map((block, idx) => {
+    // Normalise Windows line endings \r\n to \n
+    const normalizedContent = content.replace(/\r\n/g, '\n');
+    return normalizedContent.split('\n\n').map((block, idx) => {
       const trimmed = block.trim();
+
+      // Parse markdown images
+      if (trimmed.startsWith('![')) {
+        const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+        if (imgMatch) {
+          const alt = imgMatch[1];
+          const src = imgMatch[2];
+          return (
+            <div key={idx} className="my-8 overflow-hidden rounded-3xl border border-dark/10 dark:border-white/10 shadow-lg relative group">
+              <img
+                src={src}
+                alt={alt}
+                className="w-full object-cover max-h-[380px] transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+              {alt && (
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-xs font-semibold text-white/90">
+                  {alt}
+                </div>
+              )}
+            </div>
+          );
+        }
+      }
+
       if (trimmed.startsWith('# ')) {
-        return <h1 key={idx} className="font-display font-black text-3xl mt-6 mb-3 text-[#0B071E]">{trimmed.replace('# ', '')}</h1>;
+        return <h1 key={idx} className="font-display font-black text-3xl mt-6 mb-3 text-[#0B071E] dark:text-white">{trimmed.replace('# ', '')}</h1>;
       }
       if (trimmed.startsWith('## ')) {
-        return <h2 key={idx} className="font-display font-bold text-2xl mt-5 mb-3 text-[#0B071E]">{trimmed.replace('## ', '')}</h2>;
+        return <h2 key={idx} className="font-display font-bold text-2xl mt-5 mb-3 text-[#0B071E] dark:text-white">{trimmed.replace('## ', '')}</h2>;
       }
       if (trimmed.startsWith('### ')) {
-        return <h3 key={idx} className="font-display font-bold text-xl mt-4 mb-2 text-[#0B071E]">{trimmed.replace('### ', '')}</h3>;
+        return <h3 key={idx} className="font-display font-bold text-xl mt-4 mb-2 text-[#0B071E] dark:text-white">{trimmed.replace('### ', '')}</h3>;
       }
       if (trimmed.startsWith('- ')) {
         const items = trimmed.split('\n').map((item, i) => (
-          <li key={i} className="list-disc ml-5 mb-1.5 font-semibold text-[#0B071E]/80 text-sm">
+          <li key={i} className="list-disc ml-5 mb-1.5 font-semibold text-[#0B071E]/80 dark:text-white/80 text-sm">
             {parseTextWithLinks(item.replace('- ', ''))}
           </li>
         ));
         return <ul key={idx} className="my-3 space-y-1">{items}</ul>;
       }
-      return <p key={idx} className="text-[#0B071E]/80 text-base leading-relaxed mb-4 font-semibold">{parseTextWithLinks(trimmed)}</p>;
+      return <p key={idx} className="text-[#0B071E]/80 dark:text-white/80 text-base leading-relaxed mb-4 font-semibold">{parseTextWithLinks(trimmed)}</p>;
     });
   };
 
-  return (
-    <div className="min-h-screen pt-32 pb-24 relative">
-      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 blur-[100px] rounded-full pointer-events-none" />
+  const coverImage = post.coverImage || getBlogCoverImage(post.category, post.title, post.slug);
 
-      <div className="section-container max-w-3xl relative z-10">
-        <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 hover:text-[#0066FF] text-sm mb-8 transition-colors font-bold">
+  return (
+    <div className="min-h-screen pt-32 pb-24 relative bg-[#FDFBF7] dark:bg-[#070310] transition-colors duration-500">
+      <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-funky-blue/5 dark:bg-funky-blue/[0.03] blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 w-[400px] h-[300px] bg-funky-cyan/5 dark:bg-funky-cyan/[0.02] blur-[100px] rounded-full pointer-events-none" />
+
+      <div className="section-container max-w-3xl relative z-10 mx-auto px-4">
+        <Link href="/blog" className="inline-flex items-center gap-2 text-[#0B071E]/60 dark:text-white/60 hover:text-[#0066FF] dark:hover:text-funky-cyan text-sm mb-8 transition-colors font-bold">
           <ArrowLeft size={15} /> Back to YOUR INSIDER
         </Link>
 
-        <article className="glass-card p-8 sm:p-12 bg-white/95 shadow-xl">
-          <header className="mb-8 border-b border-black/5 pb-8">
+        <article className="glass-card p-8 sm:p-12 bg-white/95 dark:bg-[#110A20]/90 border border-dark/10 dark:border-white/10 shadow-xl rounded-3xl">
+          {/* Article Cover Image */}
+          {coverImage && (
+            <div className="w-full h-[240px] sm:h-[350px] overflow-hidden rounded-2xl mb-8 relative border border-dark/10 dark:border-white/10 shadow-md">
+              <img
+                src={coverImage}
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            </div>
+          )}
+
+          <header className="mb-8 border-b border-black/5 dark:border-white/5 pb-8">
             <span
-              className="px-3 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider mb-4 inline-block"
+              className="px-3 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider mb-4 inline-block border"
               style={{
-                background: `${post.color || '#0066FF'}15`,
-                border: `1px solid ${post.color || '#0066FF'}25`,
-                color: post.color || '#0066FF',
+                background: `${post.color}12`,
+                borderColor: `${post.color}25`,
+                color: post.color,
               }}
             >
               {post.category}
             </span>
-            <h1 className="font-display font-black text-4xl sm:text-5xl leading-tight text-[#0B071E] mb-6">
+            <h1 className="font-display font-black text-4xl sm:text-5xl leading-tight text-[#0B071E] dark:text-white mb-6">
               {post.title}
             </h1>
-            <div className="flex flex-wrap gap-4 text-xs text-[#0B071E]/60 font-bold items-center">
+            <div className="flex flex-wrap gap-4 text-xs text-[#0B071E]/60 dark:text-white/50 font-bold items-center">
               <span className="flex items-center gap-1.5">
-                <User size={14} className="text-[#0066FF]" />
+                <User size={14} className="text-[#0066FF] dark:text-funky-cyan" />
                 {post.authorName}
               </span>
-              <span className="text-[#0B071E]/20">•</span>
+              <span className="text-[#0B071E]/20 dark:text-white/20">•</span>
               <span className="flex items-center gap-1.5">
-                <Calendar size={14} className="text-[#0066FF]" />
+                <Calendar size={14} className="text-[#0066FF] dark:text-funky-cyan" />
                 {post.date}
               </span>
-              <span className="text-[#0B071E]/20">•</span>
+              <span className="text-[#0B071E]/20 dark:text-white/20">•</span>
               <span className="flex items-center gap-1.5">
-                <Clock size={14} className="text-[#0066FF]" />
+                <Clock size={14} className="text-[#0066FF] dark:text-funky-cyan" />
                 {post.readTime}
               </span>
+              {post.views && (
+                <>
+                  <span className="text-[#0B071E]/20 dark:text-white/20">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <Eye size={14} className="text-funky-orange" />
+                    {post.views} reads
+                  </span>
+                </>
+              )}
             </div>
           </header>
 
-          <div className="prose prose-blue max-w-none">
+          <div className="prose prose-blue dark:prose-invert max-w-none">
             {renderContent(post.content)}
           </div>
         </article>
+
+        {/* Track blog read */}
+        <BlogReadTracker slug={params.id} />
       </div>
     </div>
   );

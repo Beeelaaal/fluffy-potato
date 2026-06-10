@@ -4,11 +4,12 @@ import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Download, Eye, Star, Filter, FileText, BookOpen,
-  Clock, ClipboardList, Presentation, X, ChevronDown, ExternalLink, Coins
+  Clock, ClipboardList, Presentation, X, ChevronDown, ExternalLink, Coins,
+  MessageSquare, User, Check
 } from 'lucide-react';
 import { degrees, courses, Resource } from '@/data/resources';
 import { universities } from '@/data/universities';
-import { collection, getDocs, doc, updateDoc, increment } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, increment, query, where, addDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
@@ -37,7 +38,7 @@ const resourceTypes = ['all', 'notes', 'past-paper', 'assignment', 'timetable', 
 function ResourcesContent() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const isAdmin = profile?.role === 'admin';
 
   const searchParams = useSearchParams();
@@ -51,22 +52,71 @@ function ResourcesContent() {
   const [search, setSearch] = useState('');
   const [downloadingResource, setDownloadingResource] = useState<string | null>(null);
 
+  // New states for interactive detail modal, download limits and reviews
+  const [selectedResourceForDetail, setSelectedResourceForDetail] = useState<Resource | null>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [showLoginPromoModal, setShowLoginPromoModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [resourceToReview, setResourceToReview] = useState<Resource | null>(null);
+  const [userRating, setUserRating] = useState(5);
+  const [reviewText, setReviewText] = useState('');
+  const [submittingReview, setSubmittingReview] = useState(false);
+
+  // Local storage helpers to track guest downloads
+  const getGuestDownloads = (): string[] => {
+    if (typeof window === 'undefined') return [];
+    return JSON.parse(localStorage.getItem('guest_downloads') || '[]');
+  };
+
+  const addGuestDownload = (id: string) => {
+    if (typeof window === 'undefined') return;
+    const current = getGuestDownloads();
+    if (!current.includes(id)) {
+      current.push(id);
+      localStorage.setItem('guest_downloads', JSON.stringify(current));
+    }
+  };
+
   const handleDownload = (resourceId: string, fileUrl?: string) => {
     if (!fileUrl) {
       alert("No download URL available for this resource.");
       return;
     }
     
-    // Set downloading state for feedback toast
     const resource = resources.find(r => r.id === resourceId);
-    setDownloadingResource(resource?.title || 'Resource');
+    if (!resource) return;
 
-    // Increment downloads in Firestore in the background (non-blocking) so window.open is not blocked as a popup
+    // Check anonymous download limits
+    if (!user) {
+      const guestDownloads = getGuestDownloads();
+      const isAlreadyDownloaded = guestDownloads.includes(resourceId);
+
+      if (!isAlreadyDownloaded && guestDownloads.length >= 5) {
+        setShowLimitModal(true);
+        return;
+      }
+    }
+
+    // Set downloading state for feedback toast
+    setDownloadingResource(resource.title || 'Resource');
+
+    // Increment downloads in Firestore in the background
     updateDoc(doc(db, 'resources', resourceId), {
       downloads: increment(1)
     }).catch(err => console.error('Error updating download count:', err));
 
     setResources(prev => prev.map(r => r.id === resourceId ? { ...r, downloads: (r.downloads || 0) + 1 } : r));
+
+    // Update stats
+    if (user) {
+      updateDoc(doc(db, 'users', user.uid), {
+        downloadedResourcesCount: increment(1)
+      }).catch(err => console.error('Error updating user download count:', err));
+    } else {
+      addGuestDownload(resourceId);
+    }
 
     let downloadUrl = fileUrl;
     
@@ -94,6 +144,91 @@ function ResourcesContent() {
     }
     
     window.open(downloadUrl, '_blank');
+
+    // Post-download modals
+    setTimeout(() => {
+      if (!user) {
+        setShowLoginPromoModal(true);
+        setResourceToReview(resource);
+      } else {
+        setResourceToReview(resource);
+        setUserRating(5);
+        setReviewText('');
+        setShowReviewModal(true);
+      }
+    }, 1500);
+  };
+
+  useEffect(() => {
+    if (!selectedResourceForDetail) return;
+    const resourceId = selectedResourceForDetail.id;
+
+    async function fetchReviews() {
+      setReviewsLoading(true);
+      try {
+        const q = query(
+          collection(db, 'resourceReviews'),
+          where('resourceId', '==', resourceId)
+        );
+        const querySnapshot = await getDocs(q);
+        const list = querySnapshot.docs.map(doc => doc.data());
+        list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setReviews(list);
+      } catch (err) {
+        console.error('Error fetching reviews:', err);
+      } finally {
+        setReviewsLoading(false);
+      }
+    }
+
+    fetchReviews();
+  }, [selectedResourceForDetail]);
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resourceToReview) return;
+    setSubmittingReview(true);
+
+    const reviewData = {
+      resourceId: resourceToReview.id,
+      resourceTitle: resourceToReview.title,
+      rating: userRating,
+      reviewText: reviewText.trim(),
+      userId: user ? user.uid : 'guest',
+      userName: profile ? profile.name : 'Anonymous Student',
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, 'resourceReviews'), reviewData);
+
+      const resRef = doc(db, 'resources', resourceToReview.id);
+      const currentRating = resourceToReview.rating || 0;
+      const currentCount = resourceToReview.ratingsCount || 5;
+      const newCount = currentCount + 1;
+      const newRating = parseFloat(((currentRating * currentCount + userRating) / newCount).toFixed(1));
+
+      await updateDoc(resRef, {
+        rating: newRating,
+        ratingsCount: newCount
+      });
+
+      setResources(prev => prev.map(r => r.id === resourceToReview.id ? { ...r, rating: newRating, ratingsCount: newCount } : r));
+
+      if (selectedResourceForDetail && selectedResourceForDetail.id === resourceToReview.id) {
+        setSelectedResourceForDetail(prev => prev ? { ...prev, rating: newRating, ratingsCount: newCount } : null);
+        setReviews(prev => [reviewData, ...prev]);
+      }
+
+      alert('Thank you for rating and reviewing this resource!');
+      setShowReviewModal(false);
+      setResourceToReview(null);
+    } catch (err) {
+      console.error('Error submitting review:', err);
+      alert('Failed to submit review. Please try again.');
+    } finally {
+      setSubmittingReview(false);
+    }
   };
 
   useEffect(() => {
@@ -293,7 +428,8 @@ function ResourcesContent() {
                 return (
                   <motion.div
                     key={res.id}
-                    className="glass-card p-6 flex flex-col h-full group transition-all duration-300"
+                    onClick={() => setSelectedResourceForDetail(res)}
+                    className="glass-card p-6 flex flex-col h-full group transition-all duration-300 cursor-pointer hover:border-[#0066FF]/30 hover:shadow-[0_8px_30px_rgba(0,102,255,0.06)]"
                     initial={{ opacity: 0, scale: 0.96, y: 10 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.96 }}
@@ -341,13 +477,14 @@ function ResourcesContent() {
                     {/* Actions */}
                     <div className="flex gap-3 mt-auto">
                       <button 
-                        onClick={() => handleDownload(res.id, res.fileUrl)}
+                        onClick={(e) => { e.stopPropagation(); handleDownload(res.id, res.fileUrl); }}
                         className="btn-primary flex-1 py-2.5 text-sm font-extrabold tracking-wide"
                       >
                         <Download size={14} /> Download
                       </button>
                       <button 
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           if (res.fileUrl) {
                             window.open(res.fileUrl, '_blank');
                           } else {
@@ -472,6 +609,366 @@ function ResourcesContent() {
                     Go to Tutor Marketplace
                   </Link>
                 </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Resource Details Modal */}
+        <AnimatePresence>
+          {selectedResourceForDetail && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative w-full max-w-2xl glass-card p-8 bg-white/95 dark:bg-[#110A20]/95 shadow-2xl rounded-3xl border border-[#0B071E]/10 dark:border-white/10 overflow-y-auto max-h-[90vh]"
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+              >
+                <button
+                  onClick={() => setSelectedResourceForDetail(null)}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg text-[#0B071E]/40 dark:text-white/40 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                >
+                  <X size={16} />
+                </button>
+
+                {/* Resource Metadata Header */}
+                <div className="flex items-center gap-2.5 mb-4">
+                  <span className="text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider bg-[#0d9488]/10 border border-[#0d9488]/20 text-[#0d9488]">
+                    {selectedResourceForDetail.type.replace('-', ' ')}
+                  </span>
+                  <span className="text-xs px-3 py-1 rounded-full font-bold bg-[#0066FF]/10 text-[#0066FF] border border-[#0066FF]/20">
+                    {selectedResourceForDetail.university}
+                  </span>
+                </div>
+
+                <h2 className="font-display font-black text-2xl sm:text-3xl text-[#0B071E] dark:text-white mb-2 leading-tight">
+                  {selectedResourceForDetail.title}
+                </h2>
+                <p className="text-sm font-semibold text-[#0B071E]/60 dark:text-white/60 mb-6">
+                  {selectedResourceForDetail.degree} &bull; {selectedResourceForDetail.course}
+                </p>
+
+                {/* Grid stats */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5 mb-6">
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-[#0B071E]/40 dark:text-white/40">Instructor</span>
+                    <p className="text-sm font-bold text-[#0B071E] dark:text-white">{selectedResourceForDetail.instructor}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-[#0B071E]/40 dark:text-white/40">Semester / Year</span>
+                    <p className="text-sm font-bold text-[#0B071E] dark:text-white">Sem {selectedResourceForDetail.semester} / {selectedResourceForDetail.year}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-[#0B071E]/40 dark:text-white/40">File Size / Type</span>
+                    <p className="text-sm font-bold text-[#0B071E] dark:text-white uppercase">{selectedResourceForDetail.fileSize} / {selectedResourceForDetail.fileType}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-[#0B071E]/40 dark:text-white/40">Downloads / Views</span>
+                    <p className="text-sm font-bold text-[#0B071E] dark:text-white">{selectedResourceForDetail.downloads} / {selectedResourceForDetail.views}</p>
+                  </div>
+                </div>
+
+                <div className="mb-6">
+                  <h4 className="font-display font-black text-sm uppercase tracking-wider text-[#0B071E] dark:text-white mb-2">Description</h4>
+                  <p className="text-[#0B071E]/80 dark:text-white/80 text-sm leading-relaxed font-semibold">
+                    {selectedResourceForDetail.description}
+                  </p>
+                </div>
+
+                {/* Reviews Section */}
+                <div className="border-t border-black/10 dark:border-white/10 pt-6 mb-8">
+                  <h4 className="font-display font-black text-lg text-[#0B071E] dark:text-white mb-4 flex items-center gap-2">
+                    <MessageSquare size={18} className="text-[#0066FF]" /> Student Reviews
+                  </h4>
+
+                  {reviewsLoading ? (
+                    <div className="flex justify-center py-6">
+                      <div className="w-6 h-6 border-2 border-[#0066FF]/20 border-t-[#0066FF] rounded-full animate-spin" />
+                    </div>
+                  ) : reviews.length === 0 ? (
+                    <p className="text-xs font-bold text-[#0B071E]/50 dark:text-white/50 text-center py-4 bg-black/[0.01] dark:bg-white/[0.01] rounded-xl border border-dashed border-black/10 dark:border-white/10">
+                      No reviews yet. Be the first to rate and review after downloading!
+                    </p>
+                  ) : (
+                    <div className="space-y-4 max-h-56 overflow-y-auto pr-2 custom-scrollbar">
+                      {reviews.map((rev, idx) => (
+                        <div key={idx} className="p-4 rounded-xl border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+                          <div className="flex justify-between items-center mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 rounded-full bg-brand-500/10 flex items-center justify-center text-[10px] font-black text-[#0066FF]">
+                                {rev.userName ? rev.userName.charAt(0).toUpperCase() : 'A'}
+                              </div>
+                              <span className="text-xs font-bold text-[#0B071E] dark:text-white">{rev.userName || 'Anonymous'}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {[...Array(5)].map((_, sIdx) => (
+                                <Star
+                                  key={sIdx}
+                                  size={10}
+                                  className={sIdx < rev.rating ? 'fill-yellow-500 text-yellow-500' : 'text-black/10 dark:text-white/10'}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-xs font-semibold text-[#0B071E]/80 dark:text-white/80 pl-8 leading-relaxed">
+                            {rev.reviewText}
+                          </p>
+                          <span className="text-[9px] font-bold text-[#0B071E]/40 dark:text-white/40 block text-right mt-1">
+                            {new Date(rev.createdAt).toLocaleDateString('en-PK')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => {
+                      setSelectedResourceForDetail(null);
+                    }}
+                    className="btn-ghost flex-1 py-3 text-sm font-bold"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDownload(selectedResourceForDetail.id, selectedResourceForDetail.fileUrl);
+                    }}
+                    className="btn-primary flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2"
+                  >
+                    <Download size={16} /> Download Resource
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Guest Download Limit Reached Modal */}
+        <AnimatePresence>
+          {showLimitModal && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative w-full max-w-md glass-card p-8 bg-white/95 dark:bg-[#110A20]/95 shadow-2xl rounded-3xl border border-[#FF5C7A]/20"
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+              >
+                <button
+                  onClick={() => setShowLimitModal(false)}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg text-[#0B071E]/40 dark:text-white/40 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                >
+                  <X size={16} />
+                </button>
+
+                <div className="w-16 h-16 bg-[#FF5C7A]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#FF5C7A]/20">
+                  <Coins size={28} className="text-[#FF5C7A]" />
+                </div>
+
+                <h2 className="font-display font-black text-2xl mb-2 text-[#0B071E] dark:text-white">
+                  Free Limit Reached!
+                </h2>
+                <p className="text-dark/70 dark:text-white/70 text-sm leading-relaxed mb-6 font-semibold">
+                  You have downloaded your limit of 5 free resources as a guest. Please create a free account or log in to unlock unlimited downloads, track your study history, and rate study materials.
+                </p>
+
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/login"
+                    className="btn-primary py-3 text-sm font-bold w-full text-center"
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="btn-ghost py-3 text-sm font-bold w-full text-center"
+                  >
+                    Create Free Account
+                  </Link>
+                  <button
+                    onClick={() => setShowLimitModal(false)}
+                    className="text-xs text-[#0B071E]/40 dark:text-white/40 hover:text-[#0066FF] font-bold text-center mt-2"
+                  >
+                    Close
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Guest Log-in Reminder Modal after download */}
+        <AnimatePresence>
+          {showLoginPromoModal && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative w-full max-w-md glass-card p-8 bg-white/95 dark:bg-[#110A20]/95 shadow-2xl rounded-3xl border border-[#0066FF]/20"
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+              >
+                <button
+                  onClick={() => {
+                    setShowLoginPromoModal(false);
+                    if (resourceToReview) {
+                      setUserRating(5);
+                      setReviewText('');
+                      setShowReviewModal(true);
+                    }
+                  }}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg text-[#0B071E]/40 dark:text-white/40 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                >
+                  <X size={16} />
+                </button>
+
+                <div className="w-16 h-16 bg-[#0066FF]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#0066FF]/20">
+                  <Check size={28} className="text-[#0066FF]" />
+                </div>
+
+                <h2 className="font-display font-black text-2xl mb-2 text-[#0B071E] dark:text-white">
+                  Download Started!
+                </h2>
+                <p className="text-dark/70 dark:text-white/70 text-sm leading-relaxed mb-6 font-semibold">
+                  Your resource is downloading. Create a free account or log in to unlock unlimited downloads, bookmark materials, and keep your history.
+                </p>
+
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/signup"
+                    className="btn-primary py-3 text-sm font-bold w-full text-center"
+                  >
+                    Sign Up Free
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="btn-ghost py-3 text-sm font-bold w-full text-center"
+                  >
+                    Log In
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setShowLoginPromoModal(false);
+                      if (resourceToReview) {
+                        setUserRating(5);
+                        setReviewText('');
+                        setShowReviewModal(true);
+                      }
+                    }}
+                    className="btn-ghost py-3 text-sm font-bold w-full text-center border-none text-[#0B071E]/50 dark:text-white/50"
+                  >
+                    Rate & Review First
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Rating and Review Prompt Modal */}
+        <AnimatePresence>
+          {showReviewModal && resourceToReview && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative w-full max-w-md glass-card p-8 bg-white/95 dark:bg-[#110A20]/95 shadow-2xl rounded-3xl border border-[#0066FF]/20"
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+              >
+                <button
+                  onClick={() => {
+                    setShowReviewModal(false);
+                    setResourceToReview(null);
+                  }}
+                  className="absolute top-4 right-4 p-1.5 rounded-lg text-[#0B071E]/40 dark:text-white/40 hover:bg-black/5 dark:hover:bg-white/5 transition-all"
+                >
+                  <X size={16} />
+                </button>
+
+                <h2 className="font-display font-black text-2xl mb-1 text-[#0B071E] dark:text-white">
+                  Rate & Review
+                </h2>
+                <p className="text-xs font-bold text-[#0066FF] mb-4">
+                  {resourceToReview.title}
+                </p>
+
+                <form onSubmit={handleSubmitReview} className="space-y-4">
+                  <div className="flex flex-col items-center py-2 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl border border-black/5 dark:border-white/5">
+                    <span className="text-[10px] uppercase font-black tracking-wider text-[#0B071E]/40 dark:text-white/40 mb-2">Select Star Rating</span>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setUserRating(star)}
+                          className="focus:outline-none transition-transform active:scale-95"
+                        >
+                          <Star
+                            size={28}
+                            className={`transition-colors ${
+                              star <= userRating
+                                ? 'fill-yellow-500 text-yellow-500'
+                                : 'text-black/10 dark:text-white/10'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="form-label">Review Comment</label>
+                    <textarea
+                      value={reviewText}
+                      onChange={e => setReviewText(e.target.value)}
+                      required
+                      rows={3}
+                      placeholder="Write a brief comment about this resource to help other students..."
+                      className="input-field resize-none text-sm"
+                    />
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowReviewModal(false);
+                        setResourceToReview(null);
+                      }}
+                      className="btn-ghost flex-1 py-3 text-sm font-bold"
+                    >
+                      Skip
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={submittingReview}
+                      className="btn-primary flex-1 py-3 text-sm font-bold disabled:opacity-60"
+                    >
+                      {submittingReview ? 'Submitting...' : 'Submit'}
+                    </button>
+                  </div>
+                </form>
               </motion.div>
             </motion.div>
           )}
