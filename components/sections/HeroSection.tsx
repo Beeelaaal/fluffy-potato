@@ -36,6 +36,7 @@ export default function HeroSection() {
   const [uniCount, setUniCount] = useState(12); // Dynamic fallback
   const [resCount, setResCount] = useState(1);  // Dynamic fallback
   const { theme } = useTheme();
+  const [activeMobileTab, setActiveMobileTab] = useState<'search' | 'resources' | 'tutors' | 'unis' | 'pulse'>('search');
 
   useEffect(() => {
     async function loadCounts() {
@@ -297,18 +298,18 @@ export default function HeroSection() {
             </motion.div>
 
             {/* Compact Floating Metrics Cards */}
-            <motion.div variants={itm} className="grid grid-cols-2 gap-4 mt-10 w-full">
+            <motion.div variants={itm} className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 sm:gap-4 mt-10 w-full">
               {dynamicStats.map(({ label, value, Icon, statColor, statBg }) => (
                 <div 
                   key={label} 
-                  className="glass-card p-4 flex items-center gap-3 bg-white/70 dark:bg-[#110A20]/80 border border-dark/5 dark:border-white/5 shadow-sm hover:scale-[1.03] hover:-translate-y-0.5 transition-all duration-200"
+                  className="glass-card p-3 sm:p-4 flex items-center gap-2 sm:gap-3 bg-white/70 dark:bg-[#110A20]/80 border border-dark/5 dark:border-white/5 shadow-sm hover:scale-[1.03] hover:-translate-y-0.5 transition-all duration-200"
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${statColor} ${statBg}`}>
-                    <Icon size={18} />
+                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${statColor} ${statBg}`}>
+                    <Icon size={16} className="sm:w-[18px] sm:h-[18px]" />
                   </div>
-                  <div>
-                    <div className="font-display text-lg font-bold text-[#0B071E] dark:text-white leading-tight">{value}</div>
-                    <div className="text-[#0B071E]/50 dark:text-white/50 text-[10px] font-bold uppercase tracking-wider">{label}</div>
+                  <div className="min-w-0">
+                    <div className="font-display text-base sm:text-lg font-bold text-[#0B071E] dark:text-white leading-tight truncate">{value}</div>
+                    <div className="text-[#0B071E]/50 dark:text-white/50 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider truncate">{label}</div>
                   </div>
                 </div>
               ))}
@@ -316,10 +317,11 @@ export default function HeroSection() {
           </motion.div>
 
           {/* RIGHT COLUMN: Connected Command Center Infographic Dashboard */}
-          <div className="lg:col-span-7 relative flex justify-center items-center h-[540px] sm:h-[580px] w-full mt-6 lg:mt-0 overflow-visible">
+          <div className="lg:col-span-7 w-full mt-6 lg:mt-0 relative overflow-visible flex flex-col items-center">
             
-            {/* Overlapping Command Center Shell */}
-            <div className="relative w-full max-w-[560px] h-[520px] scale-[0.80] xs:scale-[0.85] sm:scale-90 md:scale-95 lg:scale-100 origin-center flex items-center justify-center overflow-visible">
+            {/* DESKTOP VIEW: Absolute SVG Command Center */}
+            <div className="hidden lg:flex relative w-full h-[580px] items-center justify-center overflow-visible">
+              <div className="relative w-full max-w-[560px] h-[520px] scale-[0.80] xs:scale-[0.85] sm:scale-90 md:scale-95 lg:scale-100 origin-center flex items-center justify-center overflow-visible">
               
               {/* SVG Glowing Flow Network Connectors */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 560 520" fill="none">
@@ -747,6 +749,333 @@ export default function HeroSection() {
                 </div>
               </div>
 
+              </div>
+            </div>
+
+            {/* MOBILE VIEW: Interactive Tabbed Console */}
+            <div className="lg:hidden w-full max-w-[460px] mx-auto relative z-20 mt-6 px-2">
+              <div className="glass-card p-5 rounded-3xl bg-white/95 dark:bg-[#110A20]/95 border border-dark/10 dark:border-white/10 shadow-xl flex flex-col min-h-[350px] justify-between">
+                
+                {/* Tabs selector */}
+                <div className="flex gap-2 overflow-x-auto pb-3 border-b border-dark/5 dark:border-white/5 scrollbar-none select-none">
+                  {[
+                    { id: 'search', label: 'Search', icon: Search, color: 'text-funky-blue dark:text-[#2EF2FF]' },
+                    { id: 'resources', label: 'Vault', icon: FileText, color: 'text-funky-blue dark:text-[#2EF2FF]' },
+                    { id: 'tutors', label: 'Tutors', icon: Users, color: 'text-funky-orange dark:text-[#FF7A18]' },
+                    { id: 'unis', label: 'Unis', icon: GraduationCap, color: 'text-[#15803D] dark:text-[#D8FF3E]' },
+                    { id: 'pulse', label: 'Pulse', icon: Clock, color: 'text-funky-coral dark:text-[#FF5C7A]' }
+                  ].map((tab) => {
+                    const TabIcon = tab.icon;
+                    const isTabActive = activeMobileTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveMobileTab(tab.id as any)}
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all shrink-0 border ${
+                          isTabActive
+                            ? 'bg-dark text-white border-dark dark:bg-white/10 dark:border-white/20'
+                            : 'bg-white/50 border-dark/5 dark:border-white/5 text-dark/60 dark:text-white/60 hover:bg-white dark:hover:bg-white/5'
+                        }`}
+                        type="button"
+                      >
+                        <TabIcon size={12} className={tab.color} />
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Tab content */}
+                <div className="py-4 flex-1 flex flex-col justify-center">
+                  <AnimatePresence mode="wait">
+                    {activeMobileTab === 'search' && (
+                      <motion.div
+                        key="tab-search"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-xs text-funky-blue dark:text-[#2EF2FF] font-black uppercase tracking-wider">Campus Search</span>
+                          <span className="text-[9px] font-bold text-emerald-500 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> LIVE INDEX
+                          </span>
+                        </div>
+                        <div className="relative">
+                          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-funky-blue dark:text-[#2EF2FF]" />
+                          <div className="w-full bg-white dark:bg-dark-900 border border-dark/10 dark:border-white/10 rounded-xl pl-8.5 pr-3 py-2 text-xs font-bold text-[#0B071E] dark:text-white h-[36px] flex items-center shadow-inner">
+                            <span className="truncate">{placeholderText}</span>
+                            <span className="w-[1.5px] h-3.5 bg-funky-cyan dark:bg-[#2EF2FF] ml-0.5 animate-pulse" />
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 pt-1.5">
+                          {['#NUST', '#FAST', '#DSA', '#Calculus'].map(chip => (
+                            <button
+                              key={chip}
+                              onClick={() => {
+                                setTerminalLogs((oldLogs) => [
+                                  ...oldLogs.slice(1),
+                                  { type: 'Resource', text: `Demo Student searched for ${chip}`, color: 'text-funky-blue dark:text-[#4D90FF]' }
+                                ]);
+                              }}
+                              className="text-[10px] font-bold px-2 py-1 rounded-lg bg-dark/5 dark:bg-white/5 border border-dark/5 dark:border-white/5 text-dark/70 dark:text-white/70 hover:border-funky-blue/30"
+                              type="button"
+                            >
+                              {chip}
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeMobileTab === 'resources' && (
+                      <motion.div
+                        key="tab-resources"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-black text-funky-blue dark:text-[#2EF2FF] uppercase tracking-wider flex items-center gap-1.5">
+                            <FileText size={12} /> Resource Hub
+                          </span>
+                          <span className="text-[9px] bg-funky-blue text-white px-2 py-0.5 rounded font-black uppercase">{resCount} Files</span>
+                        </div>
+                        
+                        <div className="flex gap-1.5">
+                          {(['NUST', 'FAST', 'LUMS'] as const).map((tag) => (
+                            <button
+                              key={tag}
+                              onClick={() => setSelectedTag(tag)}
+                              className={`text-[10px] font-black px-2.5 py-1 rounded-lg border transition-all ${
+                                selectedTag === tag
+                                  ? 'bg-funky-blue border-dark text-white dark:border-white'
+                                  : 'bg-white dark:bg-[#1A0F30] border-dark/10 dark:border-white/10 text-[#0B071E]/60 dark:text-white/60'
+                              }`}
+                              type="button"
+                            >
+                              #{tag}
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="space-y-1.5">
+                          {mockDocs[selectedTag].map((item, i) => {
+                            const isDownloading = downloadingFile === item.name;
+                            const isSuccess = downloadSuccessToast === item.name;
+
+                            return (
+                              <div
+                                key={i}
+                                onClick={() => handleDownloadDemo(item.name)}
+                                className="flex items-center justify-between p-2 rounded-xl bg-white/90 dark:bg-[#0B071E]/55 border border-dark/5 dark:border-white/5 hover:border-funky-cyan/50 transition-all cursor-pointer"
+                              >
+                                <span className="text-xs font-bold text-[#0B071E] dark:text-white truncate max-w-[170px] flex items-center gap-1.5">
+                                  <FileText size={11} className="text-funky-blue dark:text-[#2EF2FF]" />
+                                  {item.name}
+                                </span>
+                                <button
+                                  disabled={!!downloadingFile}
+                                  className="text-[9px] font-extrabold text-funky-blue bg-funky-blue/10 dark:text-[#2EF2FF] dark:bg-[#2EF2FF]/10 px-2 py-0.5 rounded-lg flex items-center gap-0.5"
+                                  type="button"
+                                >
+                                  {isSuccess ? <CheckCircle size={8.5} className="text-emerald-500" /> : <Download size={8.5} />}
+                                  <span>{isSuccess ? 'Saved' : item.dl}</span>
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        <div className="h-[16px] relative mt-1">
+                          {downloadingFile ? (
+                            <div className="w-full flex flex-col gap-0.5">
+                              <div className="flex items-center justify-between text-[8.5px] font-black text-funky-blue dark:text-[#2EF2FF] font-mono">
+                                <span>Downloading...</span>
+                                <span>{downloadProgress}%</span>
+                              </div>
+                              <div className="w-full h-1 bg-dark/5 dark:bg-white/10 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-funky-blue to-funky-cyan" style={{ width: `${downloadProgress}%` }} />
+                              </div>
+                            </div>
+                          ) : downloadSuccessToast ? (
+                            <div className="p-1 rounded bg-emerald-500 text-white text-[10px] font-black text-center shadow-md flex items-center justify-center gap-1">
+                              <CheckCircle size={9} /> File saved successfully!
+                            </div>
+                          ) : (
+                            <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono italic">
+                              * Tap a file to test download demo
+                            </span>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeMobileTab === 'tutors' && (
+                      <motion.div
+                        key="tab-tutors"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-black text-funky-orange dark:text-[#FF7A18] uppercase tracking-wider flex items-center gap-1.5">
+                            <Users size={12} /> Tutor Marketplace
+                          </span>
+                          <span className="text-[9px] bg-funky-orange text-white px-2 py-0.5 rounded font-black uppercase">Active Bids</span>
+                        </div>
+
+                        <div className="bg-dark/4 dark:bg-white/5 p-2 rounded-xl border border-dark/5 dark:border-white/5">
+                          <div className="flex items-center justify-between mb-0.5">
+                            <span className="text-[8.5px] font-black text-funky-orange font-mono">Study Help Needed</span>
+                            <span className="text-[8px] font-bold text-emerald-500 flex items-center gap-0.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> active
+                            </span>
+                          </div>
+                          <p className="text-xs font-extrabold text-[#0B071E] dark:text-white">
+                            &quot;Need 1-on-1 prep for FAST Calculus II exam. Help!&quot;
+                          </p>
+                        </div>
+
+                        <div className="bg-white dark:bg-dark-900 border border-dark/5 dark:border-white/5 rounded-xl p-2 flex items-center justify-between min-h-[46px]">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-funky-orange to-[#0066FF] flex items-center justify-center text-white font-extrabold text-[10px] shrink-0">
+                              {mockBids[activeBidIdx].name.charAt(0)}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-black text-[#0B071E] dark:text-white truncate">
+                                {mockBids[activeBidIdx].name}
+                              </div>
+                              <div className="flex items-center gap-0.5 text-[8.5px] text-yellow-600 dark:text-yellow-400 font-bold">
+                                <Star size={8} className="fill-current" />
+                                {mockBids[activeBidIdx].rating} • {mockBids[activeBidIdx].sessions} sessions
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <div className="text-xs font-black text-funky-orange dark:text-[#FF7A18]">
+                              PKR {mockBids[activeBidIdx].amount}
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => handleHireTutor(mockBids[activeBidIdx].name, activeBidIdx.toString())}
+                          className={`w-full py-2 rounded-xl text-xs font-black border transition-all flex items-center justify-center gap-1 ${
+                            hiredBidId === activeBidIdx.toString()
+                              ? 'bg-emerald-500 text-white border-emerald-600 pointer-events-none'
+                              : 'bg-[#FF7A18] hover:bg-orange-500 border-dark dark:border-white text-white shadow-md active:translate-y-0.5'
+                          }`}
+                          type="button"
+                        >
+                          {hiredBidId === activeBidIdx.toString() ? (
+                            <>
+                              <CheckCircle size={10} /> Tutor Hired!
+                            </>
+                          ) : (
+                            <>
+                              <Zap size={10} /> Hire Tutor (PKR {mockBids[activeBidIdx].amount})
+                            </>
+                          )}
+                        </button>
+                      </motion.div>
+                    )}
+
+                    {activeMobileTab === 'unis' && (
+                      <motion.div
+                        key="tab-unis"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-black text-[#15803D] dark:text-[#D8FF3E] uppercase tracking-wider flex items-center gap-1.5">
+                            <GraduationCap size={12} /> University Explorer
+                          </span>
+                          <span className="text-[9px] text-[#15803D] dark:text-[#D8FF3E] font-mono">Admission Deadlines</span>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          {[
+                            { name: 'NUST', fee: '185k/sem', deadline: 'Aug 31', status: 'Open' },
+                            { name: 'FAST-NU', fee: '162k/sem', deadline: 'July 15', status: 'Closing' },
+                          ].map((uni, idx) => (
+                            <div
+                              key={idx}
+                              className="p-2 rounded-xl bg-white/90 dark:bg-[#0B071E]/55 border border-dark/5 dark:border-white/5 flex items-center justify-between text-xs"
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                <div className="w-6 h-6 rounded-lg bg-[#DCFCE7] dark:bg-[#D8FF3E]/10 flex items-center justify-center text-[10px] font-black text-[#15803D] dark:text-[#D8FF3E] shrink-0">
+                                  {uni.name.charAt(0)}
+                                </div>
+                                <div className="min-w-0">
+                                  <div className="text-xs font-black text-[#0B071E] dark:text-white">
+                                    {uni.name}
+                                  </div>
+                                  <div className="text-[9px] text-text-muted dark:text-white/45 font-semibold">
+                                    Deadline: {uni.deadline}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right shrink-0 flex flex-col items-end">
+                                <div className="font-extrabold text-[#0B071E] dark:text-white text-xs">PKR {uni.fee}</div>
+                                <span className={`text-[8px] font-black uppercase px-1 rounded-sm ${
+                                  uni.status === 'Closing' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-800'
+                                }`}>
+                                  {uni.status}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeMobileTab === 'pulse' && (
+                      <motion.div
+                        key="tab-pulse"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-2.5"
+                      >
+                        <div className="flex items-center justify-between pb-1 border-b border-dark/5 dark:border-white/5">
+                          <span className="text-xs font-black text-funky-coral dark:text-[#FF5C7A] uppercase tracking-wider flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-funky-coral shrink-0 animate-pulse" /> Live Campus Pulse
+                          </span>
+                          <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono">Ecosystem logs</span>
+                        </div>
+
+                        <div className="bg-[#0B071E]/95 dark:bg-dark-900 border border-dark/15 dark:border-white/10 rounded-xl p-3 font-mono text-[9.5px] leading-relaxed h-[110px] flex flex-col justify-end overflow-hidden shadow-inner">
+                          <div className="space-y-1.5">
+                            {terminalLogs.map((log, idx) => (
+                              <div key={idx} className="flex items-start gap-1.5 min-w-0 shrink-0">
+                                <span className={`${log.color} font-black uppercase shrink-0`}>
+                                  [{log.type}]
+                                </span>
+                                <span className="text-white/80 truncate font-medium">
+                                  {log.text}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Mobile console status info */}
+                <div className="pt-2.5 border-t border-dark/5 dark:border-white/5 flex justify-between items-center text-[9px] font-bold text-[#0B071E]/40 dark:text-white/40 uppercase tracking-widest font-mono select-none">
+                  <span>System: Online</span>
+                  <span>Vibe check: 100%</span>
+                </div>
+
+              </div>
             </div>
           </div>
 

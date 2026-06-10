@@ -183,7 +183,7 @@ export default function FeaturesSection() {
         </div>
 
         {/* ─── THE AURA CORE CONSTELLATION ─── */}
-        <div className="relative w-full h-[650px] flex items-center justify-center overflow-visible scale-[0.6] xs:scale-[0.72] sm:scale-[0.85] md:scale-100 origin-center my-6">
+        <div className="hidden lg:flex relative w-full h-[650px] items-center justify-center overflow-visible origin-center my-6">
           
           {/* Orbital path guides */}
           <div className="absolute w-[360px] h-[360px] rounded-full border border-dashed border-funky-blue/20 dark:border-[#2EF2FF]/10 pointer-events-none z-10" />
@@ -528,7 +528,7 @@ export default function FeaturesSection() {
                   </AnimatePresence>
 
                   {/* Circular Node Icon (Branded logo shield with rotating micro-satellite) */}
-                  <div className="relative w-15 h-15 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 15px rgba(255, 184, 0, 0.15)` }}>
+                  <div className="relative w-16 h-16 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 16px rgba(255, 184, 0, 0.15)` }}>
                     <div className="absolute inset-0 -m-1.5 rounded-full border border-dashed border-dark/10 dark:border-white/10 pointer-events-none animate-micro-spin" />
                     <img src={uniDetails.NUST.logo} alt="" className="w-10 h-10 object-contain filter dark:brightness-110" />
                   </div>
@@ -582,7 +582,7 @@ export default function FeaturesSection() {
                   </AnimatePresence>
 
                   {/* Circular Node Icon (Branded logo shield with rotating micro-satellite) */}
-                  <div className="relative w-15 h-15 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 15px rgba(46, 242, 255, 0.15)` }}>
+                  <div className="relative w-16 h-16 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 16px rgba(46, 242, 255, 0.15)` }}>
                     <div className="absolute inset-0 -m-1.5 rounded-full border border-dashed border-dark/10 dark:border-white/10 pointer-events-none animate-micro-spin" />
                     <img src={uniDetails.FAST.logo} alt="" className="w-10 h-10 object-contain filter dark:brightness-110" />
                   </div>
@@ -636,7 +636,7 @@ export default function FeaturesSection() {
                   </AnimatePresence>
 
                   {/* Circular Node Icon (Branded logo shield with rotating micro-satellite) */}
-                  <div className="relative w-15 h-15 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 15px rgba(216, 255, 62, 0.15)` }}>
+                  <div className="relative w-16 h-16 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 16px rgba(216, 255, 62, 0.15)` }}>
                     <div className="absolute inset-0 -m-1.5 rounded-full border border-dashed border-dark/10 dark:border-white/10 pointer-events-none animate-micro-spin" />
                     <img src={uniDetails.LUMS.logo} alt="" className="w-10 h-10 object-contain filter dark:brightness-110" />
                   </div>
@@ -690,7 +690,7 @@ export default function FeaturesSection() {
                   </AnimatePresence>
 
                   {/* Circular Node Icon (Branded logo shield with rotating micro-satellite) */}
-                  <div className="relative w-15 h-15 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 15px rgba(255, 122, 24, 0.15)` }}>
+                  <div className="relative w-16 h-16 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 16px rgba(255, 122, 24, 0.15)` }}>
                     <div className="absolute inset-0 -m-1.5 rounded-full border border-dashed border-dark/10 dark:border-white/10 pointer-events-none animate-micro-spin" />
                     <img src={uniDetails.IBA.logo} alt="" className="w-10 h-10 object-contain filter dark:brightness-110" />
                   </div>
@@ -744,7 +744,7 @@ export default function FeaturesSection() {
                   </AnimatePresence>
 
                   {/* Circular Node Icon (Branded logo shield with rotating micro-satellite) */}
-                  <div className="relative w-15 h-15 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 15px rgba(255, 92, 122, 0.15)` }}>
+                  <div className="relative w-16 h-16 rounded-full bg-white/95 dark:bg-[#110A20]/95 border-2 border-dark/10 dark:border-white/15 p-2 shadow-lg flex items-center justify-center hover:scale-115 transition-transform duration-300" style={{ boxShadow: `0 0 16px rgba(255, 92, 122, 0.15)` }}>
                     <div className="absolute inset-0 -m-1.5 rounded-full border border-dashed border-dark/10 dark:border-white/10 pointer-events-none animate-micro-spin" />
                     <img src={uniDetails.AKU.logo} alt="" className="w-10 h-10 object-contain filter dark:brightness-110" />
                   </div>
@@ -759,6 +759,60 @@ export default function FeaturesSection() {
 
           </div>
 
+        </div>
+
+        {/* MOBILE VIEW: University Cards Showcase */}
+        <div className="lg:hidden w-full max-w-lg mx-auto space-y-4 z-20 relative mt-8 px-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {Object.entries(uniDetails).map(([key, uni]) => {
+              return (
+                <div 
+                  key={key} 
+                  className="glass-card p-4 flex flex-col justify-between h-[210px] border transition-all"
+                  style={{
+                    backgroundColor: uni.bg,
+                    borderColor: uni.border,
+                    boxShadow: `0 8px 32px ${uni.color}05`
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <img src={uni.logo} alt="" className="w-10 h-10 object-contain rounded-lg bg-white p-1 border border-black/5" />
+                    <div>
+                      <h3 className="font-display font-black text-sm text-[#0B071E] dark:text-white leading-tight">{uni.name}</h3>
+                      <span className="text-[10px] font-bold text-dark/40 dark:text-white/40 uppercase tracking-widest">{key}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 my-3 text-[11px] font-semibold text-[#0B071E]/75 dark:text-white/75">
+                    <div className="flex justify-between">
+                      <span className="text-dark/45 dark:text-white/45">Fee:</span>
+                      <span>{uni.fee.split('/')[0]}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-dark/45 dark:text-white/45">Deadline:</span>
+                      <span className="text-funky-orange font-bold">{uni.deadline}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mt-auto">
+                    <Link 
+                      href={`/blog?university=${key}`}
+                      className="px-2 py-1.5 rounded-lg text-[9px] font-black uppercase text-center bg-white border border-dark/15 text-dark hover:bg-dark hover:text-white dark:bg-[#110A20] dark:border-white/10 dark:text-white dark:hover:bg-white dark:hover:text-dark transition-all duration-200"
+                    >
+                      Insider Guide
+                    </Link>
+                    <Link 
+                      href={`/resources?uni=${key}`}
+                      className="px-2 py-1.5 rounded-lg text-[9px] font-black uppercase text-center text-white transition-all duration-200"
+                      style={{ backgroundColor: uni.color }}
+                    >
+                      Folder
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Floating Help HUD */}
