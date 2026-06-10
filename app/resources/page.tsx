@@ -455,7 +455,7 @@ function ResourcesContent() {
 
                     {/* Meta */}
                     <p className="text-[#0B071E]/75 text-xs mb-1 font-bold">{res.university} · {res.degree}</p>
-                    <p className="text-[#0B071E]/55 text-xs mb-4 font-semibold">{res.course} · {res.instructor}</p>
+                    <p className="text-[#0B071E]/60 text-xs mb-4 font-semibold">{res.course} · {res.instructor}</p>
 
                     {/* Description */}
                     <p className="text-[#0B071E]/75 text-sm leading-relaxed mb-6 line-clamp-2 flex-grow font-semibold">{res.description}</p>

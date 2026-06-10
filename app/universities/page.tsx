@@ -399,7 +399,7 @@ export default function UniversitiesPage() {
                     {uni.degrees && uni.degrees.length > 0 && (
                       <div className="mb-4 flex flex-wrap gap-1 border-t border-black/5 pt-3">
                         {uni.degrees.slice(0, 3).map((deg) => (
-                          <span key={deg} className="px-2 py-0.5 rounded-lg bg-black/[0.03] border border-black/5 text-[10px] text-[#0B071E]/65 font-bold">
+                          <span key={deg} className="px-2 py-0.5 rounded-lg bg-black/[0.03] border border-black/5 text-[10px] text-[#0B071E]/60 font-bold">
                             {deg.split(' (')[0]}
                           </span>
                         ))}

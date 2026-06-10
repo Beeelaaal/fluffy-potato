@@ -253,7 +253,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                   </div>
                   <div>
                     <h4 className="text-xs font-black text-[#0B071E]">Active Campus View</h4>
-                    <p className="text-[10px] text-[#0B071E]/55 font-bold">Showing details for selected campus</p>
+                    <p className="text-[10px] text-[#0B071E]/60 font-bold">Showing details for selected campus</p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
