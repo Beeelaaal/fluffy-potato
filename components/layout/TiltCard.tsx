@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface TiltCardProps {
@@ -18,9 +18,20 @@ export default function TiltCard({ children, className = '', maxTilt = 10, hover
   const [glareX, setGlareX] = useState(50);
   const [glareY, setGlareY] = useState(50);
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const media = window.matchMedia('(pointer: coarse)');
+      setIsTouchDevice(media.matches);
+      const listener = (e: MediaQueryListEvent) => setIsTouchDevice(e.matches);
+      media.addEventListener('change', listener);
+      return () => media.removeEventListener('change', listener);
+    }
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (isTouchDevice || !cardRef.current) return;
     const card = cardRef.current;
     const rect = card.getBoundingClientRect();
     const width = rect.width;
@@ -45,6 +56,7 @@ export default function TiltCard({ children, className = '', maxTilt = 10, hover
   };
 
   const handleMouseEnter = () => {
+    if (isTouchDevice) return;
     setIsHovered(true);
   };
 
@@ -64,14 +76,19 @@ export default function TiltCard({ children, className = '', maxTilt = 10, hover
         onMouseMove={handleMouseMove}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        animate={{
-          rotateX: isHovered ? rotateX : 0,
-          rotateY: isHovered ? rotateY : 0,
-          scale: isHovered ? 1.025 : 1,
-          z: isHovered ? 15 : 0
+        animate={(!isTouchDevice && isHovered) ? {
+          rotateX: rotateX,
+          rotateY: rotateY,
+          scale: 1.025,
+          z: 15
+        } : {
+          rotateX: 0,
+          rotateY: 0,
+          scale: 1,
+          z: 0
         }}
         style={{
-          boxShadow: isHovered && hoverShadowColor ? `0 20px 45px -12px ${hoverShadowColor}` : undefined,
+          boxShadow: (!isTouchDevice && isHovered) && hoverShadowColor ? `0 20px 45px -12px ${hoverShadowColor}` : undefined,
           ...props.style
         }}
         transition={{ type: 'spring', stiffness: 300, damping: 22 }}
@@ -79,12 +96,14 @@ export default function TiltCard({ children, className = '', maxTilt = 10, hover
         {...props}
       >
         {/* Shiny Light Reflection Glare Overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-300 opacity-0 group-hover:opacity-30 mix-blend-overlay"
-          style={{
-            background: `radial-gradient(circle 220px at ${glareX}% ${glareY}%, rgba(255,255,255,0.7), transparent)`,
-          }}
-        />
+        {!isTouchDevice && (
+          <div
+            className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-300 opacity-0 group-hover:opacity-30 mix-blend-overlay"
+            style={{
+              background: `radial-gradient(circle 220px at ${glareX}% ${glareY}%, rgba(255,255,255,0.7), transparent)`,
+            }}
+          />
+        )}
         {children}
       </motion.div>
     </div>

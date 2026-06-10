@@ -20,12 +20,14 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
   const [activeTab, setActiveTab] = useState<'overview' | 'academics' | 'admissions' | 'studentLife'>('overview');
   const [expandedPrograms, setExpandedPrograms] = useState<Record<string, boolean>>({});
   const [programSearch, setProgramSearch] = useState('');
+  const [selectedCampus, setSelectedCampus] = useState('all');
 
   const toggleProgram = (name: string) => {
     setExpandedPrograms(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
   useEffect(() => {
+    setSelectedCampus('all');
     async function load() {
       try {
         const decodedId = decodeURIComponent(params.id);
@@ -138,6 +140,18 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
     notFound();
   }
 
+  const activeCampus = selectedCampus === 'all'
+    ? null
+    : uni.campuses?.find((c: any) => c.name === selectedCampus);
+
+  const displayDescription = activeCampus?.description || uni.description || 'No description available.';
+  const displayPros = activeCampus?.pros && activeCampus.pros.length > 0 ? activeCampus.pros : (uni.pros || []);
+  const displayCons = activeCampus?.cons && activeCampus.cons.length > 0 ? activeCampus.cons : (uni.cons || []);
+  const displayRatings = activeCampus?.ratings || uni.ratings || null;
+  const displayPhone = activeCampus?.phone || uni.contacts?.phone;
+  const displayEmail = activeCampus?.email || uni.contacts?.email;
+  const displayAddress = activeCampus?.address || uni.contacts?.address;
+
   const uniDegrees = uni.degrees || [];
   const groupedDegrees = Object.entries(categorizedDegrees).reduce((acc, [category, degreesList]) => {
     const matching = degreesList.filter(d => uniDegrees.includes(d));
@@ -149,11 +163,27 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
 
   const hasDegrees = Object.keys(groupedDegrees).length > 0;
 
-  // Filter programs within academics tab
-  const filteredPrograms = uni.programs_list?.filter((p: any) => 
-    p.name.toLowerCase().includes(programSearch.toLowerCase()) || 
-    p.degree.toLowerCase().includes(programSearch.toLowerCase())
-  ) || [];
+  // Filter programs within academics tab (and optionally filter by selected campus)
+  const campusDegrees = activeCampus?.degrees || [];
+  const filteredPrograms = (uni.programs_list || []).filter((p: any) => {
+    const matchesSearch = p.name.toLowerCase().includes(programSearch.toLowerCase()) || 
+                          p.degree.toLowerCase().includes(programSearch.toLowerCase());
+    if (selectedCampus === 'all') return matchesSearch;
+    
+    if (!campusDegrees || campusDegrees.length === 0) return matchesSearch;
+    
+    const progFull = `${p.degree} ${p.name}`.toLowerCase();
+    const progNameLower = p.name.toLowerCase();
+    
+    const isOffered = campusDegrees.some((d: string) => {
+      const dLower = d.toLowerCase();
+      return dLower === progFull || 
+             dLower.includes(progNameLower) || 
+             progNameLower.includes(dLower);
+    });
+    
+    return matchesSearch && isOffered;
+  }) || [];
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -214,6 +244,46 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
           {/* Main content (Left column, grid-span-2) */}
           <div className="lg:col-span-2 space-y-6">
             
+            {/* Campus Selector */}
+            {uni.campuses && uni.campuses.length > 1 && (
+              <div className="glass-card p-4 bg-gradient-to-br from-white/95 to-neutral-50/50 border-black/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-[#0066FF]/10 flex items-center justify-center text-[#0066FF]">
+                    <Building2 size={16} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black text-[#0B071E]">Active Campus View</h4>
+                    <p className="text-[10px] text-[#0B071E]/55 font-bold">Showing details for selected campus</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    onClick={() => setSelectedCampus('all')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all ${
+                      selectedCampus === 'all'
+                        ? 'bg-[#0066FF] text-white shadow-sm'
+                        : 'bg-white/60 border border-black/5 text-[#0B071E]/60 hover:text-[#0B071E] hover:bg-white'
+                    }`}
+                  >
+                    All (Collective)
+                  </button>
+                  {uni.campuses.map((c: any) => (
+                    <button
+                      key={c.name}
+                      onClick={() => setSelectedCampus(c.name)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all ${
+                        selectedCampus === c.name
+                          ? 'bg-[#0066FF] text-white shadow-sm'
+                          : 'bg-white/60 border border-black/5 text-[#0B071E]/60 hover:text-[#0B071E] hover:bg-white'
+                      }`}
+                    >
+                      {c.name.replace(' Campus', '').replace(' (Main)', '').replace(' (Main Campus)', '')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Horizontal Tabs Selector */}
             <div className="flex border-b border-black/5 mb-6 overflow-x-auto no-scrollbar gap-1">
               {[
@@ -272,7 +342,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                       
                       <div className="border-t border-black/5 mt-5 pt-5">
                         <h3 className="font-display font-black text-xs uppercase tracking-wider text-[#0B071E]/50 mb-2">Introduction</h3>
-                        <p className="text-[#0B071E]/75 leading-relaxed text-xs font-semibold">{uni.description}</p>
+                        <p className="text-[#0B071E]/75 leading-relaxed text-xs font-semibold">{displayDescription}</p>
                       </div>
 
                       <div className="flex flex-wrap gap-2 mt-5">
@@ -295,8 +365,8 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                           What Students Love (Pros)
                         </h3>
                         <ul className="space-y-2.5">
-                          {uni.pros && uni.pros.length > 0 ? (
-                            uni.pros.map((pro: string, idx: number) => (
+                          {displayPros && displayPros.length > 0 ? (
+                            displayPros.map((pro: string, idx: number) => (
                               <li key={idx} className="flex items-start gap-2 text-xs text-[#0B071E]/85 font-semibold">
                                 <span className="text-emerald-500 font-extrabold mt-0.5">•</span>
                                 <span>{pro}</span>
@@ -307,7 +377,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                           )}
                         </ul>
                       </div>
-
+ 
                       {/* Cons */}
                       <div className="p-6 rounded-2xl border border-red-500/10 bg-red-500/[0.02] shadow-sm">
                         <h3 className="font-display font-black text-red-700 text-sm mb-4 flex items-center gap-2">
@@ -317,8 +387,8 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                           Areas of Improvement (Cons)
                         </h3>
                         <ul className="space-y-2.5">
-                          {uni.cons && uni.cons.length > 0 ? (
-                            uni.cons.map((con: string, idx: number) => (
+                          {displayCons && displayCons.length > 0 ? (
+                            displayCons.map((con: string, idx: number) => (
                               <li key={idx} className="flex items-start gap-2 text-xs text-[#0B071E]/85 font-semibold">
                                 <span className="text-red-400 font-extrabold mt-0.5">•</span>
                                 <span>{con}</span>
@@ -337,17 +407,17 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                         <Award className="text-[#0066FF]" size={18} /> Ratings Dashboard
                       </h2>
                       
-                      {uni.ratings ? (
+                      {displayRatings ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                           {[
-                            { label: 'Academic Rigor', score: uni.ratings.academicRigor, color: 'bg-[#0066FF]' },
-                            { label: 'Job Placement Strength', score: uni.ratings.jobPlacement, color: 'bg-emerald-500' },
-                            { label: 'Practical Skills Focus', score: uni.ratings.practicalSkills, color: 'bg-indigo-500' },
-                            { label: 'Sports & Campus Life', score: uni.ratings.sportsLife || uni.ratings.campusLife, color: 'bg-pink-500' },
-                            { label: 'Faculty Quality', score: uni.ratings.facultyQuality, color: 'bg-amber-500' },
-                            { label: 'Value for Money', score: uni.ratings.valueForMoney, color: 'bg-violet-500' },
-                            { label: 'Research Opportunities', score: uni.ratings.researchOpportunities, color: 'bg-teal-500' },
-                            { label: 'Hostel & Accommodations', score: uni.ratings.hostelFacilities, color: 'bg-cyan-500' },
+                            { label: 'Academic Rigor', score: displayRatings.academicRigor, color: 'bg-[#0066FF]' },
+                            { label: 'Job Placement Strength', score: displayRatings.jobPlacement, color: 'bg-emerald-500' },
+                            { label: 'Practical Skills Focus', score: displayRatings.practicalSkills, color: 'bg-indigo-500' },
+                            { label: 'Sports & Campus Life', score: displayRatings.sportsLife || displayRatings.campusLife, color: 'bg-pink-500' },
+                            { label: 'Faculty Quality', score: displayRatings.facultyQuality, color: 'bg-amber-500' },
+                            { label: 'Value for Money', score: displayRatings.valueForMoney, color: 'bg-violet-500' },
+                            { label: 'Research Opportunities', score: displayRatings.researchOpportunities, color: 'bg-teal-500' },
+                            { label: 'Hostel & Accommodations', score: displayRatings.hostelFacilities, color: 'bg-cyan-500' },
                           ].map((item) => (
                             <div key={item.label} className="space-y-1.5">
                               <div className="flex justify-between items-center text-xs font-black text-[#0B071E]">
@@ -601,11 +671,14 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                         <div className="space-y-4">
                           {uni.campuses.map((campus: any) => {
                             const isPNEC = campus.name.toLowerCase().includes('pnec');
+                            const isSelected = selectedCampus === campus.name;
                             return (
                               <div key={campus.name} className={`p-5 rounded-2xl border transition-all duration-300 ${
-                                isPNEC 
-                                  ? 'bg-gradient-to-br from-blue-500/10 to-teal-500/5 border-blue-200 shadow-sm' 
-                                  : 'bg-white/60 border-black/5'
+                                isSelected
+                                  ? 'ring-2 ring-[#0066FF] bg-[#0066FF]/5 border-transparent shadow-md'
+                                  : isPNEC 
+                                    ? 'bg-gradient-to-br from-blue-500/10 to-teal-500/5 border-blue-200 shadow-sm' 
+                                    : 'bg-white/60 border-black/5'
                               }`}>
                                 <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
                                   <div>
@@ -772,16 +845,16 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
               initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
             >
               <h3 className="font-display font-black text-sm text-[#0B071E] uppercase tracking-wider mb-4">Contact</h3>
-              <a href={`tel:${uni.contacts?.phone}`}
+              <a href={`tel:${displayPhone}`}
                 className="flex items-center gap-3 text-sm text-[#0B071E]/80 hover:text-[#0066FF] transition-colors font-semibold">
-                <Phone size={14} className="text-funky-cyan" /> {uni.contacts?.phone}
+                <Phone size={14} className="text-funky-cyan" /> {displayPhone}
               </a>
-              <a href={`mailto:${uni.contacts?.email}`}
+              <a href={`mailto:${displayEmail}`}
                 className="flex items-center gap-3 text-sm text-[#0B071E]/80 hover:text-[#0066FF] transition-colors font-semibold">
-                <Mail size={14} className="text-funky-cyan" /> {uni.contacts?.email}
+                <Mail size={14} className="text-funky-cyan" /> {displayEmail}
               </a>
               <div className="flex items-start gap-3 text-sm text-[#0B071E]/80 font-semibold">
-                <MapPin size={14} className="text-funky-cyan mt-0.5 flex-shrink-0" /> {uni.contacts?.address}
+                <MapPin size={14} className="text-funky-cyan mt-0.5 flex-shrink-0" /> {displayAddress}
               </div>
               <a href={uni.website} target="_blank" rel="noopener noreferrer"
                 className="btn-ghost w-full text-sm py-2.5 mt-2 flex items-center justify-center gap-2 font-bold border border-black/10">

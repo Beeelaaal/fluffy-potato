@@ -245,7 +245,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Islamabad",
         "address": "QAU Campus, Islamabad 45320",
-        "phone": "+92-51-9064-3000"
+        "phone": "+92-51-9064-3000",
+        "description": "The flagship main campus of QAU in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Top-tier research output and highly cited faculty.",
+          "Extremely affordable tuition fees.",
+          "Diverse student body representing all provinces.",
+          "Beautiful, vast scenic campus at the foot of Margalla Hills."
+        ],
+        "cons": [
+          "Frequent strikes and student political group clashes.",
+          "Aging lab equipment and hostel infrastructure.",
+          "Slow administrative and bureaucratic processes."
+        ],
+        "ratings": {
+          "academicRigor": 4.5,
+          "jobPlacement": 4,
+          "practicalSkills": 3.5,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.7,
+          "valueForMoney": 4.9,
+          "feesAffordability": 4.8,
+          "campusLife": 3.8,
+          "researchOpportunities": 4.8,
+          "hostelFacilities": 2.8,
+          "overall": 4.3
+        }
       }
     ]
   },
@@ -508,17 +533,98 @@ const universities = [
         "seats": 60,
         "fee": 394100,
         "merit": 75,
-        "description": "Detailed study of Maritime Sciences (Karachi PNEC), focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Interdisciplinary study of marine biology, maritime law, oceanography, shipping operations, and port management.",
+        "scope": "Crucial for port authorities, commercial shipping lines, ocean research bodies, and maritime security organizations.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Port Operations Manager",
+          "Marine Inspector",
+          "Shipping Coordinator",
+          "Maritime Consultant"
         ],
-        "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
+        "difficultyLevel": "Medium-High",
+        "practicalExposure": "High",
         "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "higherStudyOptions": "MS Maritime Studies, Port Management certifications"
+      },
+      {
+        "name": "Mechatronics Engineering (Rawalpindi EME)",
+        "degree": "BE",
+        "duration": "4 years",
+        "seats": 60,
+        "fee": 394100,
+        "merit": 82,
+        "description": "Synergizes mechanical engineering, electronics, computer engineering, and control systems to design smart automated machines and robotics.",
+        "scope": "Highly relevant in modern automated factories, robotics firms, automotive sectors, and smart systems design.",
+        "careerPaths": [
+          "Robotics Engineer",
+          "Automation Consultant",
+          "Control Systems Specialist",
+          "Mechatronics Designer"
+        ],
+        "difficultyLevel": "High",
+        "practicalExposure": "Very High",
+        "industryDemand": "Good",
+        "higherStudyOptions": "MS Mechatronics, MS Robotics, Automation certifications"
+      },
+      {
+        "name": "Information Security Engineering (Rawalpindi MCS)",
+        "degree": "BE",
+        "duration": "4 years",
+        "seats": 50,
+        "fee": 394100,
+        "merit": 81,
+        "description": "Focuses on defending computer systems, networks, and data from security threats, unauthorized access, and cyber espionage.",
+        "scope": "Critical for national security grids, corporate IT divisions, banking networks, and secure software development.",
+        "careerPaths": [
+          "Information Security Analyst",
+          "Network Defense Specialist",
+          "Security Auditor",
+          "Ethical Hacker"
+        ],
+        "difficultyLevel": "High",
+        "practicalExposure": "Very High",
+        "industryDemand": "Excellent",
+        "higherStudyOptions": "MS Information Security, Cybersecurity certifications (CISSP, CISM)"
+      },
+      {
+        "name": "Aerospace Engineering (Risalpur CAE)",
+        "degree": "BE",
+        "duration": "4 years",
+        "seats": 50,
+        "fee": 394100,
+        "merit": 80,
+        "description": "Studies aeronautics, aerodynamics design, propulsion systems, flight mechanics, and aircraft design engineering.",
+        "scope": "Highly specialized engineering with jobs in aviation divisions, defence research, and aerospace corporations.",
+        "careerPaths": [
+          "Aerospace Design Engineer",
+          "Propulsion Specialist",
+          "Aviation Manager",
+          "Maintenance Engineer"
+        ],
+        "difficultyLevel": "Very High",
+        "practicalExposure": "High",
+        "industryDemand": "Medium-High",
+        "higherStudyOptions": "MS Aerospace Engineering"
+      },
+      {
+        "name": "Avionics Engineering (Risalpur CAE)",
+        "degree": "BE",
+        "duration": "4 years",
+        "seats": 50,
+        "fee": 394100,
+        "merit": 78,
+        "description": "Specialized branch of electronics engineering focusing on electronic systems used on aircraft, artificial satellites, and spacecraft (radar, communication, navigation).",
+        "scope": "Highly critical for aviation divisions, national defense forces, satellite communication networks, and airline operators.",
+        "careerPaths": [
+          "Avionics Design Engineer",
+          "Radar Specialist",
+          "Aircraft Systems Installer",
+          "Aviation Technical Officer"
+        ],
+        "difficultyLevel": "Very High",
+        "practicalExposure": "Very High",
+        "industryDemand": "High",
+        "higherStudyOptions": "MS Avionics Engineering, Aerospace Control Systems"
       }
     ],
     "requirements": [
@@ -553,7 +659,11 @@ const universities = [
       "BS Mathematics",
       "B.Arch (Architecture)",
       "BE Naval Architecture",
-      "BS Maritime Sciences"
+      "BS Maritime Sciences",
+      "BE Mechatronics Engineering",
+      "BE Information Security Engineering",
+      "BE Aerospace Engineering",
+      "BE Avionics Engineering"
     ],
     "campuses": [
       {
@@ -574,7 +684,32 @@ const universities = [
           "BBA",
           "BS Mathematics",
           "B.Arch (Architecture)"
-        ]
+        ],
+        "description": "The flagship main campus of NUST in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Superb campus infrastructure and sports facilities (including equestrian and indoor arena).",
+          "Extremely high corporate employability and active campus placement drives.",
+          "NSTP (National Science & Technology Park) on-site offers great startup incubator networks.",
+          "Active international exchange programs and research collaboration."
+        ],
+        "cons": [
+          "High stress academic environment with rapid-fire quizzes and relative grading system.",
+          "Highly competitive merit; admissions are extremely difficult.",
+          "Relatively higher fee structure for a public sector university."
+        ],
+        "ratings": {
+          "academicRigor": 4.6,
+          "jobPlacement": 4.8,
+          "practicalSkills": 4.5,
+          "sportsLife": 4.8,
+          "facultyQuality": 4.6,
+          "valueForMoney": 4.2,
+          "feesAffordability": 2.8,
+          "campusLife": 4.6,
+          "researchOpportunities": 4.6,
+          "hostelFacilities": 4,
+          "overall": 4.5
+        }
       },
       {
         "name": "Karachi Campus (PNEC)",
@@ -588,7 +723,30 @@ const universities = [
           "BE Electrical Engineering",
           "BE Naval Architecture",
           "BS Maritime Sciences"
-        ]
+        ],
+        "description": "NUST Pakistan Navy Engineering College (PNEC) in Karsaz, Karachi is a highly disciplined and prestigious engineering college administered under the Pakistan Navy.",
+        "pros": [
+          "Highly structured naval environment with direct marine and defense lab exposure.",
+          "Strong industry connections for mechanical, electrical, and naval architecture grads.",
+          "Excellent lab testing machines and specialized naval engineering training."
+        ],
+        "cons": [
+          "Strict military-style dress codes, gate timings, and discipline protocols.",
+          "Lacks the broad, relaxed social atmosphere of the H-12 Islamabad campus."
+        ],
+        "ratings": {
+          "academicRigor": 4.7,
+          "jobPlacement": 4.6,
+          "practicalSkills": 4.7,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.5,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.8,
+          "campusLife": 3.2,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.8,
+          "overall": 4.3
+        }
       },
       {
         "name": "Rawalpindi Campus (College of EME)",
@@ -601,7 +759,30 @@ const universities = [
           "BE Mechanical Engineering",
           "BE Electrical Engineering",
           "BS Computer Science"
-        ]
+        ],
+        "description": "NUST constituent colleges in Rawalpindi (College of Electrical and Mechanical Engineering & Military College of Signals) deliver specialized high-rigor courses in mechatronics, signals, computer, and information security engineering.",
+        "pros": [
+          "Pioneer in Mechatronics and Information Security engineering degrees in Pakistan.",
+          "Highly active robotic clubs, national cybersecurity contest participations, and research labs.",
+          "Strong industry and military-technical linkages for defense and software projects."
+        ],
+        "cons": [
+          "Strict security protocols and military entrance gate inspections for students and visitors.",
+          "Smaller social campus footprint compared to the sprawling H-12 Islamabad flagship campus."
+        ],
+        "ratings": {
+          "academicRigor": 4.7,
+          "jobPlacement": 4.6,
+          "practicalSkills": 4.7,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.5,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.8,
+          "campusLife": 3.5,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.8,
+          "overall": 4.3
+        }
       },
       {
         "name": "Rawalpindi Campus (MCS)",
@@ -612,7 +793,30 @@ const universities = [
         "degrees": [
           "BS Software Engineering",
           "BE Information Security Engineering"
-        ]
+        ],
+        "description": "NUST constituent colleges in Rawalpindi (College of Electrical and Mechanical Engineering & Military College of Signals) deliver specialized high-rigor courses in mechatronics, signals, computer, and information security engineering.",
+        "pros": [
+          "Pioneer in Mechatronics and Information Security engineering degrees in Pakistan.",
+          "Highly active robotic clubs, national cybersecurity contest participations, and research labs.",
+          "Strong industry and military-technical linkages for defense and software projects."
+        ],
+        "cons": [
+          "Strict security protocols and military entrance gate inspections for students and visitors.",
+          "Smaller social campus footprint compared to the sprawling H-12 Islamabad flagship campus."
+        ],
+        "ratings": {
+          "academicRigor": 4.7,
+          "jobPlacement": 4.6,
+          "practicalSkills": 4.7,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.5,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.8,
+          "campusLife": 3.5,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.8,
+          "overall": 4.3
+        }
       },
       {
         "name": "Risalpur Campus (CAE)",
@@ -623,7 +827,30 @@ const universities = [
         "degrees": [
           "BE Aerospace Engineering",
           "BE Avionics Engineering"
-        ]
+        ],
+        "description": "NUST College of Aeronautical Engineering (CAE) in Risalpur, Khyber Pakhtunkhwa is the premier center for aerospace and avionics engineering in Pakistan, run in close collaboration with the Pakistan Air Force.",
+        "pros": [
+          "Aviation-specific lab testing setups, wind-tunnel research facilities, and flight simulation labs.",
+          "High military discipline and PAF technical officer grooming environment.",
+          "Excellent job placement in national defense organizations, airlines, and aviation industries."
+        ],
+        "cons": [
+          "Remote location in Risalpur, KP with limited general city access and leisure options.",
+          "Highly structured military discipline with strict gate timings and uniform codes."
+        ],
+        "ratings": {
+          "academicRigor": 4.8,
+          "jobPlacement": 4.6,
+          "practicalSkills": 4.8,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.5,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.8,
+          "campusLife": 3.2,
+          "researchOpportunities": 4.5,
+          "hostelFacilities": 4,
+          "overall": 4.4
+        }
       }
     ],
     "reviews": [
@@ -787,17 +1014,18 @@ const universities = [
         "seats": 120,
         "fee": 1280000,
         "merit": 85,
-        "description": "Detailed study of Economics, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Analyzes micro and macroeconomic systems, fiscal policy, financial markets, econometric modelling, and wealth distribution.",
+        "scope": "Extremely versatile degree leading to placements in commercial banks, state institutions, investment firms, and public policy think-tanks.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Economic Analyst",
+          "Financial Consultant",
+          "Policy Researcher",
+          "Investment Banker"
         ],
-        "difficultyLevel": "Medium",
+        "difficultyLevel": "Medium-High",
         "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "industryDemand": "Very High",
+        "higherStudyOptions": "MS Economics, MS Applied Econometrics, PhD Economics"
       },
       {
         "name": "Law (LLB)",
@@ -851,7 +1079,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Lahore",
         "address": "DHA, Lahore Cantt., Lahore 54792",
-        "phone": "+92-42-3560-8000"
+        "phone": "+92-42-3560-8000",
+        "description": "The flagship main campus of LUMS in Lahore, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Unrivalled networking opportunities and prestige.",
+          "Flexible liberal arts curriculum with multiple choices.",
+          "Stellar corporate recruitment with top multinational partnerships.",
+          "Active student societies and highly inclusive, liberal campus culture."
+        ],
+        "cons": [
+          "Extremely high tuition fees, making it unaffordable for many.",
+          "High peer pressure and intense workload (known as LUMS stress).",
+          "Admissions are highly selective with a heavy focus on SAT scores."
+        ],
+        "ratings": {
+          "academicRigor": 4.5,
+          "jobPlacement": 4.9,
+          "practicalSkills": 4.6,
+          "sportsLife": 4.5,
+          "facultyQuality": 4.7,
+          "valueForMoney": 3.5,
+          "feesAffordability": 1.5,
+          "campusLife": 4.8,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 4.5,
+          "overall": 4.6
+        }
       }
     ],
     "reviews": [
@@ -970,17 +1223,18 @@ const universities = [
         "seats": 150,
         "fee": 80000,
         "merit": 83,
-        "description": "Detailed study of Information Technology, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Focuses on the installation, configuration, and maintenance of computer systems, networks, databases, and web applications for organizational needs.",
+        "scope": "High demand in network administration, database management, cloud services, and system security.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "IT Support Specialist",
+          "Network Administrator",
+          "Database Administrator",
+          "System Administrator"
         ],
         "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "practicalExposure": "High",
+        "industryDemand": "Very High",
+        "higherStudyOptions": "MS Information Technology, Cloud Computing, Cybersecurity certifications"
       },
       {
         "name": "Law (LLB)",
@@ -1009,17 +1263,18 @@ const universities = [
         "seats": 300,
         "fee": 40000,
         "merit": 65,
-        "description": "Detailed study of Commerce, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Covers commercial operations, trade principles, retail management, sales strategies, and corporate logistics.",
+        "scope": "Essential for retail sectors, supply chain networks, banking operations, and small-to-medium enterprise management.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Sales Officer",
+          "Commerce Consultant",
+          "Logistics Coordinator",
+          "Bank Officer"
         ],
         "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "practicalExposure": "Medium-High",
+        "industryDemand": "Very High",
+        "higherStudyOptions": "M.Com, MBA, ACCA"
       },
       {
         "name": "Business Administration",
@@ -1071,13 +1326,59 @@ const universities = [
         "name": "Quaid-e-Azam Campus (New Campus)",
         "city": "Lahore",
         "address": "Bosan Road/Canal Road, Lahore",
-        "phone": "+92-42-99231246"
+        "phone": "+92-42-99231246",
+        "description": "Constituent campus of PU located in Lahore. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to PU's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 3.8,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.5,
+          "sportsLife": 4,
+          "facultyQuality": 4,
+          "valueForMoney": 4.9,
+          "feesAffordability": 4.9,
+          "campusLife": 4.2,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3,
+          "overall": 4
+        }
       },
       {
         "name": "Allama Iqbal Campus (Old Campus)",
         "city": "Lahore",
         "address": "The Mall Road, Lahore",
-        "phone": "+92-42-99211612"
+        "phone": "+92-42-99211612",
+        "description": "Constituent campus of PU located in Lahore. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to PU's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 3.8,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.5,
+          "sportsLife": 4,
+          "facultyQuality": 4,
+          "valueForMoney": 4.9,
+          "feesAffordability": 4.9,
+          "campusLife": 4.2,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3,
+          "overall": 4
+        }
       },
       {
         "name": "Gujranwala Campus",
@@ -1089,7 +1390,30 @@ const universities = [
           "BS Information Technology",
           "BBA",
           "BCom"
-        ]
+        ],
+        "description": "Constituent campus of PU located in Gujranwala. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to PU's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 3.8,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.5,
+          "sportsLife": 4,
+          "facultyQuality": 4,
+          "valueForMoney": 4.9,
+          "feesAffordability": 4.9,
+          "campusLife": 4.2,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3,
+          "overall": 4
+        }
       },
       {
         "name": "Jhelum Campus",
@@ -1101,7 +1425,30 @@ const universities = [
           "BBA",
           "BCom",
           "LLB"
-        ]
+        ],
+        "description": "Constituent campus of PU located in Jhelum. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to PU's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 3.8,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.5,
+          "sportsLife": 4,
+          "facultyQuality": 4,
+          "valueForMoney": 4.9,
+          "feesAffordability": 4.9,
+          "campusLife": 4.2,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3,
+          "overall": 4
+        }
       }
     ],
     "reviews": [
@@ -1254,7 +1601,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Karachi",
         "address": "Stadium Road, Karachi 74800",
-        "phone": "+92-21-3486-1900"
+        "phone": "+92-21-3486-1900",
+        "description": "The flagship main campus of AKU in Karachi, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Unmatched clinical training at the JCI-accredited AKU Hospital.",
+          "Extensive research culture and international recognition.",
+          "High placement in international residencies (US/UK).",
+          "State-of-the-art medical libraries and simulation labs."
+        ],
+        "cons": [
+          "Admissions are extremely selective (highly competitive test/interview).",
+          "Very demanding workload with heavy stress.",
+          "High fees compared to public medical colleges."
+        ],
+        "ratings": {
+          "academicRigor": 4.9,
+          "jobPlacement": 5,
+          "practicalSkills": 4.9,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.9,
+          "valueForMoney": 4,
+          "feesAffordability": 1.5,
+          "campusLife": 4.2,
+          "researchOpportunities": 4.8,
+          "hostelFacilities": 4.2,
+          "overall": 4.8
+        }
       }
     ],
     "reviews": [
@@ -1469,31 +1841,148 @@ const universities = [
         "name": "Islamabad Campus (Main)",
         "city": "Islamabad",
         "address": "Park Road, Chak Shahzad, Islamabad",
-        "phone": "+92-51-9247000"
+        "phone": "+92-51-9247000",
+        "description": "The flagship main campus of COMSATS in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Excellent balance between cost and education quality.",
+          "Active coding cultures and computing contests.",
+          "Nice main campus in Islamabad (Chak Shahzad).",
+          "Wide presence across Punjab and KP."
+        ],
+        "cons": [
+          "Admin processes can be bureaucratic.",
+          "High student volume makes individual counseling hard.",
+          "Job placement is good but depends heavily on student initiative."
+        ],
+        "ratings": {
+          "academicRigor": 4.2,
+          "jobPlacement": 4.2,
+          "practicalSkills": 4.1,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       },
       {
         "name": "Lahore Campus",
         "city": "Lahore",
         "address": "Defence Road, Off Raiwind Road, Lahore",
-        "phone": "+92-42-111-001-007"
+        "phone": "+92-42-111-001-007",
+        "description": "COMSATS Lahore campus represents a vibrant, culturally rich educational community situated in Punjab's capital, offering strong engineering, business, and computing tracks.",
+        "pros": [
+          "Vibrant student culture, cultural fests, and competitive programming clubs.",
+          "Highly active local industry and software house networking.",
+          "Top-tier experienced engineering and computing faculty."
+        ],
+        "cons": [
+          "High competition amongst students for grades and ranking.",
+          "Busy metropolitan environment with high daily traffic commute."
+        ],
+        "ratings": {
+          "academicRigor": 4.2,
+          "jobPlacement": 4.2,
+          "practicalSkills": 4.1,
+          "sportsLife": 3.7,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       },
       {
         "name": "Abbottabad Campus",
         "city": "Abbottabad",
         "address": "University Road, Tobe Camp, Abbottabad",
-        "phone": "+92-992-383591"
+        "phone": "+92-992-383591",
+        "description": "COMSATS Abbottabad Campus is situated in the scenic and peaceful valley of Abbottabad, offering excellent computing, biotechnology, and engineering tracks in a cool mountain climate.",
+        "pros": [
+          "Beautiful, scenic mountain environment and peaceful, pollution-free study setting.",
+          "Exceptional research output in biotechnology, environmental sciences, and earth sciences.",
+          "Very safe campus atmosphere with low local living and hostel expenses."
+        ],
+        "cons": [
+          "Significant distance from main industrial software hubs (Karachi/Lahore).",
+          "Fewer local software house internship options compared to Islamabad or Lahore."
+        ],
+        "ratings": {
+          "academicRigor": 4.2,
+          "jobPlacement": 4.2,
+          "practicalSkills": 4.1,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       },
       {
         "name": "Wah Campus",
         "city": "Wah Cantt",
         "address": "G.T. Road, Wah Cantt",
-        "phone": "+92-51-4534200"
+        "phone": "+92-51-4534200",
+        "description": "COMSATS regional campus in Wah Cantt delivers high-quality, affordable computer science, business, and software engineering programs to students in their local region.",
+        "pros": [
+          "Provides direct access to COMSATS' high-quality computing curriculum locally.",
+          "Highly affordable tuition fees and minimal local hostel/living costs.",
+          "Focused, close-knit academic environment with dedicated faculty instruction."
+        ],
+        "cons": [
+          "Smaller campus infrastructure and fewer sports/extracurricular amenities.",
+          "Limited on-campus recruitment drives by large multinational companies."
+        ],
+        "ratings": {
+          "academicRigor": 4.2,
+          "jobPlacement": 4.2,
+          "practicalSkills": 4.1,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3.2,
+          "overall": 3.9999999999999996
+        }
       },
       {
         "name": "Sahiwal Campus",
         "city": "Sahiwal",
         "address": "COMSATS Road, Sahiwal",
-        "phone": "+92-40-4305001"
+        "phone": "+92-40-4305001",
+        "description": "COMSATS regional campus in Sahiwal delivers high-quality, affordable computer science, business, and software engineering programs to students in their local region.",
+        "pros": [
+          "Provides direct access to COMSATS' high-quality computing curriculum locally.",
+          "Highly affordable tuition fees and minimal local hostel/living costs.",
+          "Focused, close-knit academic environment with dedicated faculty instruction."
+        ],
+        "cons": [
+          "Smaller campus infrastructure and fewer sports/extracurricular amenities.",
+          "Limited on-campus recruitment drives by large multinational companies."
+        ],
+        "ratings": {
+          "academicRigor": 4.2,
+          "jobPlacement": 4.2,
+          "practicalSkills": 4.1,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.4,
+          "feesAffordability": 3.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3.2,
+          "overall": 3.9999999999999996
+        }
       }
     ]
   },
@@ -1680,25 +2169,117 @@ const universities = [
         "name": "UET Lahore (Main)",
         "city": "Lahore",
         "address": "G.T. Road, Lahore",
-        "phone": "+92-42-99029202"
+        "phone": "+92-42-99029202",
+        "description": "UET Lahore campus represents a vibrant, culturally rich educational community situated in Punjab's capital, offering strong engineering, business, and computing tracks.",
+        "pros": [
+          "Vibrant student culture, cultural fests, and competitive programming clubs.",
+          "Highly active local industry and software house networking.",
+          "Top-tier experienced engineering and computing faculty."
+        ],
+        "cons": [
+          "High competition amongst students for grades and ranking.",
+          "Busy metropolitan environment with high daily traffic commute."
+        ],
+        "ratings": {
+          "academicRigor": 4.4,
+          "jobPlacement": 4.3,
+          "practicalSkills": 4,
+          "sportsLife": 4,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       },
       {
         "name": "Kala Shah Kaku Campus (KSK)",
         "city": "Sheikhupura",
         "address": "KSK, Punjab",
-        "phone": "+92-42-35515685"
+        "phone": "+92-42-35515685",
+        "description": "Constituent campus of UET located in Sheikhupura. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to UET's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 4.4,
+          "jobPlacement": 4.3,
+          "practicalSkills": 4,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       },
       {
         "name": "Faisalabad Campus (UET-FSD)",
         "city": "Faisalabad",
         "address": "Faisalabad, Punjab",
-        "phone": "+92-41-2433501"
+        "phone": "+92-41-2433501",
+        "description": "UET Faisalabad/Multan campus is designed to provide high-quality education to the agricultural and textile industrial heartlands of Punjab.",
+        "pros": [
+          "Excellent regional reach, helping local students access elite curriculum without moving to capital cities.",
+          "Low campus congestion, and peaceful academic environments.",
+          "Close connections with regional textile, industrial, and agricultural bodies."
+        ],
+        "cons": [
+          "Limited extracurricular facilities and smaller campuses.",
+          "Lower numbers of on-campus recruiting drives compared to main campuses."
+        ],
+        "ratings": {
+          "academicRigor": 4.4,
+          "jobPlacement": 4.3,
+          "practicalSkills": 4,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       },
       {
         "name": "Narowal Campus",
         "city": "Narowal",
         "address": "Narowal, Punjab",
-        "phone": "+92-54-2500511"
+        "phone": "+92-54-2500511",
+        "description": "Constituent campus of UET located in Narowal. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to UET's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 4.4,
+          "jobPlacement": 4.3,
+          "practicalSkills": 4,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.5,
+          "campusLife": 3.8,
+          "researchOpportunities": 4.2,
+          "hostelFacilities": 3.2,
+          "overall": 4.1
+        }
       }
     ],
     "reviews": [
@@ -1790,17 +2371,19 @@ const universities = [
         "seats": 100,
         "fee": 55000,
         "merit": 75,
-        "description": "Detailed study of English Literature, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Explores critical analysis of literary texts, prose, drama, poetry, and linguistic development across historical eras.",
+        "scope": "Develops exceptional communication, analytical, and writing skills, opening pathways in media, publishing, civil services, and education.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Content Writer",
+          "Editor",
+          "PR Specialist",
+          "English Instructor",
+          "Civil Servant"
         ],
         "difficultyLevel": "Medium",
         "practicalExposure": "Medium",
         "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "higherStudyOptions": "MA English Literature, M.Phil Linguistics, CSS/PMS preparations"
       },
       {
         "name": "Physics",
@@ -1890,13 +2473,61 @@ const universities = [
         "name": "Main Campus",
         "city": "Lahore",
         "address": "Katchery Road, Lahore",
-        "phone": "+92-42-99211256"
+        "phone": "+92-42-99211256",
+        "description": "The flagship main campus of GCU in Lahore, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Stellar debates, sports, and dramatics clubs (historic Ravian legacy).",
+          "Scenic Gothic revival architecture.",
+          "Central Lahore location with easy commute.",
+          "Very strong legacy in Urdu, English Literature, and Natural Sciences."
+        ],
+        "cons": [
+          "Infrastructure is crowded due to limited space.",
+          "Bureaucratic administrative machinery.",
+          "Less focus on modern software coding compared to NUST/FAST."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.6,
+          "sportsLife": 4.5,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.6,
+          "feesAffordability": 4.7,
+          "campusLife": 4.2,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3.2,
+          "overall": 4
+        }
       },
       {
         "name": "Kala Shah Kaku Campus",
         "city": "Sheikhupura",
         "address": "KSK, Punjab",
-        "phone": "+92-42-3790123"
+        "phone": "+92-42-3790123",
+        "description": "Constituent campus of GCU located in Sheikhupura. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to GCU's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.6,
+          "sportsLife": 4.5,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.6,
+          "feesAffordability": 4.7,
+          "campusLife": 4.2,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3.2,
+          "overall": 4
+        }
       }
     ]
   },
@@ -2062,7 +2693,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Karachi",
         "address": "Main University Road, Karachi 75270",
-        "phone": "+92-21-9926-1300"
+        "phone": "+92-21-9926-1300",
+        "description": "The flagship main campus of KU in Karachi, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Very affordable fee structure.",
+          "Vast array of departments and degree courses.",
+          "Strong local corporate recognition in Karachi.",
+          "Large research hubs in organic chemistry."
+        ],
+        "cons": [
+          "Complex student union politics.",
+          "Sluggish administrative response.",
+          "Transport and security challenges on campus."
+        ],
+        "ratings": {
+          "academicRigor": 3.9,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.6,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.7,
+          "feesAffordability": 4.7,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 2.8,
+          "overall": 4
+        }
       }
     ]
   },
@@ -2268,7 +2924,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Islamabad",
         "address": "PAF Complex, E-9, Islamabad",
-        "phone": "+92-51-9262-6100"
+        "phone": "+92-51-9262-6100",
+        "description": "The flagship main campus of AU in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Very safe and highly disciplined campus environment.",
+          "Excellent cyber security and specialized engineering programs.",
+          "Centrally located inside Islamabad (E-9 complex).",
+          "Solid labs and equipment."
+        ],
+        "cons": [
+          "Relatively small campus size.",
+          "Strict dress codes and tight security protocols.",
+          "Moderate campus life compared to public universities like NUST/LUMS."
+        ],
+        "ratings": {
+          "academicRigor": 4.1,
+          "jobPlacement": 4.1,
+          "practicalSkills": 4.2,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4,
+          "feesAffordability": 3.2,
+          "campusLife": 3.6,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 3.5,
+          "overall": 4
+        }
       }
     ]
   },
@@ -2372,17 +3053,18 @@ const universities = [
         "seats": 100,
         "fee": 260000,
         "merit": 70,
-        "description": "Detailed study of Information Technology, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Focuses on the installation, configuration, and maintenance of computer systems, networks, databases, and web applications for organizational needs.",
+        "scope": "High demand in network administration, database management, cloud services, and system security.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "IT Support Specialist",
+          "Network Administrator",
+          "Database Administrator",
+          "System Administrator"
         ],
         "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "practicalExposure": "High",
+        "industryDemand": "Very High",
+        "higherStudyOptions": "MS Information Technology, Cloud Computing, Cybersecurity certifications"
       },
       {
         "name": "Business Administration",
@@ -2451,19 +3133,90 @@ const universities = [
         "name": "Islamabad Campus (Main)",
         "city": "Islamabad",
         "address": "Shangrila Road, E-8, Islamabad",
-        "phone": "+92-51-92600261"
+        "phone": "+92-51-92600261",
+        "description": "The flagship main campus of BU in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Very safe and secure environment.",
+          "Diverse selection of degrees, including psychology and business.",
+          "Presence in three major cities.",
+          "Active student events and neat campus maintenance."
+        ],
+        "cons": [
+          "Rigid discipline and strict attendance rules.",
+          "Medium research impact compared to tech-heavy schools.",
+          "Moderate campus area in Islamabad."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 4.1,
+          "practicalSkills": 4,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4,
+          "feesAffordability": 3,
+          "campusLife": 3.8,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 3.5,
+          "overall": 4
+        }
       },
       {
         "name": "Karachi Campus",
         "city": "Karachi",
         "address": "13 National Stadium Road, Karachi",
-        "phone": "+92-21-99240002"
+        "phone": "+92-21-99240002",
+        "description": "BU Karachi campus is a leading academic center in Pakistan's financial hub, highly regarded for corporate partnerships, tech incubators, and finance tracks.",
+        "pros": [
+          "Direct access to the largest corporate and financial market of Pakistan.",
+          "Highly active developer circles, tech startups, and hackathons.",
+          "Flexible city options and transport networks."
+        ],
+        "cons": [
+          "Hot and humid coastal weather with high municipal congestion.",
+          "Campus size is smaller than capital locations."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 4.1,
+          "practicalSkills": 4,
+          "sportsLife": 3.5,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4,
+          "feesAffordability": 3,
+          "campusLife": 3.8,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 3.5,
+          "overall": 4
+        }
       },
       {
         "name": "Lahore Campus",
         "city": "Lahore",
         "address": "47-C, Civic Centre, Johar Town, Lahore",
-        "phone": "+92-42-99233401"
+        "phone": "+92-42-99233401",
+        "description": "BU Lahore campus represents a vibrant, culturally rich educational community situated in Punjab's capital, offering strong engineering, business, and computing tracks.",
+        "pros": [
+          "Vibrant student culture, cultural fests, and competitive programming clubs.",
+          "Highly active local industry and software house networking.",
+          "Top-tier experienced engineering and computing faculty."
+        ],
+        "cons": [
+          "High competition amongst students for grades and ranking.",
+          "Busy metropolitan environment with high daily traffic commute."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 4.1,
+          "practicalSkills": 4,
+          "sportsLife": 3.7,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4,
+          "feesAffordability": 3,
+          "campusLife": 3.8,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 3.5,
+          "overall": 4
+        }
       }
     ]
   },
@@ -2608,17 +3361,18 @@ const universities = [
         "seats": 150,
         "fee": 50000,
         "merit": 60,
-        "description": "Detailed study of Islamic Studies, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Comprehensive study of Quranic sciences, Hadith literature, Islamic jurisprudence (Fiqh), Islamic history, and comparative religion.",
+        "scope": "Prepares specialists for religious administration, educational institutions, Shariah advisory boards in Islamic banks, and research.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Shariah Advisor",
+          "Islamic Studies Teacher",
+          "Religious Administrator",
+          "Research Scholar"
         ],
         "difficultyLevel": "Medium",
         "practicalExposure": "Medium",
         "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "higherStudyOptions": "M.Phil Islamic Studies, PhD in Shariah/Fiqh"
       }
     ],
     "requirements": [
@@ -2648,7 +3402,32 @@ const universities = [
         "name": "Main Campus (H-10)",
         "city": "Islamabad",
         "address": "Sector H-10, Islamabad",
-        "phone": "+92-51-9019-5000"
+        "phone": "+92-51-9019-5000",
+        "description": "The flagship main campus of IIUI in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Low tuition fee with public sector backing.",
+          "Strong international representation, particularly from Middle East and Africa.",
+          "Beautiful main campus adjacent to Faisal Mosque.",
+          "Excellent integration of Islamic values in the curriculum."
+        ],
+        "cons": [
+          "Strict separation of male and female campuses.",
+          "Campus politics and bureaucratic admin processes.",
+          "Vast student size makes registration processes tedious."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.7,
+          "sportsLife": 3.8,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.7,
+          "feesAffordability": 4.5,
+          "campusLife": 3.5,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3,
+          "overall": 4
+        }
       }
     ]
   },
@@ -2772,17 +3551,19 @@ const universities = [
         "seats": 100,
         "fee": 50000,
         "merit": 70,
-        "description": "Detailed study of English, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Explores critical analysis of literary texts, prose, drama, poetry, and linguistic development across historical eras.",
+        "scope": "Develops exceptional communication, analytical, and writing skills, opening pathways in media, publishing, civil services, and education.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Content Writer",
+          "Editor",
+          "PR Specialist",
+          "English Instructor",
+          "Civil Servant"
         ],
         "difficultyLevel": "Medium",
         "practicalExposure": "Medium",
         "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "higherStudyOptions": "MA English Literature, M.Phil Linguistics, CSS/PMS preparations"
       }
     ],
     "requirements": [
@@ -2812,7 +3593,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Peshawar",
         "address": "University Campus, Peshawar",
-        "phone": "+92-91-921-6701"
+        "phone": "+92-91-921-6701",
+        "description": "The flagship main campus of UOP in Peshawar, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Very low fee structure.",
+          "Vast historical campus with rich heritage.",
+          "Strongest alumni network in KPK's public sector services.",
+          "Respected science and literature departments."
+        ],
+        "cons": [
+          "Active student political unions sometimes lead to strikes.",
+          "Administrative processes are slow and bureaucratic.",
+          "Hostel infrastructure requires maintenance."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.6,
+          "sportsLife": 4,
+          "facultyQuality": 4.1,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.8,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 2.8,
+          "overall": 4
+        }
       }
     ]
   },
@@ -2916,17 +3722,18 @@ const universities = [
         "seats": 100,
         "fee": 70000,
         "merit": 70,
-        "description": "Detailed study of Food Science & Technology, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Studies the chemical, physical, and biological nature of food, including processing, preservation, packaging, and safety standards.",
+        "scope": "Critical for food manufacturing conglomerates, quality assurance labs, packaging industries, and health authorities.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Food Quality Manager",
+          "Food Technologist",
+          "Product Developer",
+          "Food Safety Auditor"
         ],
-        "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "difficultyLevel": "Medium-High",
+        "practicalExposure": "High",
+        "industryDemand": "Very High",
+        "higherStudyOptions": "MS Food Science and Technology, Food Safety certifications"
       },
       {
         "name": "Computer Science",
@@ -2976,7 +3783,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Faisalabad",
         "address": "University of Agriculture, Faisalabad",
-        "phone": "+92-41-920-0161"
+        "phone": "+92-41-920-0161",
+        "description": "The flagship main campus of UAF in Faisalabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Nationwide leader in agricultural research and agronomy.",
+          "Vast land area with research farms and crop testing units.",
+          "Nominal fee structure with extensive scholarship schemes.",
+          "Top-class veterinary (DVM) clinical setups."
+        ],
+        "cons": [
+          "Very specialized academic focus; less renowned for mainstream IT/CS.",
+          "Traditional administrative structures.",
+          "Located away from major industrial corporate offices."
+        ],
+        "ratings": {
+          "academicRigor": 4.1,
+          "jobPlacement": 4.2,
+          "practicalSkills": 4.3,
+          "sportsLife": 4.2,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.8,
+          "campusLife": 4,
+          "researchOpportunities": 4.6,
+          "hostelFacilities": 3.5,
+          "overall": 4.2
+        }
       }
     ]
   },
@@ -3039,17 +3871,18 @@ const universities = [
         "seats": 120,
         "fee": 100000,
         "merit": 75,
-        "description": "Detailed study of Computer Systems Engineering, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Integrates electrical engineering and computer science to design and build computer hardware, embedded microprocessors, and hardware-software interfaces.",
+        "scope": "Vital for semiconductor industries, robotics, IoT development, and computer manufacturing.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Embedded Systems Engineer",
+          "Hardware Design Engineer",
+          "Systems Developer",
+          "Firmware Engineer"
         ],
-        "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "difficultyLevel": "High",
+        "practicalExposure": "Very High",
+        "industryDemand": "Excellent",
+        "higherStudyOptions": "MS Computer Engineering, MS Embedded Systems"
       },
       {
         "name": "Software Engineering",
@@ -3139,7 +3972,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Jamshoro",
         "address": "Jamshoro, Sindh 76062",
-        "phone": "+92-22-277-1281"
+        "phone": "+92-22-277-1281",
+        "description": "The flagship main campus of MUET in Jamshoro, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Respected engineering degree with strong industrial recognition in Sindh.",
+          "Low fee structure for merit seats.",
+          "Affiliated with various international institutions.",
+          "Vibrant campus life alongside Sindh University."
+        ],
+        "cons": [
+          "Remote campus location in Jamshoro (away from Karachi center).",
+          "Bureaucratic system and old-school campus infrastructure.",
+          "Relative lack of tech startups compared to urban centers."
+        ],
+        "ratings": {
+          "academicRigor": 4.1,
+          "jobPlacement": 4.1,
+          "practicalSkills": 4.1,
+          "sportsLife": 4,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.7,
+          "feesAffordability": 4.7,
+          "campusLife": 4,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3,
+          "overall": 4.1
+        }
       }
     ]
   },
@@ -3262,17 +4120,18 @@ const universities = [
         "seats": 100,
         "fee": 600000,
         "merit": 80,
-        "description": "Detailed study of Economics, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Analyzes micro and macroeconomic systems, fiscal policy, financial markets, econometric modelling, and wealth distribution.",
+        "scope": "Extremely versatile degree leading to placements in commercial banks, state institutions, investment firms, and public policy think-tanks.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Economic Analyst",
+          "Financial Consultant",
+          "Policy Researcher",
+          "Investment Banker"
         ],
-        "difficultyLevel": "Medium",
+        "difficultyLevel": "Medium-High",
         "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "industryDemand": "Very High",
+        "higherStudyOptions": "MS Economics, MS Applied Econometrics, PhD Economics"
       }
     ],
     "requirements": [
@@ -3303,13 +4162,61 @@ const universities = [
         "name": "Main Campus",
         "city": "Karachi",
         "address": "University Road, Karachi",
-        "phone": "+92-21-38104700"
+        "phone": "+92-21-38104700",
+        "description": "The flagship main campus of IBA in Karachi, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Top-class placement cell connecting directly to MNCs and banks.",
+          "Vast, highly active corporate alumni network.",
+          "Excellent infrastructure with state-of-the-art classrooms and library.",
+          "Rigorous academic programs keeping pace with global standards."
+        ],
+        "cons": [
+          "Highly competitive and selective admissions.",
+          "Strict attendance policy (minimum 80% is non-negotiable).",
+          "Tuition fees are high compared to other public institutions."
+        ],
+        "ratings": {
+          "academicRigor": 4.4,
+          "jobPlacement": 4.8,
+          "practicalSkills": 4.3,
+          "sportsLife": 4,
+          "facultyQuality": 4.5,
+          "valueForMoney": 3.8,
+          "feesAffordability": 2.2,
+          "campusLife": 4.5,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 4,
+          "overall": 4.5
+        }
       },
       {
         "name": "City Campus",
         "city": "Karachi",
         "address": "Kiyani Shaheed Road, Garden, Karachi",
-        "phone": "+92-21-38104701"
+        "phone": "+92-21-38104701",
+        "description": "Constituent campus of IBA located in Karachi. It provides quality higher education in the region following the academic standards of the parent institution.",
+        "pros": [
+          "Fosters local access to IBA's respected curriculum and degrees.",
+          "Strong focus on local student academic training and direct guidance.",
+          "Affordable regional learning footprint with active faculty support."
+        ],
+        "cons": [
+          "Smaller facilities and campus size compared to the main flagship campus.",
+          "Fewer choices of engineering/computing majors locally than the main branch."
+        ],
+        "ratings": {
+          "academicRigor": 4.4,
+          "jobPlacement": 4.8,
+          "practicalSkills": 4.3,
+          "sportsLife": 4,
+          "facultyQuality": 4.5,
+          "valueForMoney": 3.8,
+          "feesAffordability": 2.2,
+          "campusLife": 4.5,
+          "researchOpportunities": 3.8,
+          "hostelFacilities": 4,
+          "overall": 4.5
+        }
       }
     ],
     "reviews": [
@@ -3427,17 +4334,18 @@ const universities = [
         "seats": 60,
         "fee": 950000,
         "merit": 85,
-        "description": "Detailed study of Computer Engineering, focusing on core principles and practical skills.",
-        "scope": "Fosters wide career opportunities in local and international fields.",
+        "description": "Integrates electrical engineering and computer science to design and build computer hardware, embedded microprocessors, and hardware-software interfaces.",
+        "scope": "Vital for semiconductor industries, robotics, IoT development, and computer manufacturing.",
         "careerPaths": [
-          "General Practitioner",
-          "Researcher",
-          "Field Analyst"
+          "Embedded Systems Engineer",
+          "Hardware Design Engineer",
+          "Systems Developer",
+          "Firmware Engineer"
         ],
-        "difficultyLevel": "Medium",
-        "practicalExposure": "Medium",
-        "industryDemand": "Good",
-        "higherStudyOptions": "MS in relevant discipline"
+        "difficultyLevel": "High",
+        "practicalExposure": "Very High",
+        "industryDemand": "Excellent",
+        "higherStudyOptions": "MS Computer Engineering, MS Embedded Systems"
       },
       {
         "name": "Mechanical Engineering",
@@ -3509,7 +4417,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Topi",
         "address": "Topi, Swabi, KP 23640",
-        "phone": "+92-938-271-858"
+        "phone": "+92-938-271-858",
+        "description": "The flagship main campus of GIKI in Topi, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Outstanding residential life and close student-faculty bonding.",
+          "State-of-the-art engineering and computing labs.",
+          "Excellent placement record with international headhunting.",
+          "Vibrant extracurricular activities and student societies (e.g. SOPHEP)."
+        ],
+        "cons": [
+          "Very expensive tuition and hostel fees.",
+          "Remote location (Topi, Swabi) limits urban access and internships.",
+          "Severe weather conditions in summers."
+        ],
+        "ratings": {
+          "academicRigor": 4.6,
+          "jobPlacement": 4.8,
+          "practicalSkills": 4.5,
+          "sportsLife": 4.2,
+          "facultyQuality": 4.4,
+          "valueForMoney": 3.6,
+          "feesAffordability": 1.8,
+          "campusLife": 4.6,
+          "researchOpportunities": 4,
+          "hostelFacilities": 4.5,
+          "overall": 4.4
+        }
       }
     ],
     "reviews": [
@@ -3756,7 +4689,32 @@ const universities = [
           "BS Data Science",
           "BS Cyber Security",
           "BBA"
-        ]
+        ],
+        "description": "The flagship main campus of FAST-NUCES in Islamabad, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Industry-wide reputation as the best coding and tech university.",
+          "Stellar job placements and immediate corporate hiring.",
+          "Intensive hands-on practical coding assignments.",
+          "Dispersed across 5 major cities offering broad accessibility."
+        ],
+        "cons": [
+          "Extremely high workload with continuous quizzes/projects.",
+          "Very strict absolute grading system (hard to score high GPAs).",
+          "Relatively basic campus life and limited sports spaces."
+        ],
+        "ratings": {
+          "academicRigor": 4.8,
+          "jobPlacement": 4.9,
+          "practicalSkills": 4.8,
+          "sportsLife": 2,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.2,
+          "feesAffordability": 3.2,
+          "campusLife": 3,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 2.5,
+          "overall": 4.4
+        }
       },
       {
         "name": "Lahore Campus",
@@ -3771,7 +4729,30 @@ const universities = [
           "BS Data Science",
           "BS Electrical Engineering",
           "BBA"
-        ]
+        ],
+        "description": "FAST-NUCES Lahore campus represents a vibrant, culturally rich educational community situated in Punjab's capital, offering strong engineering, business, and computing tracks.",
+        "pros": [
+          "Vibrant student culture, cultural fests, and competitive programming clubs.",
+          "Highly active local industry and software house networking.",
+          "Top-tier experienced engineering and computing faculty."
+        ],
+        "cons": [
+          "High competition amongst students for grades and ranking.",
+          "Busy metropolitan environment with high daily traffic commute."
+        ],
+        "ratings": {
+          "academicRigor": 4.8,
+          "jobPlacement": 4.9,
+          "practicalSkills": 4.8,
+          "sportsLife": 2.2,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.2,
+          "feesAffordability": 3.2,
+          "campusLife": 3,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 2.5,
+          "overall": 4.4
+        }
       },
       {
         "name": "Karachi Campus",
@@ -3787,7 +4768,30 @@ const universities = [
           "BS Cyber Security",
           "BS Electrical Engineering",
           "BBA"
-        ]
+        ],
+        "description": "FAST-NUCES Karachi campus is a leading academic center in Pakistan's financial hub, highly regarded for corporate partnerships, tech incubators, and finance tracks.",
+        "pros": [
+          "Direct access to the largest corporate and financial market of Pakistan.",
+          "Highly active developer circles, tech startups, and hackathons.",
+          "Flexible city options and transport networks."
+        ],
+        "cons": [
+          "Hot and humid coastal weather with high municipal congestion.",
+          "Campus size is smaller than capital locations."
+        ],
+        "ratings": {
+          "academicRigor": 4.8,
+          "jobPlacement": 4.9,
+          "practicalSkills": 4.8,
+          "sportsLife": 2,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.2,
+          "feesAffordability": 3.2,
+          "campusLife": 3,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 2.5,
+          "overall": 4.4
+        }
       },
       {
         "name": "Peshawar Campus",
@@ -3800,7 +4804,30 @@ const universities = [
           "BS Software Engineering",
           "BS Electrical Engineering",
           "BBA"
-        ]
+        ],
+        "description": "FAST-NUCES Peshawar campus delivers quality technological education in the KPK region, serving as a vital training ground for IT and software professionals.",
+        "pros": [
+          "Affordable tuition fees and low local living costs.",
+          "Relaxed, friendly student environment with dedicated faculty guidance.",
+          "Saves out-of-province travel costs for local students."
+        ],
+        "cons": [
+          "Slightly fewer choices of specialized programs.",
+          "Fewer local software houses compared to Karachi or Lahore."
+        ],
+        "ratings": {
+          "academicRigor": 4.8,
+          "jobPlacement": 4.9,
+          "practicalSkills": 4.8,
+          "sportsLife": 2,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.2,
+          "feesAffordability": 3.2,
+          "campusLife": 3,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 2.5,
+          "overall": 4.4
+        }
       },
       {
         "name": "Chiniot-Faisalabad Campus",
@@ -3815,7 +4842,30 @@ const universities = [
           "BS Data Science",
           "BS Electrical Engineering",
           "BBA"
-        ]
+        ],
+        "description": "FAST-NUCES Faisalabad/Multan campus is designed to provide high-quality education to the agricultural and textile industrial heartlands of Punjab.",
+        "pros": [
+          "Excellent regional reach, helping local students access elite curriculum without moving to capital cities.",
+          "Low campus congestion, and peaceful academic environments.",
+          "Close connections with regional textile, industrial, and agricultural bodies."
+        ],
+        "cons": [
+          "Limited extracurricular facilities and smaller campuses.",
+          "Lower numbers of on-campus recruiting drives compared to main campuses."
+        ],
+        "ratings": {
+          "academicRigor": 4.8,
+          "jobPlacement": 4.9,
+          "practicalSkills": 4.8,
+          "sportsLife": 2,
+          "facultyQuality": 4.2,
+          "valueForMoney": 4.2,
+          "feesAffordability": 3.2,
+          "campusLife": 3,
+          "researchOpportunities": 3.5,
+          "hostelFacilities": 2.5,
+          "overall": 4.4
+        }
       }
     ],
     "reviews": [
@@ -4002,7 +5052,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Lahore",
         "address": "Khayaban-e-Jamia Punjab, Lahore",
-        "phone": "+92-42-9923-1304"
+        "phone": "+92-42-9923-1304",
+        "description": "The flagship main campus of UHS in Lahore, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Directly regulates all Punjab public medical college credentials.",
+          "Highly recognized medical and dental qualifications.",
+          "Nominal fee structure for merit seats in public sector affiliates.",
+          "Comprehensive syllabus guidelines."
+        ],
+        "cons": [
+          "Purely academic/examination body; main campus has limited student life.",
+          "Sluggish administrative and result processing.",
+          "Very high competition for MDCAT admission seats."
+        ],
+        "ratings": {
+          "academicRigor": 4.5,
+          "jobPlacement": 4.8,
+          "practicalSkills": 4.5,
+          "sportsLife": 2.5,
+          "facultyQuality": 4.3,
+          "valueForMoney": 4.8,
+          "feesAffordability": 4.8,
+          "campusLife": 2.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3,
+          "overall": 4.2
+        }
       }
     ]
   },
@@ -4187,7 +5262,32 @@ const universities = [
         "name": "Main Campus",
         "city": "Multan",
         "address": "Bosan Road, Multan 60800",
-        "phone": "+92-61-9210-067"
+        "phone": "+92-61-9210-067",
+        "description": "The flagship main campus of BZU in Multan, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.",
+        "pros": [
+          "Low cost of education (extremely economical).",
+          "Very strong brand name in Southern Punjab region.",
+          "Vast campus grounds with active sports activities.",
+          "Strong research in agricultural sciences."
+        ],
+        "cons": [
+          "Administrative processes are slow.",
+          "Frequent political issues and strikes.",
+          "Hostel amenities require renovation."
+        ],
+        "ratings": {
+          "academicRigor": 4,
+          "jobPlacement": 3.8,
+          "practicalSkills": 3.6,
+          "sportsLife": 4.2,
+          "facultyQuality": 4,
+          "valueForMoney": 4.7,
+          "feesAffordability": 4.7,
+          "campusLife": 3.8,
+          "researchOpportunities": 4,
+          "hostelFacilities": 3,
+          "overall": 4
+        }
       }
     ]
   }

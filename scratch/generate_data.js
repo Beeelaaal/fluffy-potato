@@ -184,7 +184,7 @@ const courseMetadata = {
   "International Relations": {
     description: "Focuses on diplomacy, foreign policies of nations, international security systems, global institutions, and conflict resolutions.",
     scope: "Highly targeted path for foreign service examinations, embassies, NGOs, journalism, and public administration.",
-    careerPaths: ["Diplomatic Attach\u00E9", "Political Analyst", "NGO Specialist", "Foreign Journalist"],
+    careerPaths: ["Diplomatic Attaché", "Political Analyst", "NGO Specialist", "Foreign Journalist"],
     difficultyLevel: "Medium",
     practicalExposure: "Medium",
     industryDemand: "Good",
@@ -219,7 +219,7 @@ const courseMetadata = {
   },
   "Agriculture": {
     description: "Focuses on crop production, soil sciences, agribusiness management, pest controls, and sustainable farming systems.",
-    scope: "Critical for Pakistan\'s agrarian economy, food processing firms, and government research departments.",
+    scope: "Critical for Pakistan's agrarian economy, food processing firms, and government research departments.",
     careerPaths: ["Agricultural Officer", "Farm Supervisor", "Agribusiness Consultant", "Food inspector"],
     difficultyLevel: "Medium",
     practicalExposure: "High",
@@ -252,6 +252,132 @@ const courseMetadata = {
     practicalExposure: "Very High",
     industryDemand: "High",
     higherStudyOptions: "M.Arch (Master of Architecture), Urban Planning"
+  },
+  "Information Technology": {
+    description: "Focuses on the installation, configuration, and maintenance of computer systems, networks, databases, and web applications for organizational needs.",
+    scope: "High demand in network administration, database management, cloud services, and system security.",
+    careerPaths: ["IT Support Specialist", "Network Administrator", "Database Administrator", "System Administrator"],
+    difficultyLevel: "Medium",
+    practicalExposure: "High",
+    industryDemand: "Very High",
+    higherStudyOptions: "MS Information Technology, Cloud Computing, Cybersecurity certifications"
+  },
+  "English": {
+    description: "Explores critical analysis of literary texts, prose, drama, poetry, and linguistic development across historical eras.",
+    scope: "Develops exceptional communication, analytical, and writing skills, opening pathways in media, publishing, civil services, and education.",
+    careerPaths: ["Content Writer", "Editor", "PR Specialist", "English Instructor", "Civil Servant"],
+    difficultyLevel: "Medium",
+    practicalExposure: "Medium",
+    industryDemand: "Good",
+    higherStudyOptions: "MA English Literature, M.Phil Linguistics, CSS/PMS preparations"
+  },
+  "Commerce": {
+    description: "Covers commercial operations, trade principles, retail management, sales strategies, and corporate logistics.",
+    scope: "Essential for retail sectors, supply chain networks, banking operations, and small-to-medium enterprise management.",
+    careerPaths: ["Sales Officer", "Commerce Consultant", "Logistics Coordinator", "Bank Officer"],
+    difficultyLevel: "Medium",
+    practicalExposure: "Medium-High",
+    industryDemand: "Very High",
+    higherStudyOptions: "M.Com, MBA, ACCA"
+  },
+  "Naval Architecture": {
+    description: "Specialized engineering discipline focusing on the design, construction, maintenance, and operation of marine vessels and structures (ships, submarines, offshore platforms).",
+    scope: "Extremely vital for defense sectors, shipyards, marine survey firms, and naval shipping operations.",
+    careerPaths: ["Naval Architect", "Marine Design Engineer", "Shipyard Manager", "Marine Surveyor"],
+    difficultyLevel: "High",
+    practicalExposure: "Very High",
+    industryDemand: "Good",
+    higherStudyOptions: "MS Naval Architecture, MS Marine Engineering"
+  },
+  "Maritime Sciences": {
+    description: "Interdisciplinary study of marine biology, maritime law, oceanography, shipping operations, and port management.",
+    scope: "Crucial for port authorities, commercial shipping lines, ocean research bodies, and maritime security organizations.",
+    careerPaths: ["Port Operations Manager", "Marine Inspector", "Shipping Coordinator", "Maritime Consultant"],
+    difficultyLevel: "Medium-High",
+    practicalExposure: "High",
+    industryDemand: "Good",
+    higherStudyOptions: "MS Maritime Studies, Port Management certifications"
+  },
+  "Veterinary": {
+    description: "Professional clinical training focusing on animal health, disease prevention, surgical procedures, animal husbandry, and public health.",
+    scope: "High-demand sector in livestock farms, pet clinics, pharmaceutical labs, wildlife conservation, and government veterinary departments.",
+    careerPaths: ["Veterinary Doctor", "Livestock Farm Manager", "Animal Nutritionist", "Veterinary Surgeon"],
+    difficultyLevel: "High",
+    practicalExposure: "Extreme",
+    industryDemand: "Very High",
+    higherStudyOptions: "M.Phil in Clinical Medicine, Veterinary Surgery, PhD tracks"
+  },
+  "Food Science": {
+    description: "Studies the chemical, physical, and biological nature of food, including processing, preservation, packaging, and safety standards.",
+    scope: "Critical for food manufacturing conglomerates, quality assurance labs, packaging industries, and health authorities.",
+    careerPaths: ["Food Quality Manager", "Food Technologist", "Product Developer", "Food Safety Auditor"],
+    difficultyLevel: "Medium-High",
+    practicalExposure: "High",
+    industryDemand: "Very High",
+    higherStudyOptions: "MS Food Science and Technology, Food Safety certifications"
+  },
+  "Computer Systems Engineering": {
+    description: "Integrates electrical engineering and computer science to design and build computer hardware, embedded microprocessors, and hardware-software interfaces.",
+    scope: "Vital for semiconductor industries, robotics, IoT development, and computer manufacturing.",
+    careerPaths: ["Embedded Systems Engineer", "Hardware Design Engineer", "Systems Developer", "Firmware Engineer"],
+    difficultyLevel: "High",
+    practicalExposure: "Very High",
+    industryDemand: "Excellent",
+    higherStudyOptions: "MS Computer Engineering, MS Embedded Systems"
+  },
+  "Computer Engineering": {
+    description: "Integrates electrical engineering and computer science to design and build computer hardware, embedded microprocessors, and hardware-software interfaces.",
+    scope: "Vital for semiconductor industries, robotics, IoT development, and computer manufacturing.",
+    careerPaths: ["Embedded Systems Engineer", "Hardware Design Engineer", "Systems Developer", "Firmware Engineer"],
+    difficultyLevel: "High",
+    practicalExposure: "Very High",
+    industryDemand: "Excellent",
+    higherStudyOptions: "MS Computer Engineering, MS Embedded Systems"
+  },
+  "Economics": {
+    description: "Analyzes micro and macroeconomic systems, fiscal policy, financial markets, econometric modelling, and wealth distribution.",
+    scope: "Extremely versatile degree leading to placements in commercial banks, state institutions, investment firms, and public policy think-tanks.",
+    careerPaths: ["Economic Analyst", "Financial Consultant", "Policy Researcher", "Investment Banker"],
+    difficultyLevel: "Medium-High",
+    practicalExposure: "Medium",
+    industryDemand: "Very High",
+    higherStudyOptions: "MS Economics, MS Applied Econometrics, PhD Economics"
+  },
+  "Islamic Studies": {
+    description: "Comprehensive study of Quranic sciences, Hadith literature, Islamic jurisprudence (Fiqh), Islamic history, and comparative religion.",
+    scope: "Prepares specialists for religious administration, educational institutions, Shariah advisory boards in Islamic banks, and research.",
+    careerPaths: ["Shariah Advisor", "Islamic Studies Teacher", "Religious Administrator", "Research Scholar"],
+    difficultyLevel: "Medium",
+    practicalExposure: "Medium",
+    industryDemand: "Good",
+    higherStudyOptions: "M.Phil Islamic Studies, PhD in Shariah/Fiqh"
+  },
+  "Mechatronics": {
+    description: "Synergizes mechanical engineering, electronics, computer engineering, and control systems to design smart automated machines and robotics.",
+    scope: "Highly relevant in modern automated factories, robotics firms, automotive sectors, and smart systems design.",
+    careerPaths: ["Robotics Engineer", "Automation Consultant", "Control Systems Specialist", "Mechatronics Designer"],
+    difficultyLevel: "High",
+    practicalExposure: "Very High",
+    industryDemand: "Good",
+    higherStudyOptions: "MS Mechatronics, MS Robotics, Automation certifications"
+  },
+  "Avionics": {
+    description: "Specialized branch of electronics engineering focusing on electronic systems used on aircraft, artificial satellites, and spacecraft (radar, communication, navigation).",
+    scope: "Highly critical for aviation divisions, national defense forces, satellite communication networks, and airline operators.",
+    careerPaths: ["Avionics Design Engineer", "Radar Specialist", "Aircraft Systems Installer", "Aviation Technical Officer"],
+    difficultyLevel: "Very High",
+    practicalExposure: "Very High",
+    industryDemand: "High",
+    higherStudyOptions: "MS Avionics Engineering, Aerospace Control Systems"
+  },
+  "Information Security": {
+    description: "Focuses on defending computer systems, networks, and data from security threats, unauthorized access, and cyber espionage.",
+    scope: "Critical for national security grids, corporate IT divisions, banking networks, and secure software development.",
+    careerPaths: ["Information Security Analyst", "Network Defense Specialist", "Security Auditor", "Ethical Hacker"],
+    difficultyLevel: "High",
+    practicalExposure: "Very High",
+    industryDemand: "Excellent",
+    higherStudyOptions: "MS Information Security, Cybersecurity certifications (CISSP, CISM)"
   }
 };
 
@@ -381,6 +507,10 @@ const baseUniversities = [
       { name: 'Accounting & Finance', degree: 'BS', duration: '4 years', seats: 100, fee: 550800, merit: 77 },
       { name: 'Naval Architecture (Karachi PNEC)', degree: 'BE', duration: '4 years', seats: 50, fee: 394100, merit: 80 },
       { name: 'Maritime Sciences (Karachi PNEC)', degree: 'BS', duration: '4 years', seats: 60, fee: 394100, merit: 75 },
+      { name: 'Mechatronics Engineering (Rawalpindi EME)', degree: 'BE', duration: '4 years', seats: 60, fee: 394100, merit: 82 },
+      { name: 'Information Security Engineering (Rawalpindi MCS)', degree: 'BE', duration: '4 years', seats: 50, fee: 394100, merit: 81 },
+      { name: 'Aerospace Engineering (Risalpur CAE)', degree: 'BE', duration: '4 years', seats: 50, fee: 394100, merit: 80 },
+      { name: 'Avionics Engineering (Risalpur CAE)', degree: 'BE', duration: '4 years', seats: 50, fee: 394100, merit: 78 }
     ],
     requirements: [
       'Intermediate (FSc/ICS/A-Levels) with minimum 60% marks',
@@ -397,7 +527,7 @@ const baseUniversities = [
     ],
     contacts: { phone: '+92-51-9085-1000', email: 'admissions@nust.edu.pk', address: 'H-12, Islamabad, Pakistan' },
     admissionCriteria: 'NUST Entry Test (NET) with minimum 60 percentile. FSc/ICS/A-Levels with 60% marks.',
-    degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BE Electrical Engineering', 'BE Mechanical Engineering', 'BE Civil Engineering', 'BE Chemical Engineering', 'BBA', 'BS Mathematics', 'B.Arch (Architecture)', 'BE Naval Architecture', 'BS Maritime Sciences'],
+    degrees: ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence', 'BS Data Science', 'BE Electrical Engineering', 'BE Mechanical Engineering', 'BE Civil Engineering', 'BE Chemical Engineering', 'BBA', 'BS Mathematics', 'B.Arch (Architecture)', 'BE Naval Architecture', 'BS Maritime Sciences', 'BE Mechatronics Engineering', 'BE Information Security Engineering', 'BE Aerospace Engineering', 'BE Avionics Engineering'],
     campuses: [
       {
         name: 'Islamabad Campus (H-12)',
@@ -1774,6 +1904,226 @@ const baseUniversities = [
   }
 ];
 
+// Decorate campuses with description, pros, cons, and ratings
+const decorateCampuses = (uni) => {
+  if (!uni.campuses || !Array.isArray(uni.campuses)) return [];
+
+  return uni.campuses.map(campus => {
+    const name = campus.name.toLowerCase();
+    let cDesc = `Constituent campus of ${uni.shortName} located in ${campus.city || uni.city}. It provides quality higher education in the region following the academic standards of the parent institution.`;
+    let cPros = [
+      `Fosters local access to ${uni.shortName}'s respected curriculum and degrees.`,
+      `Strong focus on local student academic training and direct guidance.`,
+      `Affordable regional learning footprint with active faculty support.`
+    ];
+    let cCons = [
+      `Smaller facilities and campus size compared to the main flagship campus.`,
+      `Fewer choices of engineering/computing majors locally than the main branch.`
+    ];
+    let cRatings = { ...uni.ratings }; // inherit overall ratings by default
+
+    // Special custom overrides for main campuses
+    if (name.includes('main campus') || name.includes('h-12') || name.includes('clifton') || name.includes('campus (main)') || (name.includes('lahore campus') && uni.shortName === 'LUMS')) {
+      cDesc = `The flagship main campus of ${uni.shortName} in ${campus.city}, featuring the primary academic block, extensive library systems, research centers, and full hostel grounds.`;
+      cPros = uni.pros ? [...uni.pros] : cPros;
+      cCons = uni.cons ? [...uni.cons] : cCons;
+      cRatings = uni.ratings ? { ...uni.ratings } : cRatings;
+    } 
+    // Special overrides for NUST CAE Risalpur
+    else if (name.includes('risalpur') || name.includes('cae')) {
+      cDesc = `NUST College of Aeronautical Engineering (CAE) in Risalpur, Khyber Pakhtunkhwa is the premier center for aerospace and avionics engineering in Pakistan, run in close collaboration with the Pakistan Air Force.`;
+      cPros = [
+        `Aviation-specific lab testing setups, wind-tunnel research facilities, and flight simulation labs.`,
+        `High military discipline and PAF technical officer grooming environment.`,
+        `Excellent job placement in national defense organizations, airlines, and aviation industries.`
+      ];
+      cCons = [
+        `Remote location in Risalpur, KP with limited general city access and leisure options.`,
+        `Highly structured military discipline with strict gate timings and uniform codes.`
+      ];
+      cRatings = {
+        academicRigor: 4.8,
+        jobPlacement: 4.6,
+        practicalSkills: 4.8,
+        sportsLife: 3.8,
+        facultyQuality: 4.5,
+        valueForMoney: 4.4,
+        feesAffordability: 3.8,
+        campusLife: 3.2,
+        researchOpportunities: 4.5,
+        hostelFacilities: 4.0,
+        overall: 4.4
+      };
+    }
+    // Special overrides for NUST EME / MCS Rawalpindi
+    else if (name.includes('rawalpindi') || name.includes('eme') || name.includes('mcs')) {
+      cDesc = `NUST constituent colleges in Rawalpindi (College of Electrical and Mechanical Engineering & Military College of Signals) deliver specialized high-rigor courses in mechatronics, signals, computer, and information security engineering.`;
+      cPros = [
+        `Pioneer in Mechatronics and Information Security engineering degrees in Pakistan.`,
+        `Highly active robotic clubs, national cybersecurity contest participations, and research labs.`,
+        `Strong industry and military-technical linkages for defense and software projects.`
+      ];
+      cCons = [
+        `Strict security protocols and military entrance gate inspections for students and visitors.`,
+        `Smaller social campus footprint compared to the sprawling H-12 Islamabad flagship campus.`
+      ];
+      cRatings = {
+        academicRigor: 4.7,
+        jobPlacement: 4.6,
+        practicalSkills: 4.7,
+        sportsLife: 3.8,
+        facultyQuality: 4.5,
+        valueForMoney: 4.4,
+        feesAffordability: 3.8,
+        campusLife: 3.5,
+        researchOpportunities: 4.2,
+        hostelFacilities: 3.8,
+        overall: 4.3
+      };
+    }
+    // Special overrides for COMSATS Abbottabad
+    else if (name.includes('abbottabad')) {
+      cDesc = `COMSATS Abbottabad Campus is situated in the scenic and peaceful valley of Abbottabad, offering excellent computing, biotechnology, and engineering tracks in a cool mountain climate.`;
+      cPros = [
+        `Beautiful, scenic mountain environment and peaceful, pollution-free study setting.`,
+        `Exceptional research output in biotechnology, environmental sciences, and earth sciences.`,
+        `Very safe campus atmosphere with low local living and hostel expenses.`
+      ];
+      cCons = [
+        `Significant distance from main industrial software hubs (Karachi/Lahore).`,
+        `Fewer local software house internship options compared to Islamabad or Lahore.`
+      ];
+      if (uni.ratings) {
+        cRatings = { ...uni.ratings, overall: Math.min(uni.ratings.overall, 5.0) };
+      }
+    }
+    // Special overrides for COMSATS Sahiwal / Wah
+    else if (name.includes('sahiwal') || name.includes('wah')) {
+      cDesc = `COMSATS regional campus in ${campus.city || 'Punjab'} delivers high-quality, affordable computer science, business, and software engineering programs to students in their local region.`;
+      cPros = [
+        `Provides direct access to COMSATS' high-quality computing curriculum locally.`,
+        `Highly affordable tuition fees and minimal local hostel/living costs.`,
+        `Focused, close-knit academic environment with dedicated faculty instruction.`
+      ];
+      cCons = [
+        `Smaller campus infrastructure and fewer sports/extracurricular amenities.`,
+        `Limited on-campus recruitment drives by large multinational companies.`
+      ];
+      if (uni.ratings) {
+        cRatings = { ...uni.ratings, overall: Math.min(uni.ratings.overall - 0.1, 5.0) };
+      }
+    }
+    // Special overrides for Islamabad Campuses
+    else if (name.includes('islamabad')) {
+      cDesc = `${uni.shortName} Islamabad campus offers a state-of-the-art modern academic block, excellent IT infrastructure, and direct proximity to corporate and government sectors in the capital.`;
+      cPros = [
+        `Located in the peaceful, capital city with prime corporate links.`,
+        `Modern building infrastructure, high-speed labs, and top teaching faculty.`,
+        `Frequent industrial meetups and job placement opportunities.`
+      ];
+      cCons = [
+        `High cost of living and hosteling in the capital.`,
+        `Strict merit requirements for capital seat allocations.`
+      ];
+      if (uni.ratings) {
+        cRatings = { ...uni.ratings, overall: Math.min(uni.ratings.overall + 0.1, 5.0) };
+      }
+    }
+    // Special overrides for Lahore Campuses
+    else if (name.includes('lahore')) {
+      cDesc = `${uni.shortName} Lahore campus represents a vibrant, culturally rich educational community situated in Punjab's capital, offering strong engineering, business, and computing tracks.`;
+      cPros = [
+        `Vibrant student culture, cultural fests, and competitive programming clubs.`,
+        `Highly active local industry and software house networking.`,
+        `Top-tier experienced engineering and computing faculty.`
+      ];
+      cCons = [
+        `High competition amongst students for grades and ranking.`,
+        `Busy metropolitan environment with high daily traffic commute.`
+      ];
+      if (uni.ratings) {
+        cRatings = { ...uni.ratings, overall: Math.min(uni.ratings.overall, 5.0), sportsLife: Math.min((uni.ratings.sportsLife || 3) + 0.2, 5) };
+      }
+    }
+    // Special overrides for Karachi Campuses (including FAST Karachi & NUST PNEC)
+    else if (name.includes('karachi') || name.includes('pnec')) {
+      if (name.includes('pnec')) {
+        cDesc = `NUST Pakistan Navy Engineering College (PNEC) in Karsaz, Karachi is a highly disciplined and prestigious engineering college administered under the Pakistan Navy.`;
+        cPros = [
+          `Highly structured naval environment with direct marine and defense lab exposure.`,
+          `Strong industry connections for mechanical, electrical, and naval architecture grads.`,
+          `Excellent lab testing machines and specialized naval engineering training.`
+        ];
+        cCons = [
+          `Strict military-style dress codes, gate timings, and discipline protocols.`,
+          `Lacks the broad, relaxed social atmosphere of the H-12 Islamabad campus.`
+        ];
+        cRatings = {
+          academicRigor: 4.7,
+          jobPlacement: 4.6,
+          practicalSkills: 4.7,
+          sportsLife: 3.8,
+          facultyQuality: 4.5,
+          valueForMoney: 4.4,
+          feesAffordability: 3.8,
+          campusLife: 3.2,
+          researchOpportunities: 4.2,
+          hostelFacilities: 3.8,
+          overall: 4.3
+        };
+      } else {
+        cDesc = `${uni.shortName} Karachi campus is a leading academic center in Pakistan's financial hub, highly regarded for corporate partnerships, tech incubators, and finance tracks.`;
+        cPros = [
+          `Direct access to the largest corporate and financial market of Pakistan.`,
+          `Highly active developer circles, tech startups, and hackathons.`,
+          `Flexible city options and transport networks.`
+        ];
+        cCons = [
+          `Hot and humid coastal weather with high municipal congestion.`,
+          `Campus size is smaller than capital locations.`
+        ];
+        if (uni.ratings) {
+          cRatings = { ...uni.ratings, overall: Math.min(uni.ratings.overall, 5.0) };
+        }
+      }
+    }
+    // Special overrides for Peshawar Campuses
+    else if (name.includes('peshawar')) {
+      cDesc = `${uni.shortName} Peshawar campus delivers quality technological education in the KPK region, serving as a vital training ground for IT and software professionals.`;
+      cPros = [
+        `Affordable tuition fees and low local living costs.`,
+        `Relaxed, friendly student environment with dedicated faculty guidance.`,
+        `Saves out-of-province travel costs for local students.`
+      ];
+      cCons = [
+        `Slightly fewer choices of specialized programs.`,
+        `Fewer local software houses compared to Karachi or Lahore.`
+      ];
+    }
+    // Special overrides for Faisalabad / Multan / regional campuses
+    else if (name.includes('faisalabad') || name.includes('chiniot') || name.includes('multan')) {
+      cDesc = `${uni.shortName} Faisalabad/Multan campus is designed to provide high-quality education to the agricultural and textile industrial heartlands of Punjab.`;
+      cPros = [
+        `Excellent regional reach, helping local students access elite curriculum without moving to capital cities.`,
+        `Low campus congestion, and peaceful academic environments.`,
+        `Close connections with regional textile, industrial, and agricultural bodies.`
+      ];
+      cCons = [
+        `Limited extracurricular facilities and smaller campuses.`,
+        `Lower numbers of on-campus recruiting drives compared to main campuses.`
+      ];
+    }
+
+    return {
+      ...campus,
+      description: cDesc,
+      pros: cPros,
+      cons: cCons,
+      ratings: cRatings
+    };
+  });
+};
+
 // Decorate base universities with metadata
 const universities = baseUniversities.map(uni => {
   const updatedProgramsList = uni.programs_list.map(prog => {
@@ -1800,11 +2150,15 @@ const universities = baseUniversities.map(uni => {
     };
   });
 
+  const decoratedCampuses = decorateCampuses({ ...uni, programs_list: updatedProgramsList });
+
   return {
     ...uni,
-    programs_list: updatedProgramsList
+    programs_list: updatedProgramsList,
+    campuses: decoratedCampuses
   };
 });
+
 
 // Write universities.ts
 const tsContent = `export interface University {
@@ -1863,6 +2217,10 @@ export interface Campus {
   phone?: string;
   email?: string;
   degrees?: string[];
+  description?: string;
+  pros?: string[];
+  cons?: string[];
+  ratings?: Ratings;
 }
 
 export interface Review {

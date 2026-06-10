@@ -136,10 +136,12 @@ html.theme-transitioning *::after {
   border-color: rgba(46, 242, 255, 0.15) !important;
 }
 
-.dark .glass-card:hover {
-  transform: translateY(-4px) rotate(0.5deg);
-  border-color: var(--cyan) !important;
-  box-shadow: 8px 8px 0px var(--cyan) !important;
+@media (hover: hover) {
+  .dark .glass-card:hover {
+    transform: translateY(-4px) rotate(0.5deg);
+    border-color: var(--cyan) !important;
+    box-shadow: 8px 8px 0px var(--cyan) !important;
+  }
 }
 
 .dark .btn-primary {
@@ -149,9 +151,11 @@ html.theme-transitioning *::after {
   color: #0B071E !important;
 }
 
-.dark .btn-primary:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px var(--cyan);
+@media (hover: hover) {
+  .dark .btn-primary:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--cyan);
+  }
 }
 
 .dark .btn-primary:active {
@@ -190,9 +194,11 @@ html.theme-transitioning *::after {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-.dark .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--dark);
+@media (hover: hover) {
+  .dark .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--dark);
+  }
 }
 
 .dark .input-field {
@@ -205,9 +211,11 @@ html.theme-transitioning *::after {
   border-color: var(--blue);
 }
 
-.dark .sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.06);
+@media (hover: hover) {
+  .dark .sidebar-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .dark .sidebar-item.active {
@@ -215,8 +223,10 @@ html.theme-transitioning *::after {
   border-color: var(--dark);
 }
 
-.dark .data-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+@media (hover: hover) {
+  .dark .data-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
 }
 
 .dark .custom-checkbox {
@@ -327,10 +337,12 @@ html.theme-transitioning *::after {
                 border-color 0.22s ease;
   }
 
-  .glass-card:hover {
-    transform: translateY(-4px) rotate(0.5deg);
-    border-color: var(--dark);
-    box-shadow: 8px 8px 0px var(--dark);
+  @media (hover: hover) {
+    .glass-card:hover {
+      transform: translateY(-4px) rotate(0.5deg);
+      border-color: var(--dark);
+      box-shadow: 8px 8px 0px var(--dark);
+    }
   }
 
   /* ── Witty Buttons ── */
@@ -341,9 +353,11 @@ html.theme-transitioning *::after {
     box-shadow: 4px 4px 0px var(--dark);
   }
 
-  .btn-primary:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px var(--dark);
+  @media (hover: hover) {
+    .btn-primary:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--dark);
+    }
   }
 
   .btn-primary:active {
@@ -358,9 +372,11 @@ html.theme-transitioning *::after {
     box-shadow: 4px 4px 0px var(--dark);
   }
 
-  .btn-orange:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0px var(--dark);
+  @media (hover: hover) {
+    .btn-orange:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--dark);
+    }
   }
 
   .btn-ghost {
@@ -368,12 +384,14 @@ html.theme-transitioning *::after {
     color: var(--text-secondary);
   }
 
-  .btn-ghost:hover {
-    color: var(--dark);
-    border-color: var(--dark);
-    background: #FFFFFF;
-    transform: translate(-1px, -1px);
-    box-shadow: 2px 2px 0px var(--dark);
+  @media (hover: hover) {
+    .btn-ghost:hover {
+      color: var(--dark);
+      border-color: var(--dark);
+      background: #FFFFFF;
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0px var(--dark);
+    }
   }
 
   .btn-danger {
@@ -381,12 +399,14 @@ html.theme-transitioning *::after {
     color: #DC2626;
   }
 
-  .btn-danger:hover {
-    background: #FCA5A5;
-    border-color: #DC2626;
-    color: #991B1B;
-    transform: translate(-1px, -1px);
-    box-shadow: 2px 2px 0px #DC2626;
+  @media (hover: hover) {
+    .btn-danger:hover {
+      background: #FCA5A5;
+      border-color: #DC2626;
+      color: #991B1B;
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0px #DC2626;
+    }
   }
 
   /* ── Layout ── */
@@ -496,10 +516,12 @@ html.theme-transitioning *::after {
     border: 2px solid transparent;
   }
 
-  .sidebar-item:hover {
-    color: var(--dark);
-    background: rgba(11, 7, 30, 0.03);
-    border-color: rgba(11, 7, 30, 0.06);
+  @media (hover: hover) {
+    .sidebar-item:hover {
+      color: var(--dark);
+      background: rgba(11, 7, 30, 0.03);
+      border-color: rgba(11, 7, 30, 0.06);
+    }
   }
 
   .sidebar-item.active {
@@ -525,8 +547,10 @@ html.theme-transitioning *::after {
     border-bottom: none;
   }
 
-  .data-table tr:hover td {
-    background: rgba(11, 7, 30, 0.015);
+  @media (hover: hover) {
+    .data-table tr:hover td {
+      background: rgba(11, 7, 30, 0.015);
+    }
   }
 
   /* ── Form label ── */
