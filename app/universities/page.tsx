@@ -14,16 +14,49 @@ interface UniDoc {
   name: string;
   shortName: string;
   city: string;
+  province: string;
   type: string;
   programs?: number;
   description?: string;
   logoUrl?: string;
+  coverUrl?: string;
   websiteUrl?: string;
   deadline?: string;
   admissionCriteria?: string;
   degrees?: string[];
   campuses?: any[];
+  ratings?: {
+    overall: number;
+    academicRigor: number;
+    jobPlacement: number;
+    practicalSkills: number;
+    sportsLife: number;
+    facultyQuality: number;
+    valueForMoney: number;
+    feesAffordability: number;
+    campusLife: number;
+    researchOpportunities: number;
+    hostelFacilities: number;
+  };
+  programs_list?: any[];
 }
+
+const abbreviationMap: Record<string, string> = {
+  cs: 'computer science',
+  se: 'software engineering',
+  ai: 'artificial intelligence',
+  ds: 'data science',
+  cy: 'cyber security',
+  ee: 'electrical engineering',
+  me: 'mechanical engineering',
+  ce: 'civil engineering',
+  it: 'information technology',
+  bba: 'business administration',
+  af: 'accounting and finance',
+  mba: 'master of business administration',
+  mbbs: 'medicine',
+  bds: 'dentistry'
+};
 
 function getEntryTestTypes(uni: UniDoc) {
   const staticUni = staticUniversities.find(
@@ -59,6 +92,7 @@ export default function UniversitiesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [province, setProvince] = useState('All Provinces');
   const [city, setCity] = useState('All Cities');
   const [type, setType] = useState('All Types');
   const [selectedDegree, setSelectedDegree] = useState('All Degrees');
@@ -93,19 +127,39 @@ export default function UniversitiesPage() {
   });
   const cities = ['All Cities', ...Array.from(uniqueCities).sort()];
   const types = ['All Types', 'public', 'private'];
+  const provinces = ['All Provinces', 'Punjab', 'Sindh', 'KPK', 'Balochistan', 'Islamabad', 'AJK'];
 
   const filtered = universities.filter(u => {
-    const q = search.toLowerCase();
-    const matchSearch = !search || 
-      u.name?.toLowerCase().includes(q) || 
-      u.shortName?.toLowerCase().includes(q) ||
-      u.degrees?.some(d => d.toLowerCase().includes(q));
+    const q = search.trim().toLowerCase();
+    
+    // Smart Search matching name, shortName, degrees, programs_list, and expanded abbreviations
+    const matchSearch = (() => {
+      if (!q) return true;
+      const expanded = abbreviationMap[q];
+      const checkText = (text: string) => {
+        const t = text.toLowerCase();
+        return t.includes(q) || (expanded && t.includes(expanded));
+      };
+      
+      const nameMatch = checkText(u.name || '') || checkText(u.shortName || '');
+      const degreeMatch = u.degrees?.some(d => checkText(d)) || 
+                          u.programs_list?.some(p => checkText(p.name) || checkText(p.degree));
+      return nameMatch || degreeMatch;
+    })();
     
     // Match city if it is main city OR one of its campus cities
     const matchCity = city === 'All Cities' || 
       u.city === city || 
       (u.campuses && Array.isArray(u.campuses) && u.campuses.some(c => c.city === city));
+    
     const matchType = type === 'All Types' || u.type === type;
+    
+    const matchProvince = province === 'All Provinces' || 
+      (u.province && u.province.toLowerCase() === province.toLowerCase()) ||
+      (province === 'Islamabad' && u.province && u.province.toLowerCase() === 'federal') ||
+      (province === 'Islamabad' && u.province && u.province.toLowerCase() === 'islamabad') ||
+      (province === 'KPK' && u.province && u.province.toLowerCase() === 'kpk');
+
     const matchDegree = selectedDegree === 'All Degrees' || u.degrees?.includes(selectedDegree);
     
     const testTypes = getEntryTestTypes(u);
@@ -114,7 +168,7 @@ export default function UniversitiesPage() {
       (entryTest === 'net' && testTypes.acceptsNet) ||
       (entryTest === 'own' && testTypes.acceptsOwn);
       
-    return matchSearch && matchCity && matchType && matchDegree && matchEntryTest;
+    return matchSearch && matchCity && matchType && matchProvince && matchDegree && matchEntryTest;
   });
 
   const sorted = [...filtered].sort((a, b) => {
@@ -137,6 +191,7 @@ export default function UniversitiesPage() {
 
   const clearFilters = () => { 
     setSearch(''); 
+    setProvince('All Provinces');
     setCity('All Cities'); 
     setType('All Types'); 
     setSelectedDegree('All Degrees');
@@ -144,7 +199,7 @@ export default function UniversitiesPage() {
     setSortBy('name-asc');
   };
 
-  const hasFilters = search || city !== 'All Cities' || type !== 'All Types' || selectedDegree !== 'All Degrees' || entryTest !== 'All' || sortBy !== 'name-asc';
+  const hasFilters = search || province !== 'All Provinces' || city !== 'All Cities' || type !== 'All Types' || selectedDegree !== 'All Degrees' || entryTest !== 'All' || sortBy !== 'name-asc';
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -175,6 +230,9 @@ export default function UniversitiesPage() {
               <input type="text" placeholder="Search by name, abbreviation, or degree..." value={search} onChange={e => setSearch(e.target.value)} className="input-field pl-10" />
             </div>
             <div className="flex flex-wrap gap-3">
+              <select value={province} onChange={e => setProvince(e.target.value)} className="input-field w-full sm:w-44 cursor-pointer font-bold">
+                {provinces.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
               <select value={city} onChange={e => setCity(e.target.value)} className="input-field w-full sm:w-44 cursor-pointer font-bold">
                 {cities.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -257,18 +315,43 @@ export default function UniversitiesPage() {
             {sorted.map((uni, i) => (
               <motion.div key={uni.id} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.05, 0.4), duration: 0.45 }}>
                 <div className="glass-card overflow-hidden group h-full flex flex-col">
-                  {/* Header bar - Clickable */}
+                  {/* Header bar with Cover Photo Background & Logo Overlay */}
                   <Link href={`/universities/${uni.id}`}>
-                    <div className="relative h-28 overflow-hidden bg-gradient-to-br from-white to-neutral-50 border-b border-black/5 flex items-center justify-center cursor-pointer">
-                      {uni.logoUrl ? (
-                        <img src={uni.logoUrl} alt={uni.shortName} className="w-16 h-16 rounded-xl object-cover border border-black/10" />
+                    <div className="relative h-32 overflow-hidden bg-neutral-100 border-b border-black/5 cursor-pointer">
+                      {uni.coverUrl ? (
+                        <img 
+                          src={uni.coverUrl} 
+                          alt={`${uni.name} Campus`} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                        />
                       ) : (
-                        <div className="w-14 h-14 rounded-xl bg-funky-cyan/[0.1] border border-funky-cyan/[0.2] flex items-center justify-center">
-                          <span className="font-display font-black text-funky-cyan text-lg">{uni.shortName?.slice(0, 2)}</span>
-                        </div>
+                        <div className="w-full h-full bg-gradient-to-br from-funky-cyan/10 to-blue-500/10 animate-pulse" />
                       )}
-                      <div className="absolute top-3 left-3 flex gap-2">
-                        <span className={uni.type === 'public' ? 'tag-lime font-bold' : 'tag-blue font-bold'}>
+                      
+                      {/* Dark overlay for contrast */}
+                      <div className="absolute inset-0 bg-black/25 group-hover:bg-black/20 transition-colors duration-300" />
+                      
+                      {/* Logo overlaid on the campus cover background */}
+                      <div className="absolute bottom-3 left-4 flex items-end gap-3 z-10">
+                        {uni.logoUrl ? (
+                          <img 
+                            src={uni.logoUrl} 
+                            alt={uni.shortName} 
+                            className="w-14 h-14 rounded-xl object-contain p-1 bg-white shadow-sm border border-black/10 flex-shrink-0" 
+                          />
+                        ) : (
+                          <div className="w-14 h-14 rounded-xl bg-white shadow-sm border border-black/10 flex items-center justify-center flex-shrink-0">
+                            <span className="font-display font-black text-funky-cyan text-sm">{uni.shortName?.slice(0, 2)}</span>
+                          </div>
+                        )}
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-white text-[#0B071E] shadow-sm border border-black/5 mb-0.5">
+                          {uni.shortName}
+                        </span>
+                      </div>
+
+                      {/* Type badge in top-right */}
+                      <div className="absolute top-3 right-3 flex gap-2 z-10">
+                        <span className={uni.type === 'public' ? 'tag-lime font-bold shadow-sm' : 'tag-blue font-bold shadow-sm'}>
                           {uni.type?.charAt(0).toUpperCase() + uni.type?.slice(1)}
                         </span>
                       </div>
@@ -280,7 +363,16 @@ export default function UniversitiesPage() {
                     <Link href={`/universities/${uni.id}`}>
                       <h2 className="font-display font-black text-lg mb-1 text-[#0B071E] group-hover:text-[#0066FF] transition-colors cursor-pointer">{uni.name}</h2>
                     </Link>
-                    <span className="text-[#0066FF] text-xs font-bold mb-3">{uni.shortName}</span>
+                    
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[#0066FF] text-xs font-bold">{uni.shortName}</span>
+                      {uni.ratings?.overall ? (
+                        <div className="flex items-center gap-1 bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-lg text-xs font-extrabold">
+                          <span className="text-[#FFB800] text-sm">★</span>
+                          <span>{uni.ratings.overall.toFixed(1)}</span>
+                        </div>
+                      ) : null}
+                    </div>
 
                     {uni.description && (
                       <p className="text-[#0B071E]/70 text-xs leading-relaxed mb-4 line-clamp-2 font-semibold">{uni.description}</p>
