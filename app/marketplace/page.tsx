@@ -34,6 +34,15 @@ function MarketplaceContent() {
   const actionParam = searchParams ? searchParams.get('action') : null;
   const [showTutorModal, setShowTutorModal] = useState(actionParam === 'become-tutor');
 
+  useEffect(() => {
+    if (searchParams) {
+      const q = searchParams.get('query');
+      if (q) {
+        setSearch(decodeURIComponent(q));
+      }
+    }
+  }, [searchParams]);
+
   const [tutorForm, setTutorForm] = useState({
     subjects: '',
     hourlyRate: '',

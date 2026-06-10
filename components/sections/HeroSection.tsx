@@ -5,13 +5,16 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { 
   ArrowRight, GraduationCap, Zap, BookOpen,
-  Sparkles, Download, CheckCircle, Star, Search, Building2, Users, FileText, Clock, ShieldAlert
+  Sparkles, Download, CheckCircle, Star, Search, Building2, Users, FileText, Clock, ShieldAlert, X
 } from 'lucide-react';
 import { stats } from '@/data/testimonials';
 import { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useTheme } from '@/context/ThemeContext';
+import { resources } from '@/data/resources';
+import { universities } from '@/data/universities';
+import { tutorProfiles } from '@/data/marketplace';
 
 const HeroScene = dynamic(() => import('@/components/3d/HeroScene'), { ssr: false, loading: () => null });
 
@@ -37,6 +40,7 @@ export default function HeroSection() {
   const [resCount, setResCount] = useState(1);  // Dynamic fallback
   const { theme } = useTheme();
   const [activeMobileTab, setActiveMobileTab] = useState<'search' | 'resources' | 'tutors' | 'unis' | 'pulse'>('search');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     async function loadCounts() {
@@ -406,9 +410,10 @@ export default function HeroSection() {
               {/* ─────────────────────────────────────────────────────────────
                   PANE 1: Search Console (Top-Center)
                   ───────────────────────────────────────────────────────────── */}
-              <Link 
-                href="/resources?search=true"
-                className="absolute -top-4 left-1/2 -translate-x-1/2 w-[340px] z-30 pointer-events-auto block transition-all hover:scale-[1.03] select-none"
+              <button 
+                onClick={() => setIsSearchOpen(true)}
+                className="absolute -top-4 left-1/2 -translate-x-1/2 w-[340px] z-30 pointer-events-auto block transition-all hover:scale-[1.03] select-none text-left"
+                type="button"
               >
                 <div className="glass-card p-3 rounded-2xl bg-white/80 dark:bg-[#110A20]/85 border border-dark/10 dark:border-white/10 shadow-lg hover:border-funky-blue/30 dark:hover:border-funky-cyan/30">
                   {/* Console Header */}
@@ -436,7 +441,7 @@ export default function HeroSection() {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </button>
 
               {/* ─────────────────────────────────────────────────────────────
                   PANE 2: Resource Vault Panel (Middle-Left)
@@ -818,13 +823,17 @@ export default function HeroSection() {
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> LIVE INDEX
                           </span>
                         </div>
-                        <Link href="/resources?search=true" className="block relative w-full">
+                        <button 
+                          onClick={() => setIsSearchOpen(true)}
+                          className="block relative w-full text-left"
+                          type="button"
+                        >
                           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-funky-blue dark:text-[#2EF2FF]" />
                           <div className="w-full bg-white dark:bg-dark-900 border border-dark/10 dark:border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-[#0B071E] dark:text-white h-[36px] flex items-center shadow-inner">
                             <span className="truncate">{placeholderText}</span>
                             <span className="w-[1.5px] h-3.5 bg-funky-cyan dark:bg-[#2EF2FF] ml-0.5 animate-pulse" />
                           </div>
-                        </Link>
+                        </button>
                         <div className="flex flex-wrap gap-1.5 pt-1.5">
                           {['#NUST', '#FAST', '#DSA', '#Calculus'].map(chip => (
                             <button
@@ -1103,6 +1112,292 @@ export default function HeroSection() {
 
         </div>
       </div>
+
+      <AnimatePresence>
+        {isSearchOpen && (
+          <GlobalSearchModal onClose={() => setIsSearchOpen(false)} />
+        )}
+      </AnimatePresence>
     </section>
+  );
+}
+
+function GlobalSearchModal({ onClose }: { onClose: () => void }) {
+  const [query, setQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<'all' | 'resources' | 'unis' | 'tutors' | 'guides'>('all');
+
+  // Autofocus input and manage backdrop scroll lock
+  useEffect(() => {
+    const input = document.getElementById('global-search-input');
+    if (input) {
+      input.focus();
+    }
+    // Prevent background scrolling
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  // Keyboard accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  const getFilteredResults = () => {
+    if (!query.trim()) return [];
+    const term = query.toLowerCase();
+
+    const results: Array<{
+      type: 'resource' | 'university' | 'tutor' | 'guide';
+      id: string;
+      title: string;
+      subtitle: string;
+      url: string;
+      tags?: string[];
+      meta?: string;
+    }> = [];
+
+    // 1. Resources
+    resources.forEach((res) => {
+      if (
+        res.title.toLowerCase().includes(term) ||
+        res.course.toLowerCase().includes(term) ||
+        res.instructor.toLowerCase().includes(term) ||
+        res.university.toLowerCase().includes(term) ||
+        res.degree.toLowerCase().includes(term) ||
+        res.tags.some((t) => t.toLowerCase().includes(term))
+      ) {
+        results.push({
+          type: 'resource',
+          id: res.id,
+          title: res.title,
+          subtitle: `${res.university} • ${res.course} • ${res.type}`,
+          url: `/resources?search=true&query=${encodeURIComponent(res.title)}`,
+          tags: res.tags,
+          meta: res.fileSize,
+        });
+      }
+    });
+
+    // 2. Universities
+    universities.forEach((uni) => {
+      if (
+        uni.name.toLowerCase().includes(term) ||
+        uni.shortName.toLowerCase().includes(term) ||
+        uni.city.toLowerCase().includes(term) ||
+        uni.tags.some((t) => t.toLowerCase().includes(term))
+      ) {
+        results.push({
+          type: 'university',
+          id: uni.id,
+          title: uni.name,
+          subtitle: `${uni.shortName} • ${uni.city} • Rank #${uni.ranking}`,
+          url: `/universities/${uni.id}`,
+          tags: uni.tags,
+          meta: uni.admissionOpen ? 'Admissions Open' : 'Closed',
+        });
+      }
+    });
+
+    // 3. Tutors
+    tutorProfiles.forEach((tutor) => {
+      if (
+        tutor.name.toLowerCase().includes(term) ||
+        tutor.expertise.some((e) => e.toLowerCase().includes(term)) ||
+        tutor.university.toLowerCase().includes(term) ||
+        tutor.degree.toLowerCase().includes(term)
+      ) {
+        results.push({
+          type: 'tutor',
+          id: tutor.id,
+          title: tutor.name,
+          subtitle: `${tutor.university} • ${tutor.degree} • ${tutor.expertise.join(', ')}`,
+          url: `/marketplace?query=${encodeURIComponent(tutor.name)}`,
+          tags: tutor.expertise,
+          meta: `PKR ${tutor.hourlyRate}/hr`,
+        });
+      }
+    });
+
+    // 4. Insider Guides
+    const STATIC_GUIDES = [
+      { id: 'nust-admission-guide-net-prep-eligibility', title: 'The Ultimate NUST Admission Guide: NET Prep & Eligibility', category: 'Admission Guides', excerpt: 'Detailed walkthrough on acing the NUST Entry Test, aggregate calculations, and admission requirements.' },
+      { id: 'fast-nu-surviving-guide-dos-donts-freshmen', title: 'FAST-NU Surviving Guide: Do\'s and Don\'ts for Freshmen', category: 'Do\'s & Don\'ts', excerpt: 'How to survive the strict academic environment, maintain a high GPA, and navigate university life at FAST.' },
+      { id: 'higher-education-scholarships-pakistan-hec-need-based', title: 'Higher Education Scholarships in Pakistan: HEC & Need-Based Guides', category: 'Scholarships', excerpt: 'Learn how to apply for fully funded HEC, USAID, and need-based scholarships at top universities.' },
+      { id: 'university-application-deadlines-cheat-sheet-fall-2026', title: 'University Application Deadlines Cheat Sheet (Fall 2026)', category: 'Deadlines', excerpt: 'Track key registration timelines, entry test dates, and deadline details for LUMS, FAST, NUST, IBA, and AKU.' },
+      { id: 'mastering-exam-prep-midterms-finals', title: 'Mastering Exam Prep: How to Ace University Midterms & Finals', category: 'Exam Sessions', excerpt: 'Proven study methods, note-taking strategies, and past paper prep tips for exam sessions.' }
+    ];
+
+    STATIC_GUIDES.forEach((guide) => {
+      if (
+        guide.title.toLowerCase().includes(term) ||
+        guide.category.toLowerCase().includes(term) ||
+        guide.excerpt.toLowerCase().includes(term)
+      ) {
+        results.push({
+          type: 'guide',
+          id: guide.id,
+          title: guide.title,
+          subtitle: `YOUR INSIDER Guide • ${guide.category}`,
+          url: `/blog/${guide.id}`,
+          meta: 'Guide',
+        });
+      }
+    });
+
+    // Filter by tab
+    if (activeTab === 'all') return results;
+    if (activeTab === 'resources') return results.filter((r) => r.type === 'resource');
+    if (activeTab === 'unis') return results.filter((r) => r.type === 'university');
+    if (activeTab === 'tutors') return results.filter((r) => r.type === 'tutor');
+    if (activeTab === 'guides') return results.filter((r) => r.type === 'guide');
+
+    return results;
+  };
+
+  const results = getFilteredResults();
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return (
+    <motion.div
+      onClick={handleBackdropClick}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-start justify-center p-4 bg-black/60 backdrop-blur-md overflow-y-auto pt-[10vh] md:pt-[12vh]"
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: -20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: -20 }}
+        className="w-full max-w-2xl bg-white/95 dark:bg-[#110A20]/95 border border-dark/10 dark:border-white/10 shadow-2xl rounded-3xl p-5 md:p-6 overflow-hidden flex flex-col max-h-[75vh]"
+      >
+        {/* Search Input Area */}
+        <div className="relative flex items-center border-b border-dark/10 dark:border-white/10 pb-4 shrink-0">
+          <Search size={20} className="absolute left-1 text-funky-blue dark:text-[#2EF2FF]" />
+          <input
+            id="global-search-input"
+            type="text"
+            placeholder="Search resources, tutors, universities, insider guides..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-transparent pl-9 pr-8 text-base font-bold text-[#0B071E] dark:text-white border-0 focus:ring-0 placeholder-dark/30 dark:placeholder-white/30 outline-none"
+          />
+          {query && (
+            <button
+              onClick={() => setQuery('')}
+              className="absolute right-10 p-1 text-[#0B071E]/40 dark:text-white/40 hover:bg-dark/5 dark:hover:bg-white/5 rounded-full transition-colors"
+            >
+              <X size={14} />
+            </button>
+          )}
+          <button
+            onClick={onClose}
+            className="absolute right-0 p-1.5 text-xs font-mono font-bold bg-dark/5 dark:bg-white/5 border border-dark/10 dark:border-white/10 hover:bg-dark/10 dark:hover:bg-white/10 rounded-lg text-dark/70 dark:text-white/70 transition-colors uppercase shrink-0"
+          >
+            Esc
+          </button>
+        </div>
+
+        {/* Categories Tab Selector */}
+        <div className="flex gap-2 overflow-x-auto py-3 border-b border-dark/5 dark:border-white/5 scrollbar-none select-none shrink-0">
+          {[
+            { id: 'all', label: 'All Results' },
+            { id: 'resources', label: 'Resources' },
+            { id: 'unis', label: 'Universities' },
+            { id: 'tutors', label: 'Tutors' },
+            { id: 'guides', label: 'Insider Guides' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-dark border-dark text-white dark:bg-white/10 dark:border-white/20'
+                  : 'bg-white/50 dark:bg-transparent border-dark/5 dark:border-white/5 text-dark/60 dark:text-white/60 hover:bg-dark/5 dark:hover:bg-white/5'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Results List */}
+        <div className="flex-1 overflow-y-auto py-3 pr-1 scrollbar-thin scrollbar-thumb-dark/10 dark:scrollbar-thumb-white/10">
+          {query.trim() === '' ? (
+            <div className="py-12 text-center text-[#0B071E]/50 dark:text-white/50">
+              <Search size={32} className="mx-auto mb-3 text-dark/20 dark:text-white/20" />
+              <p className="text-sm font-bold">Type to search the entire campus synapse...</p>
+              <p className="text-xs mt-1">Try searching for &apos;NUST&apos;, &apos;Calculus&apos;, &apos;FAST&apos;, or &apos;DSA&apos;</p>
+            </div>
+          ) : results.length === 0 ? (
+            <div className="py-12 text-center text-[#0B071E]/50 dark:text-white/50">
+              <p className="text-sm font-black">No matches found for &quot;{query}&quot;</p>
+              <p className="text-xs mt-1">Check spelling or try a different search query</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {results.map((res) => {
+                let badgeColor = 'bg-funky-blue/10 text-funky-blue border-funky-blue/20';
+                let icon = <FileText size={16} />;
+                if (res.type === 'university') {
+                  badgeColor = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+                  icon = <GraduationCap size={16} />;
+                } else if (res.type === 'tutor') {
+                  badgeColor = 'bg-funky-orange/10 text-funky-orange border-funky-orange/20';
+                  icon = <Users size={16} />;
+                } else if (res.type === 'guide') {
+                  badgeColor = 'bg-[#FF5C7A]/10 text-[#FF5C7A] border-[#FF5C7A]/20';
+                  icon = <BookOpen size={16} />;
+                }
+
+                return (
+                  <Link
+                    key={`${res.type}-${res.id}`}
+                    href={res.url}
+                    onClick={onClose}
+                    className="flex items-center justify-between p-3 rounded-2xl bg-dark/4 hover:bg-dark/8 dark:bg-white/5 dark:hover:bg-white/10 border border-dark/5 dark:border-white/5 transition-all group/item"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${badgeColor}`}>
+                        {icon}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-black text-[#0B071E] dark:text-white truncate group-hover/item:text-[#0066FF] dark:group-hover/item:text-[#2EF2FF] transition-colors">
+                          {res.title}
+                        </div>
+                        <div className="text-xs text-[#0B071E]/50 dark:text-white/40 font-semibold truncate">
+                          {res.subtitle}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {res.meta && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-dark/5 dark:bg-white/5 text-dark/60 dark:text-white/60 uppercase">
+                          {res.meta}
+                        </span>
+                      )}
+                      <ArrowRight size={14} className="text-dark/20 dark:text-white/20 group-hover/item:text-dark dark:group-hover/item:text-white transition-all transform group-hover/item:translate-x-0.5" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }

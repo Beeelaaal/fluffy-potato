@@ -121,10 +121,16 @@ function ResourcesContent() {
   }, [downloadingResource]);
 
   useEffect(() => {
-    if (searchParams && searchParams.get('search') === 'true') {
-      const input = document.getElementById('search-input');
-      if (input) {
-        input.focus();
+    if (searchParams) {
+      const q = searchParams.get('query');
+      if (q) {
+        setSearch(decodeURIComponent(q));
+      }
+      if (searchParams.get('search') === 'true') {
+        const input = document.getElementById('search-input');
+        if (input) {
+          input.focus();
+        }
       }
     }
   }, [searchParams, loading]);
