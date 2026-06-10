@@ -120,6 +120,15 @@ function ResourcesContent() {
     }
   }, [downloadingResource]);
 
+  useEffect(() => {
+    if (searchParams && searchParams.get('search') === 'true') {
+      const input = document.getElementById('search-input');
+      if (input) {
+        input.focus();
+      }
+    }
+  }, [searchParams, loading]);
+
   const availableCourses = selectedDegree ? (courses[selectedDegree] || []) : [];
 
   const filtered = resources.filter(r => {
@@ -195,6 +204,7 @@ function ResourcesContent() {
           <div className="relative mb-5">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0B071E]/40" />
             <input
+              id="search-input"
               type="text"
               placeholder="Search by title, course, or instructor..."
               value={search}

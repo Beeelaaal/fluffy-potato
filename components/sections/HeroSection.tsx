@@ -406,10 +406,11 @@ export default function HeroSection() {
               {/* ─────────────────────────────────────────────────────────────
                   PANE 1: Search Console (Top-Center)
                   ───────────────────────────────────────────────────────────── */}
-              <div 
-                className="absolute -top-4 left-1/2 -translate-x-1/2 w-[340px] z-30 pointer-events-auto"
+              <Link 
+                href="/resources?search=true"
+                className="absolute -top-4 left-1/2 -translate-x-1/2 w-[340px] z-30 pointer-events-auto block transition-all hover:scale-[1.03] select-none"
               >
-                <div className="glass-card p-3 rounded-2xl bg-white/80 dark:bg-[#110A20]/85 border border-dark/10 dark:border-white/10 shadow-lg">
+                <div className="glass-card p-3 rounded-2xl bg-white/80 dark:bg-[#110A20]/85 border border-dark/10 dark:border-white/10 shadow-lg hover:border-funky-blue/30 dark:hover:border-funky-cyan/30">
                   {/* Console Header */}
                   <div className="flex items-center justify-between border-b border-dark/5 dark:border-white/5 pb-2 mb-2">
                     <div className="flex items-center gap-1.5">
@@ -429,13 +430,13 @@ export default function HeroSection() {
                   {/* Simulated Search Input */}
                   <div className="relative">
                     <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-funky-blue dark:text-funky-cyan" />
-                    <div className="w-full bg-white dark:bg-dark-900 border border-dark/10 dark:border-white/10 rounded-xl pl-8.5 pr-3 py-1.5 text-xs font-bold text-[#0B071E] dark:text-white h-[32px] flex items-center shadow-inner">
+                    <div className="w-full bg-white dark:bg-dark-900 border border-dark/10 dark:border-white/10 rounded-xl pl-9 pr-3 py-1.5 text-xs font-bold text-[#0B071E] dark:text-white h-[32px] flex items-center shadow-inner">
                       <span className="truncate">{placeholderText}</span>
                       <span className="w-[1.5px] h-3 bg-funky-cyan dark:bg-[#2EF2FF] ml-0.5 animate-pulse shrink-0" />
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
 
               {/* ─────────────────────────────────────────────────────────────
                   PANE 2: Resource Vault Panel (Middle-Left)
@@ -453,12 +454,17 @@ export default function HeroSection() {
                 <div className="glass-card p-3 rounded-2xl bg-white/80 dark:bg-[#110A20]/85 border border-dark/10 dark:border-white/10 shadow-lg flex flex-col justify-between min-h-[190px]">
                   <div>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-2 pb-1 border-b border-dark/5 dark:border-white/5">
-                      <span className="text-[10.5px] font-black text-funky-blue dark:text-[#2EF2FF] uppercase tracking-wider flex items-center gap-1">
-                        <FileText size={11} /> Resource Hub
+                    <Link 
+                      href="/resources" 
+                      className="flex items-center justify-between mb-2 pb-1 border-b border-dark/5 dark:border-white/5 group/hdr"
+                    >
+                      <span className="text-[10.5px] font-black text-funky-blue dark:text-[#2EF2FF] uppercase tracking-wider flex items-center gap-1 group-hover/hdr:underline">
+                        <FileText size={11} className="transition-transform group-hover/hdr:scale-110" /> Resource Hub
                       </span>
-                      <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono">Study Materials</span>
-                    </div>
+                      <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono flex items-center gap-0.5 group-hover/hdr:text-funky-blue dark:group-hover/hdr:text-funky-cyan transition-colors">
+                        Explore <ArrowRight size={10} />
+                      </span>
+                    </Link>
 
                     {/* Uni Tags Switches */}
                     <div className="flex gap-1.5 mb-2.5">
@@ -574,12 +580,17 @@ export default function HeroSection() {
                 <div className="glass-card p-3 rounded-2xl bg-white/80 dark:bg-[#110A20]/85 border border-dark/10 dark:border-white/10 shadow-lg flex flex-col justify-between min-h-[190px]">
                   <div>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-1.5 pb-1 border-b border-dark/5 dark:border-white/5">
-                      <span className="text-[10.5px] font-black text-funky-orange dark:text-[#FF7A18] uppercase tracking-wider flex items-center gap-1">
-                        <Users size={10} /> Tutor Marketplace
+                    <Link 
+                      href="/marketplace" 
+                      className="flex items-center justify-between mb-1.5 pb-1 border-b border-dark/5 dark:border-white/5 group/hdr"
+                    >
+                      <span className="text-[10.5px] font-black text-funky-orange dark:text-[#FF7A18] uppercase tracking-wider flex items-center gap-1 group-hover/hdr:underline">
+                        <Users size={10} className="transition-transform group-hover/hdr:scale-110" /> Tutor Marketplace
                       </span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-funky-orange animate-pulse" />
-                    </div>
+                      <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono flex items-center gap-0.5 group-hover/hdr:text-funky-orange transition-colors">
+                        Market <ArrowRight size={10} />
+                      </span>
+                    </Link>
 
                     {/* Active study request description */}
                     <div className="bg-dark/4 dark:bg-white/5 p-1.5 rounded-xl border border-dark/5 dark:border-white/5 mb-2">
@@ -669,12 +680,17 @@ export default function HeroSection() {
                 <div className="glass-card p-3 rounded-2xl bg-white/80 dark:bg-[#110A20]/85 border border-dark/10 dark:border-white/10 shadow-lg flex flex-col justify-between min-h-[125px]">
                   <div>
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-1.5 pb-1 border-b border-dark/5 dark:border-white/5">
-                      <span className="text-[10.5px] font-black text-[#15803D] dark:text-[#D8FF3E] uppercase tracking-wider flex items-center gap-1">
-                        <GraduationCap size={10} /> University Explorer
+                    <Link 
+                      href="/universities" 
+                      className="flex items-center justify-between mb-1.5 pb-1 border-b border-dark/5 dark:border-white/5 group/hdr"
+                    >
+                      <span className="text-[10.5px] font-black text-[#15803D] dark:text-[#D8FF3E] uppercase tracking-wider flex items-center gap-1 group-hover/hdr:underline">
+                        <GraduationCap size={10} className="transition-transform group-hover/hdr:scale-110" /> University Explorer
                       </span>
-                      <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono">Admission Guide</span>
-                    </div>
+                      <span className="text-[9px] text-[#0B071E]/40 dark:text-white/40 font-mono flex items-center gap-0.5 group-hover/hdr:text-[#15803D] dark:group-hover/hdr:text-[#D8FF3E] transition-colors">
+                        Browse <ArrowRight size={10} />
+                      </span>
+                    </Link>
 
                     {/* Side by side Admissions comparison list */}
                     <div className="space-y-1">
@@ -802,13 +818,13 @@ export default function HeroSection() {
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> LIVE INDEX
                           </span>
                         </div>
-                        <div className="relative">
+                        <Link href="/resources?search=true" className="block relative w-full">
                           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-funky-blue dark:text-[#2EF2FF]" />
-                          <div className="w-full bg-white dark:bg-dark-900 border border-dark/10 dark:border-white/10 rounded-xl pl-8.5 pr-3 py-2 text-xs font-bold text-[#0B071E] dark:text-white h-[36px] flex items-center shadow-inner">
+                          <div className="w-full bg-white dark:bg-dark-900 border border-dark/10 dark:border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-[#0B071E] dark:text-white h-[36px] flex items-center shadow-inner">
                             <span className="truncate">{placeholderText}</span>
                             <span className="w-[1.5px] h-3.5 bg-funky-cyan dark:bg-[#2EF2FF] ml-0.5 animate-pulse" />
                           </div>
-                        </div>
+                        </Link>
                         <div className="flex flex-wrap gap-1.5 pt-1.5">
                           {['#NUST', '#FAST', '#DSA', '#Calculus'].map(chip => (
                             <button
@@ -837,12 +853,14 @@ export default function HeroSection() {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-3"
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black text-funky-blue dark:text-[#2EF2FF] uppercase tracking-wider flex items-center gap-1.5">
-                            <FileText size={12} /> Resource Hub
+                        <Link href="/resources" className="flex items-center justify-between group/hdr">
+                          <span className="text-xs font-black text-funky-blue dark:text-[#2EF2FF] uppercase tracking-wider flex items-center gap-1.5 group-hover/hdr:underline">
+                            <FileText size={12} className="transition-transform group-hover/hdr:scale-110" /> Resource Hub
                           </span>
-                          <span className="text-[9px] bg-funky-blue text-white px-2 py-0.5 rounded font-black uppercase">{resCount} Files</span>
-                        </div>
+                          <span className="text-[9px] bg-funky-blue text-white px-2 py-0.5 rounded font-black uppercase flex items-center gap-0.5 group-hover/hdr:bg-funky-blue/80 transition-colors">
+                            Explore <ArrowRight size={8} />
+                          </span>
+                        </Link>
                         
                         <div className="flex gap-1.5">
                           {(['NUST', 'FAST', 'LUMS'] as const).map((tag) => (
@@ -921,12 +939,14 @@ export default function HeroSection() {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-3"
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black text-funky-orange dark:text-[#FF7A18] uppercase tracking-wider flex items-center gap-1.5">
-                            <Users size={12} /> Tutor Marketplace
+                        <Link href="/marketplace" className="flex items-center justify-between group/hdr">
+                          <span className="text-xs font-black text-funky-orange dark:text-[#FF7A18] uppercase tracking-wider flex items-center gap-1.5 group-hover/hdr:underline">
+                            <Users size={12} className="transition-transform group-hover/hdr:scale-110" /> Tutor Marketplace
                           </span>
-                          <span className="text-[9px] bg-funky-orange text-white px-2 py-0.5 rounded font-black uppercase">Active Bids</span>
-                        </div>
+                          <span className="text-[9px] bg-funky-orange text-white px-2 py-0.5 rounded font-black uppercase flex items-center gap-0.5 group-hover/hdr:bg-funky-orange/80 transition-colors">
+                            Market <ArrowRight size={8} />
+                          </span>
+                        </Link>
 
                         <div className="bg-dark/4 dark:bg-white/5 p-2 rounded-xl border border-dark/5 dark:border-white/5">
                           <div className="flex items-center justify-between mb-0.5">
@@ -992,12 +1012,14 @@ export default function HeroSection() {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-3"
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black text-[#15803D] dark:text-[#D8FF3E] uppercase tracking-wider flex items-center gap-1.5">
-                            <GraduationCap size={12} /> University Explorer
+                        <Link href="/universities" className="flex items-center justify-between group/hdr">
+                          <span className="text-xs font-black text-[#15803D] dark:text-[#D8FF3E] uppercase tracking-wider flex items-center gap-1.5 group-hover/hdr:underline">
+                            <GraduationCap size={12} className="transition-transform group-hover/hdr:scale-110" /> University Explorer
                           </span>
-                          <span className="text-[9px] text-[#15803D] dark:text-[#D8FF3E] font-mono">Admission Deadlines</span>
-                        </div>
+                          <span className="text-[9px] text-[#15803D] dark:text-[#D8FF3E] font-mono flex items-center gap-0.5 group-hover/hdr:text-[#15803D]/80 transition-colors">
+                            Browse <ArrowRight size={8} />
+                          </span>
+                        </Link>
 
                         <div className="space-y-1.5">
                           {[
