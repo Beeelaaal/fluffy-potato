@@ -266,7 +266,7 @@ export default function UniversitiesPage() {
                 <option value="deadline-asc">Sort: Nearest Deadline</option>
               </select>
               {hasFilters && (
-                <button onClick={clearFilters} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#0B071E]/60 hover:text-white transition-all bg-white/80 border border-[#0B071E]/10 hover:bg-[#0B071E] font-bold">
+                <button onClick={clearFilters} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#0B071E]/60 hover:text-white transition-all bg-white/80 border border-[#0B071E]/10 hover:bg-dark dark:hover:bg-white/10 dark:hover:text-white font-bold">
                   <X size={14} /> Clear
                 </button>
               )}
@@ -367,7 +367,7 @@ export default function UniversitiesPage() {
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-[#0066FF] text-xs font-bold">{uni.shortName}</span>
                       {uni.ratings?.overall ? (
-                        <div className="flex items-center gap-1 bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-lg text-xs font-extrabold">
+                        <div className="flex items-center gap-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-lg text-xs font-extrabold">
                           <span className="text-[#FFB800] text-sm">★</span>
                           <span>{uni.ratings.overall.toFixed(1)}</span>
                         </div>

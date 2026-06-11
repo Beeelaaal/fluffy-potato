@@ -358,9 +358,9 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       {/* Pros */}
                       <div className="p-6 rounded-2xl border border-emerald-500/10 bg-emerald-500/[0.02] shadow-sm">
-                        <h3 className="font-display font-black text-emerald-700 text-sm mb-4 flex items-center gap-2">
+                        <h3 className="font-display font-black text-emerald-700 dark:text-emerald-400 text-sm mb-4 flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                            <Check size={11} className="text-emerald-600 font-black" />
+                            <Check size={11} className="text-emerald-600 dark:text-emerald-400 font-black" />
                           </div>
                           What Students Love (Pros)
                         </h3>
@@ -380,9 +380,9 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
  
                       {/* Cons */}
                       <div className="p-6 rounded-2xl border border-red-500/10 bg-red-500/[0.02] shadow-sm">
-                        <h3 className="font-display font-black text-red-700 text-sm mb-4 flex items-center gap-2">
+                        <h3 className="font-display font-black text-red-700 dark:text-red-400 text-sm mb-4 flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0">
-                            <AlertTriangle size={11} className="text-red-600" />
+                            <AlertTriangle size={11} className="text-red-600 dark:text-red-400" />
                           </div>
                           Areas of Improvement (Cons)
                         </h3>
@@ -568,10 +568,10 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                                           <h4 className="text-[9px] font-black uppercase tracking-wider text-[#0B071E]/50 mb-1">Difficulty Level</h4>
                                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                                             prog.difficultyLevel.toLowerCase().includes('very high') || prog.difficultyLevel.toLowerCase().includes('extreme')
-                                              ? 'bg-red-500/10 text-red-700'
+                                              ? 'bg-red-500/10 text-red-700 dark:text-red-400'
                                               : prog.difficultyLevel.toLowerCase().includes('high')
-                                              ? 'bg-amber-500/10 text-amber-700'
-                                              : 'bg-emerald-500/10 text-emerald-700'
+                                              ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                                              : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
                                           }`}>
                                             {prog.difficultyLevel}
                                           </span>
@@ -588,7 +588,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                                       {prog.industryDemand && (
                                         <div>
                                           <h4 className="text-[9px] font-black uppercase tracking-wider text-[#0B071E]/50 mb-1">Local Industry Demand</h4>
-                                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-700">
+                                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-700 dark:text-purple-300">
                                             {prog.industryDemand}
                                           </span>
                                         </div>
@@ -708,7 +708,7 @@ export default function UniversityDetailPage({ params }: { params: { id: string 
                                       {campus.degrees.map((deg: string) => (
                                         <span key={deg} className={`px-2 py-1 rounded-lg text-xs font-bold ${
                                           deg.toLowerCase().includes('naval') || deg.toLowerCase().includes('maritime')
-                                            ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/25'
+                                            ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25'
                                             : 'bg-black/[0.03] border border-black/5 text-[#0B071E]/75'
                                         }`}>
                                           {deg}
